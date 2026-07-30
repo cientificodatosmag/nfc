@@ -1,41 +1,25 @@
 /**
- * NFC BACKEND BRIDGE
+ * NFC BACKEND BRIDGE (solo APK nativa)
  *
- * Unifica las dos formas de hablar con una etiqueta y expone a app.js un único
- * flujo de resultados normalizados:
+ * Toda la conversación con la etiqueta ocurre en el plugin Capacitor
+ * NfcNative: comandos crudos al chip, contraseña de hardware real en
+ * NTAG213/215/216.
  *
- *   nativo (APK)  -> plugin Capacitor NfcNative. Comandos crudos al chip:
- *                    contraseña de hardware real (PWD/PACK/AUTH0) en NTAG21x.
- *   web (PWA)     -> Web NFC (NDEFReader) en Chrome Android. Solo NDEF, así que
- *                    el "candado" es un registro MIME que la app respeta pero
- *                    que otras apps pueden sobrescribir.
+ * Web NFC quedó fuera a propósito. El WebView de Android define NDEFReader
+ * pero rechaza scan() con NotAllowedError, así que servía de respaldo silencioso
+ * que solo conseguía disfrazar un fallo de arranque del puente nativo.
  *
- * En ambos casos app.js recibe el mismo objeto de resultado:
+ * app.js recibe siempre el mismo objeto de resultado:
  *
- *   { success, mode, uid, model, protected, unlocked, locked, records[], error }
+ *   { success, mode, uid, model, capacity, protected, unlocked, locked,
+ *     readProtected, empty, wipedBytes, records[], note, error }
  */
 (function () {
   'use strict';
 
-  const SALT = 'NFC_SALT_2026::';
-  const LOCK_MIME = 'application/vnd.nfc-lock';
-
-  const capacitor = window.Capacitor;
-  const isNative = !!(
-    capacitor &&
-    typeof capacitor.isNativePlatform === 'function' &&
-    capacitor.isNativePlatform() &&
-    typeof capacitor.registerPlugin === 'function'
-  );
-  const hasWebNfc = 'NDEFReader' in window;
-
-  const plugin = isNative ? capacitor.registerPlugin('NfcNative') : null;
-
-  let listener = null;          // callback de app.js
-  let nativeHandle = null;      // handle del addListener de Capacitor
-  let webReader = null;
-  let webController = null;
-  let session = null;           // opciones del escaneo en curso
+  let listener = null;
+  let plugin = null;
+  let nativeHandle = null;
 
   function emit(result) {
     if (listener) {
@@ -43,34 +27,31 @@
     }
   }
 
-  async function hashPassword(password) {
-    const data = new TextEncoder().encode(SALT + password);
-    const digest = await crypto.subtle.digest('SHA-256', data);
-    return Array.from(new Uint8Array(digest))
-      .map((b) => b.toString(16).padStart(2, '0'))
-      .join('');
-  }
-
-  // ------------------------------------------------------------------
-  // Backend nativo
-  // ------------------------------------------------------------------
-
-  async function startNative(options) {
-    if (!nativeHandle) {
-      nativeHandle = await plugin.addListener('nfcResult', (result) => {
-        emit(normalizeNative(result));
-      });
-    }
-    await plugin.startScan({
-      mode: options.mode,
-      password: options.password || '',
-      content: options.content || '',
-      fullWipe: options.fullWipe !== false,
-      protectRead: options.protectRead === true
+  /**
+   * Capacitor inyecta su puente en el <head> antes que estos scripts, pero si
+   * por lo que sea llega tarde, esperarlo es preferible a decidir en falso que
+   * no estamos en la APK.
+   */
+  function waitForCapacitor(timeoutMs) {
+    return new Promise((resolve) => {
+      if (window.Capacitor && typeof window.Capacitor.registerPlugin === 'function') {
+        resolve(window.Capacitor);
+        return;
+      }
+      const startedAt = Date.now();
+      const timer = setInterval(() => {
+        if (window.Capacitor && typeof window.Capacitor.registerPlugin === 'function') {
+          clearInterval(timer);
+          resolve(window.Capacitor);
+        } else if (Date.now() - startedAt > timeoutMs) {
+          clearInterval(timer);
+          resolve(null);
+        }
+      }, 50);
     });
   }
 
-  function normalizeNative(result) {
+  function normalize(result) {
     return {
       success: result.success === true,
       mode: result.mode || 'read',
@@ -89,226 +70,109 @@
     };
   }
 
-  // ------------------------------------------------------------------
-  // Backend Web NFC
-  // ------------------------------------------------------------------
-
-  function decodeWebRecords(message) {
-    const records = [];
-    const list = (message && message.records) || [];
-    for (const record of list) {
-      const item = {
-        recordType: record.recordType || 'unknown',
-        mediaType: record.mediaType || '',
-        text: '',
-        bytes: record.data ? record.data.byteLength : 0
-      };
-      if (record.data) {
-        try {
-          item.text = new TextDecoder(record.encoding || 'utf-8').decode(record.data);
-        } catch (e) {
-          item.text = `[${item.bytes} bytes binarios]`;
-        }
-      }
-      records.push(item);
-    }
-    return records;
-  }
-
-  /** Busca el candado por software escrito por versiones anteriores de la app. */
-  function findSoftLockHash(records) {
-    for (const record of records) {
-      if (record.mediaType === LOCK_MIME && record.text.startsWith('HASH:')) {
-        return record.text.slice('HASH:'.length).trim();
-      }
-      if (record.text.startsWith('NFC_LOCK_V1:')) {
-        return record.text.slice('NFC_LOCK_V1:'.length).trim();
-      }
-    }
-    return null;
-  }
-
-  async function writeEmptyWeb(reader) {
-    try {
-      await reader.write({ records: [{ recordType: 'empty' }] }, { overwrite: true });
-    } catch (e) {
-      // Algunas versiones de Chromium rechazan el registro vacío.
-      await reader.write({ records: [{ recordType: 'text', data: '' }] }, { overwrite: true });
-    }
-  }
-
-  async function handleWebReading(event) {
-    const uid = event.serialNumber || 'Desconocido';
-    const records = decodeWebRecords(event.message);
-    const base = {
-      success: true,
-      mode: session.mode,
-      uid,
-      model: 'Web NFC (sin acceso al chip)',
-      protected: false,
-      unlocked: false,
-      locked: false,
-      readProtected: false,
-      empty: records.length === 0,
-      wipedBytes: 0,
-      records,
-      note: '',
-      error: ''
-    };
-
-    try {
-      if (session.mode === 'read') {
-        emit(base);
-        return;
-      }
-
-      if (session.mode === 'format') {
-        const lockHash = findSoftLockHash(records);
-        base.protected = !!lockHash;
-        if (lockHash) {
-          if (!session.password) {
-            throw new Error('Etiqueta protegida: escribe la contraseña para poder borrarla.');
-          }
-          if ((await hashPassword(session.password)) !== lockHash) {
-            throw new Error('Contraseña incorrecta. Acceso denegado.');
-          }
-          base.unlocked = true;
-        }
-        await writeEmptyWeb(webReader);
-        emit(base);
-        return;
-      }
-
-      if (session.mode === 'protect') {
-        const hash = await hashPassword(session.password);
-        const text = (session.content || '').trim() || 'Etiqueta Protegida';
-        await webReader.write(
-          {
-            records: [
-              { recordType: 'text', data: text },
-              {
-                recordType: 'mime',
-                mediaType: LOCK_MIME,
-                data: new TextEncoder().encode(`HASH:${hash}`)
-              }
-            ]
-          },
-          { overwrite: true }
-        );
-        base.locked = true;
-        base.note = 'Candado por software: Web NFC no puede escribir la contraseña del chip.';
-        emit(base);
-      }
-    } catch (err) {
-      base.success = false;
-      base.error = err.message || String(err);
-      emit(base);
-    }
-  }
-
-  async function startWeb(options) {
-    webController = new AbortController();
-    webReader = new NDEFReader();
-
-    try {
-      // scan() debe llamarse dentro del gesto del usuario o el navegador
-      // ni siquiera muestra el diálogo de permiso.
-      await webReader.scan({ signal: webController.signal });
-    } catch (err) {
-      webController = null;
-      webReader = null;
-      if (err && err.name === 'NotAllowedError') {
-        throw new Error(
-          'Permiso NFC denegado. Esto es la PWA, no la APK. Revisa: ' +
-            '1) que el NFC del teléfono esté encendido; ' +
-            '2) Ajustes de Android > Aplicaciones > esta app (o Chrome) > Permisos > NFC. ' +
-            'Si lo bloqueaste antes, Chrome lo recuerda y no vuelve a preguntar.'
-        );
-      }
-      if (err && err.name === 'NotSupportedError') {
-        throw new Error('Este navegador no admite Web NFC. Usa Chrome en Android o instala la APK.');
-      }
-      throw err;
-    }
-
-    webReader.addEventListener('reading', handleWebReading);
-    webReader.addEventListener('readingerror', () => {
-      emit({
-        success: false,
-        mode: options.mode,
-        uid: 'Desconocido',
-        model: 'Web NFC (sin acceso al chip)',
-        protected: false,
-        unlocked: false,
-        locked: false,
-        readProtected: false,
-        empty: false,
-        wipedBytes: 0,
-        records: [],
-        note: '',
-        error: 'No se pudo leer la etiqueta.'
-      });
-    });
-  }
-
-  // ------------------------------------------------------------------
-  // API pública
-  // ------------------------------------------------------------------
-
   const backend = {
-    kind: isNative ? 'native' : hasWebNfc ? 'web' : 'none',
-
-    /** Solo el backend nativo puede escribir la contraseña real del chip. */
-    hardwareLock: isNative,
-
-    isAvailable() {
-      if (isNative) {
-        return plugin.isAvailable();
-      }
-      return Promise.resolve({ hasNfc: hasWebNfc, enabled: hasWebNfc });
-    },
+    kind: 'none',     // 'native' | 'none'
+    hardwareLock: false,
+    status: null,     // { hasNfc, enabled }
+    reason: '',       // por qué no hay backend nativo, si es el caso
 
     onResult(callback) {
       listener = callback;
     },
 
     async start(options) {
-      session = Object.assign({ mode: 'read', password: '', content: '' }, options);
-      if (isNative) {
-        await startNative(session);
-      } else if (hasWebNfc) {
-        await startWeb(session);
-      } else {
-        throw new Error('Este dispositivo no admite NFC en este modo.');
+      if (backend.kind !== 'native') {
+        throw new Error(backend.reason || 'El puente NFC nativo no está disponible.');
       }
+      if (!nativeHandle) {
+        nativeHandle = await plugin.addListener('nfcResult', (result) => emit(normalize(result)));
+      }
+      await plugin.startScan({
+        mode: options.mode,
+        password: options.password || '',
+        content: options.content || '',
+        fullWipe: options.fullWipe !== false,
+        protectRead: options.protectRead === true
+      });
     },
 
     async stop() {
-      session = null;
-      if (isNative) {
-        try {
-          await plugin.stopScan();
-        } catch (e) {
-          /* el escaneo ya estaba detenido */
-        }
-        return;
-      }
-      if (webController) {
-        try {
-          webController.abort();
-        } catch (e) {
-          /* ya abortado */
-        }
-        webController = null;
-        webReader = null;
+      if (backend.kind !== 'native') return;
+      try {
+        await plugin.stopScan();
+      } catch (e) {
+        /* el escaneo ya estaba detenido */
       }
     },
 
     /** Inyecta un resultado sintético (simulador de escritorio). */
-    emit,
-
-    hashPassword
+    emit
   };
+
+  /** Orígenes que usa el WebView de Capacitor. Si estamos aquí, es la APK. */
+  function looksLikeApk() {
+    return (
+      /^(capacitor|ionic):$/.test(window.location.protocol) ||
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1'
+    );
+  }
+
+  /**
+   * Un service worker registrado por versiones anteriores sirve el index.html
+   * desde caché y se salta la inyección del puente de Capacitor, dejando la APK
+   * sin acceso nativo de forma permanente. Se limpia sin preguntar.
+   */
+  async function purgeServiceWorkers() {
+    try {
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map((r) => r.unregister()));
+      }
+      if (window.caches && caches.keys) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((k) => caches.delete(k)));
+      }
+    } catch (e) {
+      console.warn('[NFC] No se pudo limpiar el service worker:', e);
+    }
+  }
+
+  /**
+   * La detección no se fía de isNativePlatform(): la prueba de verdad es que el
+   * plugin conteste. Si contesta, estamos en la APK con el plugin enlazado.
+   */
+  backend.ready = (async function detect() {
+    const capacitor = await waitForCapacitor(3000);
+
+    if (!capacitor) {
+      backend.kind = 'none';
+      if (looksLikeApk()) {
+        await purgeServiceWorkers();
+        backend.reason =
+          'Estás en la APK pero el puente de Capacitor no cargó (service worker viejo sirviendo HTML en caché). ' +
+          'Se limpió la caché: cierra la app del todo y vuelve a abrirla.';
+      } else {
+        backend.reason = 'No se encontró el puente de Capacitor: esto no es la APK, es el navegador.';
+      }
+      console.warn('[NFC]', backend.reason);
+      return backend;
+    }
+
+    try {
+      plugin = capacitor.registerPlugin('NfcNative');
+      backend.status = await plugin.isAvailable();
+      backend.kind = 'native';
+      backend.hardwareLock = true;
+      console.log('[NFC] Backend nativo listo:', backend.status);
+    } catch (err) {
+      backend.kind = 'none';
+      backend.reason = 'El plugin NfcNative no respondió: ' + (err && err.message ? err.message : err);
+      console.error('[NFC]', backend.reason, err);
+    }
+
+    return backend;
+  })();
 
   window.NfcBackend = backend;
 })();

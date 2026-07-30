@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const BACKEND_MODE = { burst: 'format', protect: 'protect', inspect: 'read' };
 
   const state = {
-    isNfcSupported: window.NfcBackend.kind !== 'none',
     isScanning: false,
     currentMode: 'burst', // 'burst', 'protect', 'inspect'
     activeMode: null,     // pestaña que lanzó la ráfaga en curso
@@ -166,33 +165,34 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // INITIALIZATION & COMPATIBILITY
   // ==========================================
-  async function checkCompatibility() {
-    // El modo va primero y siempre: distinguir la APK de la PWA a simple vista
-    // es imposible, y cada una tiene capacidades distintas.
-    if (window.NfcBackend.kind === 'native') {
-      const status = await window.NfcBackend.isAvailable();
-      if (!status.hasNfc) {
-        DOM.compatBanner.className = 'alert-banner warning';
-        DOM.compatStatusText.innerHTML = '📱 <strong>APK NATIVA</strong> — pero este dispositivo no tiene hardware NFC.';
-        enableSimulator(true);
-        return;
-      }
-      DOM.compatBanner.className = 'alert-banner info';
-      DOM.compatStatusText.innerHTML = status.enabled
-        ? '📱 <strong>APK NATIVA</strong> — acceso directo al chip. La contraseña se graba en el hardware de la etiqueta (NTAG213/215/216).'
-        : '📱 <strong>APK NATIVA</strong> — el NFC del teléfono está apagado. Actívalo en los ajustes de Android.';
-      return;
-    }
+  function checkCompatibility() {
+    const backend = window.NfcBackend;
 
-    if (window.NfcBackend.kind === 'web') {
+    if (backend.kind !== 'native') {
       DOM.compatBanner.className = 'alert-banner warning';
-      DOM.compatStatusText.innerHTML = '🌐 <strong>NAVEGADOR / PWA</strong> — esto <strong>no es la APK</strong>. Puedes leer, borrar y grabar, pero la protección es <strong>solo por software</strong>: no se graba en el chip. Para la contraseña real, instala la APK.';
+      DOM.compatStatusText.innerHTML =
+        `🖥️ <strong>SIN NFC NATIVO</strong> — ${backend.reason} Se activó el simulador para probar la interfaz.`;
+      enableSimulator(true);
       return;
     }
 
-    DOM.compatBanner.className = 'alert-banner warning';
-    DOM.compatStatusText.innerHTML = '🖥️ <strong>SIMULADOR</strong> — este navegador no admite NFC. Puedes probar toda la interfaz sin etiquetas reales.';
-    enableSimulator(true);
+    const status = backend.status || {};
+
+    if (!status.hasNfc) {
+      DOM.compatBanner.className = 'alert-banner warning';
+      DOM.compatStatusText.innerHTML = '📱 <strong>APK NATIVA</strong> — pero este dispositivo no tiene hardware NFC.';
+      enableSimulator(true);
+      return;
+    }
+
+    if (!status.enabled) {
+      DOM.compatBanner.className = 'alert-banner warning';
+      DOM.compatStatusText.innerHTML = '📱 <strong>APK NATIVA</strong> — el NFC del teléfono está apagado. Actívalo en los ajustes de Android.';
+      return;
+    }
+
+    DOM.compatBanner.className = 'alert-banner info';
+    DOM.compatStatusText.innerHTML = '📱 <strong>APK NATIVA</strong> — acceso directo al chip. La contraseña se graba en el hardware de la etiqueta (NTAG213/215/216).';
   }
 
   // ==========================================
@@ -268,8 +268,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    if (!state.isNfcSupported && !state.simulatorActive) {
-      showToast('Este dispositivo no admite NFC. Activa el Simulador PC.', 'error');
+    if (window.NfcBackend.kind !== 'native' && !state.simulatorActive) {
+      showToast(window.NfcBackend.reason || 'El NFC nativo no está disponible.', 'error');
       return;
     }
 
@@ -385,13 +385,9 @@ document.addEventListener('DOMContentLoaded', () => {
         : `Memoria borrada (${result.wipedBytes || 0} bytes a cero)`;
     } else {
       headline = 'PROTEGIDA OK';
-      if (state.simulatorActive) {
-        detail = 'Contraseña grabada en el chip (simulado)';
-      } else {
-        detail = window.NfcBackend.hardwareLock
-          ? `Contraseña grabada en el chip${result.readProtected ? ' (lectura y escritura)' : ' (escritura)'}`
-          : 'Candado por software: Web NFC no accede al chip';
-      }
+      detail = state.simulatorActive
+        ? 'Contraseña grabada en el chip (simulado)'
+        : `Contraseña grabada en el chip${result.readProtected ? ' (lectura y escritura)' : ' (escritura)'}`;
     }
 
     const timeStr = new Date().toLocaleTimeString();
@@ -444,11 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (result.capacity) {
       rawDetails += `Memoria:     ${result.capacity} bytes de usuario\n`;
     }
-    rawDetails += `Contraseña:  ${
-      window.NfcBackend.hardwareLock
-        ? (result.protected ? 'SÍ — protegida por hardware' : 'No')
-        : 'No verificable desde el navegador'
-    }\n`;
+    rawDetails += `Contraseña:  ${result.protected ? 'SÍ — protegida por hardware' : 'No'}\n`;
     rawDetails += `Fecha:       ${new Date().toLocaleString()}\n\n`;
 
     if (records.length === 0) {
@@ -741,15 +733,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // En la APK los archivos ya están empaquetados: cachearlos otra vez solo
-  // conseguiría servir una versión vieja tras actualizar la app.
-  if ('serviceWorker' in navigator && window.NfcBackend.kind !== 'native') {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('Service Worker Registered:', reg.scope))
-      .catch(err => console.warn('Service Worker Error:', err));
-  }
-
-  // Startup Execution
-  checkCompatibility();
+  // ==========================================
+  // ARRANQUE
+  // ==========================================
   renderHistoryTable();
+
+  // Detectar el puente nativo es asíncrono: hasta que responda no se sabe si
+  // estamos en la APK, y de eso dependen el banner y el service worker.
+  window.NfcBackend.ready.then((backend) => {
+    checkCompatibility();
+
+    // En la APK los archivos ya vienen empaquetados: cachearlos otra vez solo
+    // conseguiría servir una versión vieja tras actualizar la app.
+    if ('serviceWorker' in navigator && backend.kind !== 'native') {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker Registered:', reg.scope))
+        .catch(err => console.warn('Service Worker Error:', err));
+    }
+  });
 });
