@@ -24,13 +24,24 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Instalar Capacitor CLI y generar APK
+      - name: Preparar carpeta web (www)
         run: |
-          npm install -g @capacitor/cli @capacitor/core @capacitor/android
-          npx cap init "NFC Tag Master" "com.appnfc.master" --web-dir "."
+          mkdir -p www
+          cp index.html app.js styles.css manifest.json sw.js www/
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Inicializar Capacitor y agregar Android
+        run: |
+          npx cap init "NFC Tag Master" "com.appnfc.master" --web-dir "www"
           npx cap add android
           npx cap copy android
-          cd android && ./gradlew assembleDebug
+
+      - name: Compilar APK
+        run: |
+          chmod +x android/gradlew
+          cd android && ./gradlew assembleDebug --no-daemon
 
       - name: Subir APK como Artefacto Descargable
         uses: actions/upload-artifact@v4
