@@ -1,6 +1,9 @@
 ext {
     capacitorCompileSdk = project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 34
     capacitorMinSdk = project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 22
+    // Plugin.getActivity() devuelve AppCompatActivity: sin esta dependencia
+    // javac no encuentra la clase y falla al resolver el tipo.
+    capacitorAppCompat = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.6.1'
 }
 
 buildscript {
@@ -40,4 +43,5 @@ repositories {
 
 dependencies {
     implementation project(':capacitor-android')
+    implementation "androidx.appcompat:appcompat:$capacitorAppCompat"
 }
