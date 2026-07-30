@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NFC Tag Master - Borrado Masivo y Formateo PWA</title>
+  <meta name="description" content="Aplicación Web Progresiva para borrado masivo, formateo continuo y protección de etiquetas NFC.">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2338bdf8'><path d='M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16zM18 6h-5c-1.1 0-2 .9-2 2v2.28c-.6.35-1 .98-1 1.72 0 1.1.9 2 2 2s2-.9 2-2c0-.74-.4-1.37-1-1.72V8h3v12H6V6h12z'/></svg>">
+  
+  <!-- Preconnect & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Navbar Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 10a8 8 0 0 1 8-8" stroke-linecap="round"/>
+            <path d="M4 14a12 12 0 0 1 12-12" stroke-linecap="round"/>
+            <path d="M4 18a16 16 0 0 1 16-16" stroke-linecap="round"/>
+            <circle cx="5" cy="19" r="2" fill="currentColor"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">NFC Tag Master</h1>
+          <span class="brand-badge">PWA v1.0</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <a id="apk-download-btn" href="https://pwabuilder.com" target="_blank" class="btn btn-sm btn-outline-warning" title="Descargar APK nativa con candado de hardware NTAG">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span>Descargar APK (NTAG Hardware Lock)</span>
+        </a>
+
+        <button id="pwa-install-btn" class="btn btn-sm btn-outline hidden">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span>Instalar PWA</span>
+        </button>
+
+        <button id="toggle-sound-btn" class="btn btn-icon" title="Silenciar / Activar Sonido">
+          <svg id="sound-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <svg id="sound-icon-off" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+
+        <button id="toggle-sim-btn" class="btn btn-sm btn-accent" title="Activar/Desactivar simulador para pruebas en PC">
+          <span class="sim-dot"></span>
+          <span id="sim-btn-text">Simulador PC</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Compatibility Alert Banner -->
+    <div id="compat-banner" class="alert-banner info">
+      <div class="alert-content">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <span id="compat-status-text">Comprobando compatibilidad Web NFC...</span>
+      </div>
+      <button class="alert-close" onclick="this.parentElement.style.display='none'">&times;</button>
+    </div>
+
+    <!-- Main Navigation Tabs -->
+    <nav class="nav-tabs" role="tablist">
+      <button class="tab-btn active" data-tab="tab-burst" id="tab-btn-burst">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+        <span>Borrado Masivo</span>
+      </button>
+
+      <button class="tab-btn" data-tab="tab-protect" id="tab-btn-protect">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <span>Protección y Clave</span>
+      </button>
+
+      <button class="tab-btn" data-tab="tab-inspect" id="tab-btn-inspect">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <span>Lectura e Inspección</span>
+      </button>
+
+      <button class="tab-btn" data-tab="tab-history" id="tab-btn-history">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="12 8 12 12 14 14"/>
+          <path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5"/>
+        </svg>
+        <span>Historial</span>
+      </button>
+    </nav>
+
+    <!-- Main Workspace Content -->
+    <main class="main-content">
+      
+      <!-- ================= TAB 1: BORRADO MASIVO ================= -->
+      <section id="tab-burst" class="tab-pane active">
+        <div class="pane-grid">
+          
+          <!-- Controller Card -->
+          <div class="card glass-card scanner-card">
+            <div class="card-header">
+              <h2>Modo Ráfaga (Borrado Masivo)</h2>
+              <p>Formateo continuo. Cada etiqueta que acerques se limpiará automáticamente.</p>
+            </div>
+
+            <!-- Scanner Visualizer -->
+            <div class="radar-container">
+              <div id="radar-circle" class="radar-circle">
+                <div class="radar-sweep"></div>
+                <div class="radar-waves"></div>
+                <div class="radar-icon">
+                  <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 10a8 8 0 0 1 8-8"/>
+                    <path d="M4 14a12 12 0 0 1 12-12"/>
+                    <path d="M4 18a16 16 0 0 1 16-16"/>
+                    <circle cx="5" cy="19" r="2" fill="currentColor"/>
+                  </svg>
+                </div>
+              </div>
+              <div id="scanner-status" class="scanner-status-text">Escáner Inactivo</div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="scanner-controls">
+              <button id="start-burst-btn" class="btn btn-lg btn-primary shadow-glow">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <span>Iniciar Borrado Masivo</span>
+              </button>
+
+              <button id="stop-burst-btn" class="btn btn-lg btn-danger hidden">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="6" y="6" width="12" height="12" rx="1"/>
+                </svg>
+                <span>Detener Ráfaga</span>
+              </button>
+            </div>
+
+            <!-- Simulator Trigger Box (visible when simulator active) -->
+            <div id="sim-trigger-box" class="sim-box hidden">
+              <div class="sim-header">
+                <span>Panel de Simulación PC</span>
+                <span class="sim-badge">MOCK NFC</span>
+              </div>
+              <p>Haz clic en el botón para simular la aproximación de un chip NFC:</p>
+              <div class="sim-buttons">
+                <button id="sim-tap-blank" class="btn btn-sm btn-outline">Simular Tag Con Datos</button>
+                <button id="sim-tap-error" class="btn btn-sm btn-outline-danger">Simular Error Lectura</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Stats & Output Card -->
+          <div class="card glass-card stats-card">
+            <div class="card-header">
+              <h3>Estadísticas de la Sesión</h3>
+            </div>
+
+            <div class="stats-counter-grid">
+              <div class="stat-box success">
+                <span class="stat-value" id="stat-cleared-count">0</span>
+                <span class="stat-label">Borradas con Éxito</span>
+              </div>
+
+              <div class="stat-box failed">
+                <span class="stat-value" id="stat-failed-count">0</span>
+                <span class="stat-label">Fallidas / Errores</span>
+              </div>
+            </div>
+
+            <div class="last-tag-box">
+              <div class="box-title">Última Etiqueta Procesada</div>
+              <div id="last-tag-info" class="tag-info-empty">
+                Ninguna etiqueta procesada aún en esta sesión.
+              </div>
+            </div>
+
+            <div class="options-box mt-3">
+              <h4>Protección y Desbloqueo por Contraseña</h4>
+              <div class="form-group">
+                <label for="burst-pass-input">Clave de Desbloqueo para Etiquetas Protegidas</label>
+                <div class="input-group">
+                  <input type="password" id="burst-pass-input" placeholder="Si la etiqueta tiene clave, ingrésala aquí" class="input-control">
+                  <button id="toggle-burst-pass-visibility" class="btn btn-icon btn-field" type="button">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </button>
+                </div>
+                <span class="text-sm text-muted">Si la etiqueta fue protegida con clave, solo se borrará si esta contraseña coincide.</span>
+              </div>
+            </div>
+
+            <div class="options-box mt-3">
+              <h4>Configuración de Formateo</h4>
+              <label class="toggle-option">
+                <input type="checkbox" id="opt-sound-feedback" checked>
+                <span class="toggle-slider"></span>
+                <span>Retroalimentación sonora por etiqueta</span>
+              </label>
+
+              <label class="toggle-option">
+                <input type="checkbox" id="opt-vibrate-feedback" checked>
+                <span class="toggle-slider"></span>
+                <span>Vibración háptica (dispositivos móviles)</span>
+              </label>
+
+              <label class="toggle-option">
+                <input type="checkbox" id="opt-overwrite-all" checked>
+                <span class="toggle-slider"></span>
+                <span>Forzar sobrescritura de todos los registros NDEF</span>
+              </label>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: PROTECCIÓN Y CONTRASEÑA MASIVA ================= -->
+      <section id="tab-protect" class="tab-pane">
+        <div class="pane-grid">
+          
+          <!-- Controller Card for Mass Protection -->
+          <div class="card glass-card scanner-card">
+            <div class="card-header">
+              <h2>Ráfaga de Protección por Contraseña</h2>
+              <p>Asigna una contraseña de protección masiva. Cada etiqueta que acerques se protegerá y no podrá ser borrada sin la clave.</p>
+            </div>
+
+            <!-- Scanner Visualizer for Protect Mode -->
+            <div class="radar-container">
+              <div id="protect-radar-circle" class="radar-circle">
+                <div class="radar-sweep"></div>
+                <div class="radar-waves"></div>
+                <div class="radar-icon">
+                  <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </div>
+              </div>
+              <div id="protect-scanner-status" class="scanner-status-text">Ingresa una contraseña para iniciar</div>
+            </div>
+
+            <!-- Password Entry Form -->
+            <div class="protect-form full-width">
+              <div class="form-group">
+                <label for="protect-content-input">Contenido Texto/URL de la Etiqueta (Limpio y Visible)</label>
+                <input type="text" id="protect-content-input" placeholder="Ej: Mi Etiqueta de Empresa / https://miweb.com" class="input-control" value="Etiqueta Protegida">
+                <span class="text-sm text-muted">Este texto será el contenido visible normal en lectores como NFC Tools.</span>
+              </div>
+
+              <div class="form-group mt-2">
+                <label for="protect-pass-input">Contraseña de Protección (Solo para Autorizar Edición/Borrado)</label>
+                <div class="input-group">
+                  <input type="password" id="protect-pass-input" placeholder="Ej: MiClaveSecreta2026" class="input-control">
+                  <button id="toggle-pass-visibility" class="btn btn-icon btn-field" type="button">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </button>
+                </div>
+                <span class="text-sm text-muted">La contraseña se guarda en un registro oculto de seguridad para autorizar el borrado.</span>
+              </div>
+
+              <!-- Action Controls for Protect Mode -->
+              <div class="scanner-controls mt-3">
+                <button id="start-protect-burst-btn" class="btn btn-lg btn-warning full-width shadow-glow">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                  <span>Iniciar Protección Masiva</span>
+                </button>
+
+                <button id="stop-protect-burst-btn" class="btn btn-lg btn-danger full-width hidden">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="6" y="6" width="12" height="12" rx="1"/>
+                  </svg>
+                  <span>Detener Ráfaga de Protección</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Documentation & Info Card -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <h3>¿Cómo funciona la Protección por Contraseña?</h3>
+            </div>
+            
+            <div class="tech-info-body">
+              <div class="info-block">
+                <h4>1. Ráfaga de Protección</h4>
+                <p>Ingresas una clave de acceso una sola vez y activas el modo ráfaga. Cada etiqueta NFC que acerques recibirá un registro firmado digitalmente con un hash seguro (SHA-256) de tu contraseña.</p>
+              </div>
+
+              <div class="info-block">
+                <h4>2. Prevención de Sobrescritura No Autorizada</h4>
+                <p>Si alguien intenta formatear o reescribir una etiqueta protegida desde esta aplicación sin ingresar la contraseña correcta, el sistema denegará la operación y bloqueará el borrado.</p>
+              </div>
+
+              <div class="info-block">
+                <h4>3. Totalmente Reutilizable</h4>
+                <p>A diferencia de los bloqueos permanentes de solo lectura (makeReadOnly), esta protección es reversible: siempre podrás formatear y reutilizar tus etiquetas ingresando tu contraseña en la pestaña de <strong>Borrado Masivo</strong>.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= TAB 3: LECTURA E INSPECCIÓN ================= -->
+      <section id="tab-inspect" class="tab-pane">
+        <div class="pane-grid">
+          
+          <div class="card glass-card">
+            <div class="card-header">
+              <h2>Inspección de Etiqueta NFC</h2>
+              <p>Escanea una etiqueta para ver su UID, registros NDEF y estructura interna.</p>
+            </div>
+
+            <div class="inspect-actions">
+              <button id="start-inspect-btn" class="btn btn-primary btn-lg full-width">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <span>Escanear Etiqueta</span>
+              </button>
+            </div>
+
+            <div id="inspect-result-box" class="inspect-details hidden">
+              <div class="inspect-meta-grid">
+                <div class="meta-item">
+                  <span class="meta-label">Número de Serie (UID):</span>
+                  <span class="meta-value" id="inspect-uid">--</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Tipo de Registro:</span>
+                  <span class="meta-value" id="inspect-records-count">0 registros</span>
+                </div>
+              </div>
+
+              <div class="records-container">
+                <h4>Contenido NDEF Detectado:</h4>
+                <pre id="inspect-payload-raw" class="code-block"></pre>
+              </div>
+            </div>
+
+            <div id="inspect-placeholder" class="inspect-placeholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <p>Presiona "Escanear Etiqueta" y aproxima un chip NFC al lector de tu dispositivo.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= TAB 4: HISTORIAL ================= -->
+      <section id="tab-history" class="tab-pane">
+        <div class="card glass-card">
+          <div class="card-header flex-between">
+            <div>
+              <h2>Historial de Transacciones NFC</h2>
+              <p>Registro local de borrados, inspecciones y escrituras.</p>
+            </div>
+            
+            <div class="history-actions">
+              <button id="export-csv-btn" class="btn btn-sm btn-outline">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <span>Exportar CSV</span>
+              </button>
+
+              <button id="clear-history-btn" class="btn btn-sm btn-outline-danger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                <span>Limpiar</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Fecha / Hora</th>
+                  <th>Operación</th>
+                  <th>UID / Serie</th>
+                  <th>Resultado</th>
+                  <th>Detalles</th>
+                </tr>
+              </thead>
+              <tbody id="history-tbody">
+                <tr>
+                  <td colspan="5" class="text-center text-muted">No hay registros guardados aún.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>NFC Tag Master PWA &bull; Optimizado para Vercel & Web NFC W3C</p>
+    </footer>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Script Core -->
+  <script src="app.js"></script>
+</body>
+</html>
