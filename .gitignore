@@ -1,5 +1,9 @@
 node_modules/
-www/
-android/
-capacitor.config.json
+
+# Generado en CI por Capacitor (la barra inicial limita el patrón a la raíz,
+# para no excluir plugin-nfc/android, que sí es código fuente)
+/www/
+/android/
+/capacitor.config.json
+
 *.apk

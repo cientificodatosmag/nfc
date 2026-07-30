@@ -3,11 +3,12 @@
  * Caches static shell assets for 100% offline functionality.
  */
 
-const CACHE_NAME = 'nfc-master-v1';
+const CACHE_NAME = 'nfc-master-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './styles.css',
+  './nfc-bridge.js',
   './app.js',
   './manifest.json'
 ];

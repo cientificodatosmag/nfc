@@ -1,6 +1,9 @@
 /**
  * NFC TAG MASTER - CORE APPLICATION LOGIC
- * Features: Web NFC API, Burst Mass Formatting, Password Protection Burst, Password Unlock Verification, Web Audio Synth, PC Simulator, PWA.
+ * Features: Burst Mass Formatting, Password Protection Burst, Password Unlock Verification, Web Audio Synth, PC Simulator, PWA.
+ *
+ * El acceso al hardware vive en nfc-bridge.js (window.NfcBackend). Este archivo
+ * solo pide operaciones y pinta resultados.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,35 +11,26 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // STATE MANAGEMENT
   // ==========================================
+  // Traducción de las pestañas de la UI a las operaciones del backend
+  const BACKEND_MODE = { burst: 'format', protect: 'protect', inspect: 'read' };
+
   const state = {
-    isNfcSupported: 'NDEFReader' in window,
+    isNfcSupported: window.NfcBackend.kind !== 'none',
     isScanning: false,
     currentMode: 'burst', // 'burst', 'protect', 'inspect'
+    activeMode: null,     // pestaña que lanzó la ráfaga en curso
     simulatorActive: false,
     soundEnabled: true,
     hapticEnabled: true,
     overwriteAll: true,
-    
+
     // Stats
     sessionClearedCount: 0,
     sessionFailedCount: 0,
-    
-    // Web NFC instances
-    ndefReader: null,
-    controller: null, // AbortController
-    
+
     // History array
     history: JSON.parse(localStorage.getItem('nfc_tag_master_history') || '[]')
   };
-
-  // Helper function for SHA-256 password hashing
-  async function hashPassword(password) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(`NFC_SALT_2026::${password}`);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  }
 
   // ==========================================
   // DOM ELEMENTS
@@ -172,15 +166,31 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // INITIALIZATION & COMPATIBILITY
   // ==========================================
-  function checkCompatibility() {
-    if (state.isNfcSupported) {
+  async function checkCompatibility() {
+    if (window.NfcBackend.kind === 'native') {
+      const status = await window.NfcBackend.isAvailable();
+      if (!status.hasNfc) {
+        DOM.compatBanner.className = 'alert-banner warning';
+        DOM.compatStatusText.innerHTML = '<strong>Sin hardware NFC:</strong> este dispositivo no tiene lector NFC.';
+        enableSimulator(true);
+        return;
+      }
       DOM.compatBanner.className = 'alert-banner info';
-      DOM.compatStatusText.innerHTML = '<strong>Web NFC Activo:</strong> Tu navegador es compatible con lecturas/escrituras NFC.';
-    } else {
-      DOM.compatBanner.className = 'alert-banner warning';
-      DOM.compatStatusText.innerHTML = '<strong>Atención:</strong> Web NFC requiere Chrome en Android y HTTPS. Se activó automáticamente el <strong>Simulador PC</strong> para probar todas las funciones.';
-      enableSimulator(true);
+      DOM.compatStatusText.innerHTML = status.enabled
+        ? '<strong>NFC Nativo Activo:</strong> acceso directo al chip. La contraseña se graba en el hardware de la etiqueta (NTAG213/215/216).'
+        : '<strong>NFC desactivado:</strong> actívalo en los ajustes de Android para usar la app.';
+      return;
     }
+
+    if (window.NfcBackend.kind === 'web') {
+      DOM.compatBanner.className = 'alert-banner warning';
+      DOM.compatStatusText.innerHTML = '<strong>Web NFC Activo:</strong> puedes leer, borrar y grabar etiquetas. La protección aquí es <strong>solo por software</strong> (otras apps pueden sobrescribirla). Para contraseña real en el chip, usa la APK.';
+      return;
+    }
+
+    DOM.compatBanner.className = 'alert-banner warning';
+    DOM.compatStatusText.innerHTML = '<strong>Atención:</strong> este navegador no admite NFC. Se activó el <strong>Simulador PC</strong> para probar todas las funciones.';
+    enableSimulator(true);
   }
 
   // ==========================================
@@ -199,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnProt.id = 'sim-tap-protected';
         btnProt.className = 'btn btn-sm btn-outline-warning';
         btnProt.textContent = 'Simular Tag Con Clave (1234)';
-        btnProt.addEventListener('click', simulateProtectedTagTap);
+        btnProt.addEventListener('click', () => simulateTap('protected'));
         DOM.simTriggerBox.querySelector('.sim-buttons').appendChild(btnProt);
       }
 
@@ -233,8 +243,20 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================
-  // WEB NFC CORE CONTROLLER
+  // CONTROLADOR DEL ESCÁNER
   // ==========================================
+  function currentScanOptions(mode) {
+    const contentInput = document.getElementById('protect-content-input');
+    return {
+      mode: BACKEND_MODE[mode],
+      password: mode === 'protect'
+        ? DOM.protectPassInput.value.trim()
+        : DOM.burstPassInput.value.trim(),
+      content: contentInput ? contentInput.value.trim() : '',
+      fullWipe: state.overwriteAll
+    };
+  }
+
   async function startNfcScanner(mode = 'burst') {
     initAudio();
 
@@ -245,11 +267,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (!state.isNfcSupported && !state.simulatorActive) {
-      showToast('Tu navegador no admite Web NFC. Activa el Simulador PC.', 'error');
+      showToast('Este dispositivo no admite NFC. Activa el Simulador PC.', 'error');
       return;
     }
 
     state.isScanning = true;
+    state.activeMode = mode;
     updateScannerUI(true, mode);
 
     if (state.simulatorActive) {
@@ -259,21 +282,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      state.controller = new AbortController();
-      state.ndefReader = new NDEFReader();
-
-      await state.ndefReader.scan({ signal: state.controller.signal });
-      
-      state.ndefReader.addEventListener('reading', async (event) => {
-        handleNfcReading(event, mode);
-      });
-
-      state.ndefReader.addEventListener('readingerror', (event) => {
-        handleNfcError(event);
-      });
+      await window.NfcBackend.start(currentScanOptions(mode));
 
       playSound('beep');
-      showToast(`Ráfaga iniciada (${mode === 'burst' ? 'Borrado Masivo' : 'Protección Masiva'}). Aproxima etiquetas.`, 'success');
+      const etiqueta = mode === 'burst' ? 'Borrado Masivo'
+        : mode === 'protect' ? 'Protección Masiva' : 'Inspección';
+      showToast(`Ráfaga iniciada (${etiqueta}). Aproxima etiquetas.`, 'success');
 
     } catch (err) {
       console.error('NFC Scan Error:', err);
@@ -284,13 +298,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function stopNfcScanner() {
     state.isScanning = false;
-    if (state.controller) {
-      try { state.controller.abort(); } catch (e) {}
-      state.controller = null;
-    }
-    state.ndefReader = null;
+    state.activeMode = null;
+    window.NfcBackend.stop().catch(() => {});
     updateScannerUI(false, state.currentMode);
     showToast('Escáner NFC detenido.', 'info');
+  }
+
+  /** La contraseña y las opciones se envían al iniciar: si cambian, hay que reenviarlas. */
+  async function refreshScanOptions() {
+    if (!state.isScanning || state.simulatorActive || !state.activeMode) return;
+    try {
+      await window.NfcBackend.stop();
+      await window.NfcBackend.start(currentScanOptions(state.activeMode));
+    } catch (err) {
+      console.warn('No se pudo actualizar la sesión NFC:', err);
+    }
   }
 
   function updateScannerUI(active, mode = 'burst') {
@@ -323,219 +345,137 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // NFC EVENT HANDLERS
+  // RESULTADOS DEL BACKEND NFC
   // ==========================================
-  async function handleNfcReading(event, mode) {
-    const serialNumber = event.serialNumber || `UID-MOCK-${Math.floor(1000 + Math.random()*9000)}`;
-    const message = event.message || { records: [] };
+  window.NfcBackend.onResult(handleResult);
 
-    triggerRadarPulse('success', mode);
+  function handleResult(result) {
+    triggerRadarPulse(result.success ? 'success' : 'error', state.activeMode || state.currentMode);
 
-    if (mode === 'burst') {
-      await processBurstFormat(serialNumber, message);
-    } else if (mode === 'protect') {
-      await processBurstProtect(serialNumber);
-    } else if (mode === 'inspect') {
-      processInspect(serialNumber, message);
-    }
-  }
-
-  function handleNfcError(event) {
-    state.sessionFailedCount++;
-    DOM.statFailedCount.textContent = state.sessionFailedCount;
-    triggerRadarPulse('error', state.currentMode);
-    playSound('error');
-    triggerHaptic([200, 100, 200]);
-    addHistoryLog('ERROR', 'N/A', 'ERROR_LECTURA', 'No se pudo leer la etiqueta.');
-    showToast('Error de comunicación con el chip NFC.', 'error');
-  }
-
-  // Helper function to format and wipe NFC tag cleanly
-  async function writeEmptyTag(reader) {
-    try {
-      await reader.write({
-        records: [{ recordType: "empty" }]
-      }, { overwrite: true });
-    } catch (e) {
-      // Fallback for devices/Chromium expecting text record
-      await reader.write({
-        records: [{ recordType: "text", data: "" }]
-      }, { overwrite: true });
-    }
-  }
-
-  // ==========================================
-  // RÁFAGA 1: BORRADO MASIVO & DESBLOQUEO DE CLAVE
-  // ==========================================
-  async function processBurstFormat(serialNumber, message) {
-    try {
-      // 1. Detect if tag is protected with an NFC_LOCK record
-      let lockRecordHash = null;
-      if (message && message.records) {
-        for (const rec of message.records) {
-          if (rec.data) {
-            try {
-              const text = new TextDecoder().decode(rec.data);
-              // Check for hidden MIME lock or legacy text lock
-              if (rec.mediaType === 'application/vnd.nfc-lock' && text.startsWith('HASH:')) {
-                lockRecordHash = text.replace('HASH:', '').trim();
-                break;
-              } else if (text.startsWith('NFC_LOCK_V1:')) {
-                lockRecordHash = text.replace('NFC_LOCK_V1:', '').trim();
-                break;
-              }
-            } catch (e) {}
-          }
-        }
-      }
-
-      // 2. If tag has a lock, verify entered password
-      if (lockRecordHash) {
-        const enteredPassword = DOM.burstPassInput.value.trim();
-        if (!enteredPassword) {
-          throw new Error('Etiqueta Protegida por Contraseña. Ingrese la clave de desbloqueo en la casilla.');
-        }
-
-        const enteredHash = await hashPassword(enteredPassword);
-        if (enteredHash !== lockRecordHash) {
-          throw new Error('Contraseña Incorrecta. Acceso Denegado a borrado.');
-        }
-      }
-
-      // 3. Clear/Format Tag safely using Web NFC compliant empty record
-      if (!state.simulatorActive && state.ndefReader) {
-        await writeEmptyTag(state.ndefReader);
-      }
-
-      state.sessionClearedCount++;
-      DOM.statClearedCount.textContent = state.sessionClearedCount;
-
-      const timeStr = new Date().toLocaleTimeString();
-      DOM.lastTagInfo.className = 'tag-info-active';
-      DOM.lastTagInfo.innerHTML = `
-        <strong>[${timeStr}] FORMATEADA OK ${lockRecordHash ? '(Desbloqueada con Clave)' : ''}</strong><br>
-        Serie (UID): <span style="color:#38bdf8">${serialNumber}</span><br>
-        Estado: <em>Registros NDEF borrados (0 bytes)</em>
-      `;
-
-      playSound('success');
-      triggerHaptic([80, 50, 80]);
-      
-      addHistoryLog('BORRADO MASIVO', serialNumber, 'ÉXITO', lockRecordHash ? 'Desbloqueada con clave y borrada' : 'NDEF borrado y formateado');
-      showToast(`Etiqueta ${serialNumber} borrada correctamente!`, 'success');
-
-    } catch (err) {
-      console.error('Format Write Error:', err);
-      state.sessionFailedCount++;
-      DOM.statFailedCount.textContent = state.sessionFailedCount;
-
-      playSound('error');
-      triggerHaptic([300]);
-      addHistoryLog('BORRADO MASIVO', serialNumber, 'FALLO', err.message || 'Error de protección o comunicación');
-      showToast(`Fallo en ${serialNumber}: ${err.message || 'Bloqueada o alejada'}`, 'error');
-    }
-  }
-
-  // ==========================================
-  // RÁFAGA 2: PROTECCIÓN MASIVA POR CONTRASEÑA
-  // ==========================================
-  async function processBurstProtect(serialNumber) {
-    const password = DOM.protectPassInput.value.trim();
-    const protectContentInput = document.getElementById('protect-content-input');
-    const visibleContent = protectContentInput ? protectContentInput.value.trim() : 'Etiqueta Protegida';
-
-    if (!password) {
-      stopNfcScanner();
-      showToast('Ingresa una contraseña para la ráfaga de protección.', 'error');
+    if (result.mode === 'read' && result.success) {
+      renderInspection(result);
       return;
     }
 
-    try {
-      const passHash = await hashPassword(password);
-
-      // Create two records:
-      // Record 1: Clean, readable content (visible in NFC Tools)
-      // Record 2: Security MIME lock signature for app-level password authorization
-      const recordsToWrite = [
-        {
-          recordType: 'text',
-          data: visibleContent || 'Etiqueta Protegida'
-        },
-        {
-          recordType: 'mime',
-          mediaType: 'application/vnd.nfc-lock',
-          data: new TextEncoder().encode(`HASH:${passHash}`)
-        }
-      ];
-
-      if (!state.simulatorActive && state.ndefReader) {
-        await state.ndefReader.write({
-          records: recordsToWrite
-        }, { overwrite: true });
-      }
-
-      state.sessionClearedCount++;
-      DOM.statClearedCount.textContent = state.sessionClearedCount;
-
-      playSound('success');
-      triggerHaptic([100, 50, 100]);
-
-      addHistoryLog('PROTECCIÓN MASIVA', serialNumber, 'ÉXITO', `Protegida con clave y texto libre`);
-      showToast(`Etiqueta ${serialNumber} grabada y protegida!`, 'success');
-
-    } catch (err) {
-      console.error('Protect Write Error:', err);
-      state.sessionFailedCount++;
-      DOM.statFailedCount.textContent = state.sessionFailedCount;
-
-      playSound('error');
-      triggerHaptic([300]);
-      addHistoryLog('PROTECCIÓN MASIVA', serialNumber, 'FALLO', err.message || 'Error al grabar clave');
-      showToast(`Error al proteger ${serialNumber}: ${err.message}`, 'error');
+    if (result.success) {
+      reportSuccess(result);
+    } else {
+      reportFailure(result);
     }
+  }
+
+  function operationLabel(mode) {
+    if (mode === 'format') return 'BORRADO MASIVO';
+    if (mode === 'protect') return 'PROTECCIÓN MASIVA';
+    return 'INSPECCIÓN';
+  }
+
+  function reportSuccess(result) {
+    state.sessionClearedCount++;
+    DOM.statClearedCount.textContent = state.sessionClearedCount;
+
+    let headline;
+    let detail;
+    if (result.mode === 'format') {
+      headline = `FORMATEADA OK${result.unlocked ? ' (Desbloqueada con clave)' : ''}`;
+      detail = result.unlocked
+        ? 'Contraseña del chip retirada y memoria borrada'
+        : `Memoria borrada (${result.wipedBytes || 0} bytes a cero)`;
+    } else {
+      headline = 'PROTEGIDA OK';
+      if (state.simulatorActive) {
+        detail = 'Contraseña grabada en el chip (simulado)';
+      } else {
+        detail = window.NfcBackend.hardwareLock
+          ? `Contraseña grabada en el chip${result.readProtected ? ' (lectura y escritura)' : ' (escritura)'}`
+          : 'Candado por software: Web NFC no accede al chip';
+      }
+    }
+
+    const timeStr = new Date().toLocaleTimeString();
+    DOM.lastTagInfo.className = 'tag-info-active';
+    DOM.lastTagInfo.innerHTML = `
+      <strong>[${timeStr}] ${headline}</strong><br>
+      Serie (UID): <span style="color:#38bdf8">${result.uid}</span><br>
+      Chip: <span style="color:#38bdf8">${result.model}</span><br>
+      Estado: <em>${detail}</em>
+    `;
+
+    playSound('success');
+    triggerHaptic([80, 50, 80]);
+    addHistoryLog(operationLabel(result.mode), result.uid, 'ÉXITO', detail);
+    showToast(`${result.uid}: ${headline}`, 'success');
+  }
+
+  function reportFailure(result) {
+    state.sessionFailedCount++;
+    DOM.statFailedCount.textContent = state.sessionFailedCount;
+
+    const message = result.error || 'Error de comunicación con el chip NFC.';
+    const timeStr = new Date().toLocaleTimeString();
+    DOM.lastTagInfo.className = 'tag-info-active';
+    DOM.lastTagInfo.innerHTML = `
+      <strong>[${timeStr}] FALLO</strong><br>
+      Serie (UID): <span style="color:#38bdf8">${result.uid}</span><br>
+      Motivo: <em>${message}</em>
+    `;
+
+    playSound('error');
+    triggerHaptic([300]);
+    addHistoryLog(operationLabel(result.mode), result.uid, 'FALLO', message);
+    showToast(`Fallo en ${result.uid}: ${message}`, 'error');
   }
 
   // ==========================================
   // OPERACION: INSPECCIÓN (TAB 3)
   // ==========================================
-  function processInspect(serialNumber, message) {
+  function renderInspection(result) {
     DOM.inspectPlaceholder.classList.add('hidden');
     DOM.inspectResultBox.classList.remove('hidden');
-    
-    DOM.inspectUid.textContent = serialNumber || 'Desconocido';
-    const records = message.records || [];
+
+    DOM.inspectUid.textContent = result.uid || 'Desconocido';
+    const records = result.records || [];
     DOM.inspectRecordsCount.textContent = `${records.length} registro(s)`;
 
-    let rawDetails = `Serie (UID): ${serialNumber}\nFecha: ${new Date().toLocaleString()}\n\n`;
-    
+    let rawDetails = `Serie (UID): ${result.uid}\n`;
+    rawDetails += `Chip:        ${result.model}\n`;
+    if (result.capacity) {
+      rawDetails += `Memoria:     ${result.capacity} bytes de usuario\n`;
+    }
+    rawDetails += `Contraseña:  ${
+      window.NfcBackend.hardwareLock
+        ? (result.protected ? 'SÍ — protegida por hardware' : 'No')
+        : 'No verificable desde el navegador'
+    }\n`;
+    rawDetails += `Fecha:       ${new Date().toLocaleString()}\n\n`;
+
     if (records.length === 0) {
-      rawDetails += '--> Etiqueta Vacía / Formateada (Sin registros NDEF) <--';
+      rawDetails += '--> Etiqueta vacía / formateada (sin registros NDEF) <--';
     } else {
       records.forEach((rec, idx) => {
+        const text = rec.text || '';
         rawDetails += `[Registro #${idx + 1}]\n`;
-        rawDetails += `  RecordType: ${rec.recordType}\n`;
-        rawDetails += `  MediaType:  ${rec.mediaType || 'N/A'}\n`;
-        rawDetails += `  ID:         ${rec.id || 'N/A'}\n`;
-        
-        if (rec.data) {
-          try {
-            const text = new TextDecoder(rec.encoding || 'utf-8').decode(rec.data);
-            if (rec.mediaType === 'application/vnd.nfc-lock' || text.startsWith('NFC_LOCK_V1:')) {
-              rawDetails += `  TIPO:       🔒 REGISTRO DE SEGURIDAD (CANDADO)\n`;
-              rawDetails += `  ESTADO:     Protegida para borrado/reescritura en la app\n\n`;
-            } else {
-              rawDetails += `  Contenido:  "${text}"\n\n`;
-            }
-          } catch (e) {
-            rawDetails += `  Contenido:  [${rec.data.byteLength} bytes de datos binarios]\n\n`;
-          }
+        rawDetails += `  Tipo:       ${rec.recordType}\n`;
+        if (rec.mediaType) {
+          rawDetails += `  MediaType:  ${rec.mediaType}\n`;
+        }
+        rawDetails += `  Tamaño:     ${rec.bytes || 0} bytes\n`;
+
+        if (rec.mediaType === 'application/vnd.nfc-lock' || text.startsWith('NFC_LOCK_V1:')) {
+          rawDetails += `  Contenido:  🔒 Candado por software (escrito por la versión PWA)\n\n`;
+        } else {
+          rawDetails += `  Contenido:  "${text}"\n\n`;
         }
       });
     }
 
+    if (result.note) {
+      rawDetails += `\nNota: ${result.note}\n`;
+    }
+
     DOM.inspectPayloadRaw.textContent = rawDetails;
     playSound('beep');
-    addHistoryLog('INSPECCIÓN', serialNumber, 'ÉXITO', `${records.length} registros inspeccionados`);
+    addHistoryLog('INSPECCIÓN', result.uid, 'ÉXITO', `${records.length} registros inspeccionados`);
   }
 
   // ==========================================
@@ -646,28 +586,80 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // SIMULATED TAP FOR PROTECTED TAG (PC SIMULATOR)
+  // SIMULADOR DE ESCRITORIO
   // ==========================================
-  async function simulateProtectedTagTap() {
+  const SIM_PASSWORD = '1234';
+
+  function simulatedResult(overrides) {
+    return Object.assign({
+      success: true,
+      mode: 'format',
+      uid: `SIM-${Math.floor(100000 + Math.random() * 900000).toString(16).toUpperCase()}`,
+      model: 'NTAG215 (simulada)',
+      protected: false,
+      unlocked: false,
+      locked: false,
+      readProtected: false,
+      empty: false,
+      capacity: 504,
+      wipedBytes: 504,
+      records: [],
+      note: '',
+      error: ''
+    }, overrides);
+  }
+
+  /** kind: 'blank' | 'protected' | 'error' */
+  function simulateTap(kind) {
     if (!state.isScanning) {
       showToast('Inicia primero el escáner (o modo ráfaga) para simular.', 'error');
       return;
     }
 
-    const mockUid = `SIM-PROT-${Math.floor(100000 + Math.random() * 900000).toString(16).toUpperCase()}`;
-    const defaultPassHash = await hashPassword('1234'); // Simulated password is 1234
-    
-    const mockEvent = {
-      serialNumber: mockUid,
-      message: {
-        records: [{
-          recordType: 'text',
-          data: new TextEncoder().encode(`NFC_LOCK_V1:${defaultPassHash}`)
-        }]
-      }
-    };
+    const mode = BACKEND_MODE[state.activeMode || state.currentMode] || 'read';
 
-    handleNfcReading(mockEvent, state.currentMode);
+    if (kind === 'error') {
+      handleResult(simulatedResult({
+        mode,
+        success: false,
+        error: 'Etiqueta retirada demasiado pronto. Mantenla pegada al teléfono.'
+      }));
+      return;
+    }
+
+    const isProtected = kind === 'protected';
+
+    // Una etiqueta protegida solo se deja borrar con la contraseña correcta.
+    if (isProtected && mode === 'format') {
+      const entered = DOM.burstPassInput.value.trim();
+      if (entered !== SIM_PASSWORD) {
+        handleResult(simulatedResult({
+          mode,
+          success: false,
+          protected: true,
+          error: entered
+            ? 'Contraseña incorrecta: la etiqueta rechazó la autenticación.'
+            : 'Etiqueta protegida por hardware: escribe su contraseña para poder borrarla.'
+        }));
+        return;
+      }
+    }
+
+    handleResult(simulatedResult({
+      mode,
+      protected: isProtected,
+      unlocked: isProtected && mode === 'format',
+      locked: mode === 'protect',
+      empty: mode === 'read' && !isProtected ? false : mode === 'format',
+      records: mode === 'read'
+        ? [{
+            recordType: 'text',
+            mediaType: '',
+            text: isProtected ? 'Etiqueta Protegida' : 'Payload sin clave',
+            bytes: 24
+          }]
+        : []
+    }));
   }
 
   // ==========================================
@@ -707,31 +699,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Simulator Triggers
-  DOM.simTapBlank.addEventListener('click', () => {
-    if (!state.isScanning) {
-      showToast('Inicia primero el escáner para simular.', 'error');
-      return;
-    }
-    const mockUid = `SIM-${Math.floor(100000 + Math.random() * 900000).toString(16).toUpperCase()}`;
-    const mockEvent = {
-      serialNumber: mockUid,
-      message: { records: [{ recordType: 'text', data: new TextEncoder().encode('Payload Sin Clave') }] }
-    };
-    handleNfcReading(mockEvent, state.currentMode);
-  });
+  DOM.simTapBlank.addEventListener('click', () => simulateTap('blank'));
+  DOM.simTapError.addEventListener('click', () => simulateTap('error'));
 
-  DOM.simTapError.addEventListener('click', () => {
-    if (!state.isScanning) {
-      showToast('Inicia primero el escáner para simular.', 'error');
-      return;
-    }
-    handleNfcError();
-  });
+  // La contraseña y las opciones viajan al backend al iniciar la ráfaga:
+  // si cambian a mitad de sesión hay que reenviarlas.
+  DOM.burstPassInput.addEventListener('change', refreshScanOptions);
+  DOM.protectPassInput.addEventListener('change', refreshScanOptions);
 
   // Options Switches
   DOM.optSoundFeedback.addEventListener('change', (e) => state.soundEnabled = e.target.checked);
   DOM.optVibrateFeedback.addEventListener('change', (e) => state.hapticEnabled = e.target.checked);
-  DOM.optOverwriteAll.addEventListener('change', (e) => state.overwriteAll = e.target.checked);
+  DOM.optOverwriteAll.addEventListener('change', (e) => {
+    state.overwriteAll = e.target.checked;
+    refreshScanOptions();
+  });
 
   // History Controls
   DOM.exportCsvBtn.addEventListener('click', exportHistoryCSV);
@@ -757,7 +739,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  if ('serviceWorker' in navigator) {
+  // En la APK los archivos ya están empaquetados: cachearlos otra vez solo
+  // conseguiría servir una versión vieja tras actualizar la app.
+  if ('serviceWorker' in navigator && window.NfcBackend.kind !== 'native') {
     navigator.serviceWorker.register('./sw.js')
       .then(reg => console.log('Service Worker Registered:', reg.scope))
       .catch(err => console.warn('Service Worker Error:', err));
