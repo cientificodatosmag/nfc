@@ -209,7 +209,27 @@
   async function startWeb(options) {
     webController = new AbortController();
     webReader = new NDEFReader();
-    await webReader.scan({ signal: webController.signal });
+
+    try {
+      // scan() debe llamarse dentro del gesto del usuario o el navegador
+      // ni siquiera muestra el diálogo de permiso.
+      await webReader.scan({ signal: webController.signal });
+    } catch (err) {
+      webController = null;
+      webReader = null;
+      if (err && err.name === 'NotAllowedError') {
+        throw new Error(
+          'Permiso NFC denegado. Esto es la PWA, no la APK. Revisa: ' +
+            '1) que el NFC del teléfono esté encendido; ' +
+            '2) Ajustes de Android > Aplicaciones > esta app (o Chrome) > Permisos > NFC. ' +
+            'Si lo bloqueaste antes, Chrome lo recuerda y no vuelve a preguntar.'
+        );
+      }
+      if (err && err.name === 'NotSupportedError') {
+        throw new Error('Este navegador no admite Web NFC. Usa Chrome en Android o instala la APK.');
+      }
+      throw err;
+    }
 
     webReader.addEventListener('reading', handleWebReading);
     webReader.addEventListener('readingerror', () => {

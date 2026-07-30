@@ -167,29 +167,31 @@ document.addEventListener('DOMContentLoaded', () => {
   // INITIALIZATION & COMPATIBILITY
   // ==========================================
   async function checkCompatibility() {
+    // El modo va primero y siempre: distinguir la APK de la PWA a simple vista
+    // es imposible, y cada una tiene capacidades distintas.
     if (window.NfcBackend.kind === 'native') {
       const status = await window.NfcBackend.isAvailable();
       if (!status.hasNfc) {
         DOM.compatBanner.className = 'alert-banner warning';
-        DOM.compatStatusText.innerHTML = '<strong>Sin hardware NFC:</strong> este dispositivo no tiene lector NFC.';
+        DOM.compatStatusText.innerHTML = '📱 <strong>APK NATIVA</strong> — pero este dispositivo no tiene hardware NFC.';
         enableSimulator(true);
         return;
       }
       DOM.compatBanner.className = 'alert-banner info';
       DOM.compatStatusText.innerHTML = status.enabled
-        ? '<strong>NFC Nativo Activo:</strong> acceso directo al chip. La contraseña se graba en el hardware de la etiqueta (NTAG213/215/216).'
-        : '<strong>NFC desactivado:</strong> actívalo en los ajustes de Android para usar la app.';
+        ? '📱 <strong>APK NATIVA</strong> — acceso directo al chip. La contraseña se graba en el hardware de la etiqueta (NTAG213/215/216).'
+        : '📱 <strong>APK NATIVA</strong> — el NFC del teléfono está apagado. Actívalo en los ajustes de Android.';
       return;
     }
 
     if (window.NfcBackend.kind === 'web') {
       DOM.compatBanner.className = 'alert-banner warning';
-      DOM.compatStatusText.innerHTML = '<strong>Web NFC Activo:</strong> puedes leer, borrar y grabar etiquetas. La protección aquí es <strong>solo por software</strong> (otras apps pueden sobrescribirla). Para contraseña real en el chip, usa la APK.';
+      DOM.compatStatusText.innerHTML = '🌐 <strong>NAVEGADOR / PWA</strong> — esto <strong>no es la APK</strong>. Puedes leer, borrar y grabar, pero la protección es <strong>solo por software</strong>: no se graba en el chip. Para la contraseña real, instala la APK.';
       return;
     }
 
     DOM.compatBanner.className = 'alert-banner warning';
-    DOM.compatStatusText.innerHTML = '<strong>Atención:</strong> este navegador no admite NFC. Se activó el <strong>Simulador PC</strong> para probar todas las funciones.';
+    DOM.compatStatusText.innerHTML = '🖥️ <strong>SIMULADOR</strong> — este navegador no admite NFC. Puedes probar toda la interfaz sin etiquetas reales.';
     enableSimulator(true);
   }
 
