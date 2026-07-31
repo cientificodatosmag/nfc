@@ -4,12 +4,12 @@
   "description": "Aplicación Web Progresiva para borrado masivo, formateo continuo y protección de etiquetas NFC.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0b0f19",
-  "theme_color": "#0f172a",
+  "background_color": "#150c55",
+  "theme_color": "#2b1a9e",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%2338bdf8'><rect width='512' height='512' rx='100' fill='%230f172a'/><path d='M384 128H128c-22.1 0-40 17.9-40 40v176c0 22.1 17.9 40 40 40h256c22.1 0 40-17.9 40-40V168c0-22.1-17.9-40-40-40zm0 216H128V168h256v176zM344 200h-90c-19.9 0-36 16.1-36 36v41c-10.8 6.3-18 17.6-18 31 0 19.9 16.1 36 36 36s36-16.1 36-36c0-13.4-7.2-24.7-18-31v-41h54v216h-216V200h234z' fill='%2338bdf8'/></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%2322dc7c'><rect width='512' height='512' rx='100' fill='%232b1a9e'/><path d='M384 128H128c-22.1 0-40 17.9-40 40v176c0 22.1 17.9 40 40 40h256c22.1 0 40-17.9 40-40V168c0-22.1-17.9-40-40-40zm0 216H128V168h256v176zM344 200h-90c-19.9 0-36 16.1-36 36v41c-10.8 6.3-18 17.6-18 31 0 19.9 16.1 36 36 36s36-16.1 36-36c0-13.4-7.2-24.7-18-31v-41h54v216h-216V200h234z' fill='%2322dc7c'/></svg>",
       "sizes": "192x192 512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"

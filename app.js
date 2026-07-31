@@ -44,12 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
     compatStatusText: document.getElementById('compat-status-text'),
     pwaInstallBtn: document.getElementById('pwa-install-btn'),
     apkDownloadBtn: document.getElementById('apk-download-btn'),
-    brandBadge: document.querySelector('.brand-badge'),
-    toggleSoundBtn: document.getElementById('toggle-sound-btn'),
-    soundIconOn: document.getElementById('sound-icon-on'),
-    soundIconOff: document.getElementById('sound-icon-off'),
-    toggleSimBtn: document.getElementById('toggle-sim-btn'),
-    simBtnText: document.getElementById('sim-btn-text'),
+    statusPill: document.getElementById('status-pill'),
+    statusDot: document.getElementById('status-dot'),
+    statusLabel: document.getElementById('status-label'),
     simTriggerBox: document.getElementById('sim-trigger-box'),
     simTapBlank: document.getElementById('sim-tap-blank'),
     simTapProtected: null, // Dynamically created in sim box
@@ -170,13 +167,28 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // INITIALIZATION & COMPATIBILITY
   // ==========================================
+  /**
+   * Cuando todo va bien basta el punto verde. El banner solo aparece si hay
+   * algo que el usuario tenga que resolver.
+   */
+  function setStatus(level, label, message) {
+    DOM.statusDot.className = `status-dot ${level}`;
+    DOM.statusPill.className = `status-pill ${level}`;
+    DOM.statusLabel.textContent = label;
+
+    if (!message) {
+      DOM.compatBanner.classList.add('hidden');
+      return;
+    }
+    DOM.compatStatusText.innerHTML = message;
+    DOM.compatBanner.className = `alert-banner ${level === 'ok' ? 'info' : 'warning'}`;
+  }
+
   function checkCompatibility() {
     const backend = window.NfcBackend;
 
     if (backend.kind !== 'native') {
-      DOM.compatBanner.className = 'alert-banner warning';
-      DOM.compatStatusText.innerHTML =
-        `🖥️ <strong>SIN NFC NATIVO</strong> — ${backend.reason} Se activó el simulador para probar la interfaz.`;
+      setStatus('error', 'Sin NFC', `${backend.reason} Se activó el simulador para probar la interfaz.`);
       enableSimulator(true);
       return;
     }
@@ -184,47 +196,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const status = backend.status || {};
 
     if (!status.hasNfc) {
-      DOM.compatBanner.className = 'alert-banner warning';
-      DOM.compatStatusText.innerHTML = '📱 <strong>APK NATIVA</strong> — pero este dispositivo no tiene hardware NFC.';
+      setStatus('error', 'Sin NFC', 'Este dispositivo no tiene hardware NFC.');
       enableSimulator(true);
       return;
     }
 
     if (!status.enabled) {
-      DOM.compatBanner.className = 'alert-banner warning';
-      DOM.compatStatusText.innerHTML = '📱 <strong>APK NATIVA</strong> — el NFC del teléfono está apagado. Actívalo en los ajustes de Android.';
+      setStatus('warn', 'NFC apagado', 'El NFC del teléfono está apagado. Actívalo en los ajustes de Android.');
       return;
     }
 
-    DOM.compatBanner.className = 'alert-banner info';
-    DOM.compatStatusText.innerHTML = '📱 <strong>APK NATIVA</strong> — acceso directo al chip. La contraseña se graba en el hardware de la etiqueta (NTAG213/215/216).';
+    setStatus('ok', 'En línea', null);
   }
 
   // ==========================================
   // SIMULATOR MODE LOGIC
   // ==========================================
+  /**
+   * Ya no se activa a mano: solo entra solo cuando no hay lector NFC, para que
+   * la interfaz siga siendo probable.
+   */
   function enableSimulator(enable) {
     state.simulatorActive = enable;
-    if (enable) {
-      DOM.simTriggerBox.classList.remove('hidden');
-      DOM.toggleSimBtn.classList.add('btn-accent');
-      DOM.simBtnText.textContent = 'Simulador Activo';
-      
-      // Inject simulated button for Protected Tag if not present
-      if (!document.getElementById('sim-tap-protected')) {
-        const btnProt = document.createElement('button');
-        btnProt.id = 'sim-tap-protected';
-        btnProt.className = 'btn btn-sm btn-outline-warning';
-        btnProt.textContent = 'Simular Tag Con Clave (1234)';
-        btnProt.addEventListener('click', () => simulateTap('protected'));
-        DOM.simTriggerBox.querySelector('.sim-buttons').appendChild(btnProt);
-      }
 
-      showToast('Simulador NFC activado para pruebas en PC.', 'info');
-    } else {
+    if (!enable) {
       DOM.simTriggerBox.classList.add('hidden');
-      DOM.toggleSimBtn.classList.remove('btn-accent');
-      DOM.simBtnText.textContent = 'Simulador PC';
+      return;
+    }
+
+    DOM.simTriggerBox.classList.remove('hidden');
+
+    if (!document.getElementById('sim-tap-protected')) {
+      const btnProt = document.createElement('button');
+      btnProt.id = 'sim-tap-protected';
+      btnProt.className = 'btn btn-sm btn-outline-warning';
+      btnProt.textContent = 'Simular Tag Con Clave (1234)';
+      btnProt.addEventListener('click', () => simulateTap('protected'));
+      DOM.simTriggerBox.querySelector('.sim-buttons').appendChild(btnProt);
     }
   }
 
@@ -402,8 +410,8 @@ document.addEventListener('DOMContentLoaded', () => {
     DOM.lastTagInfo.className = 'tag-info-active';
     DOM.lastTagInfo.innerHTML = `
       <strong>[${timeStr}] ${headline}</strong><br>
-      Serie (UID): <span style="color:#38bdf8">${result.uid}</span><br>
-      Chip: <span style="color:#38bdf8">${result.model}</span><br>
+      Serie (UID): <span style="color:var(--brand-green)">${result.uid}</span><br>
+      Chip: <span style="color:var(--brand-green)">${result.model}</span><br>
       Estado: <em>${detail}</em>
     `;
 
@@ -422,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
     DOM.lastTagInfo.className = 'tag-info-active';
     DOM.lastTagInfo.innerHTML = `
       <strong>[${timeStr}] FALLO</strong><br>
-      Serie (UID): <span style="color:#38bdf8">${result.uid}</span><br>
+      Serie (UID): <span style="color:var(--brand-green)">${result.uid}</span><br>
       Motivo: <em>${message}</em>
     `;
 
@@ -669,17 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // EVENT LISTENERS BINDING
   // ==========================================
   
-  // Header Actions
-  DOM.toggleSoundBtn.addEventListener('click', () => {
-    state.soundEnabled = !state.soundEnabled;
-    DOM.soundIconOn.classList.toggle('hidden', !state.soundEnabled);
-    DOM.soundIconOff.classList.toggle('hidden', state.soundEnabled);
-    showToast(`Sonido ${state.soundEnabled ? 'activado' : 'silenciado'}.`, 'info');
-  });
-
-  DOM.toggleSimBtn.addEventListener('click', () => {
-    enableSimulator(!state.simulatorActive);
-  });
+  // El volumen lo gestiona el teléfono con sus botones físicos.
 
   // Scanner Buttons
   DOM.startBurstBtn.addEventListener('click', () => startNfcScanner('burst'));
@@ -771,9 +769,8 @@ document.addEventListener('DOMContentLoaded', () => {
     checkCompatibility();
 
     // Dentro de la APK sobra el enlace para descargarla.
-    if (backend.isApkOrigin) {
-      if (DOM.apkDownloadBtn) DOM.apkDownloadBtn.classList.add('hidden');
-      if (DOM.brandBadge) DOM.brandBadge.textContent = 'APK v1.0';
+    if (backend.isApkOrigin && DOM.apkDownloadBtn) {
+      DOM.apkDownloadBtn.classList.add('hidden');
     }
 
     // Nunca en la APK: el service worker sirve el index.html desde caché y se

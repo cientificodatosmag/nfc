@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NFC Tag Master - Borrado Masivo y Formateo PWA</title>
   <meta name="description" content="Aplicación Web Progresiva para borrado masivo, formateo continuo y protección de etiquetas NFC.">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#2b1a9e">
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2338bdf8'><path d='M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16zM18 6h-5c-1.1 0-2 .9-2 2v2.28c-.6.35-1 .98-1 1.72 0 1.1.9 2 2 2s2-.9 2-2c0-.74-.4-1.37-1-1.72V8h3v12H6V6h12z'/></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322dc7c'><path d='M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16zM18 6h-5c-1.1 0-2 .9-2 2v2.28c-.6.35-1 .98-1 1.72 0 1.1.9 2 2 2s2-.9 2-2c0-.74-.4-1.37-1-1.72V8h3v12H6V6h12z'/></svg>">
   
   <!-- Preconnect & Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@
         </div>
         <div>
           <h1 class="brand-title">NFC Tag Master</h1>
-          <span class="brand-badge">PWA v1.0</span>
+          <span class="brand-badge">Ingenio Magdalena</span>
         </div>
       </div>
 
@@ -54,27 +54,15 @@
           <span>Instalar PWA</span>
         </button>
 
-        <button id="toggle-sound-btn" class="btn btn-icon" title="Silenciar / Activar Sonido">
-          <svg id="sound-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-          </svg>
-          <svg id="sound-icon-off" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <line x1="23" y1="9" x2="17" y2="15"></line>
-            <line x1="17" y1="9" x2="23" y2="15"></line>
-          </svg>
-        </button>
-
-        <button id="toggle-sim-btn" class="btn btn-sm btn-accent" title="Activar/Desactivar simulador para pruebas en PC">
-          <span class="sim-dot"></span>
-          <span id="sim-btn-text">Simulador PC</span>
-        </button>
+        <div id="status-pill" class="status-pill" title="Estado del lector NFC">
+          <span id="status-dot" class="status-dot"></span>
+          <span id="status-label">Conectando…</span>
+        </div>
       </div>
     </header>
 
-    <!-- Compatibility Alert Banner -->
-    <div id="compat-banner" class="alert-banner info">
+    <!-- Solo aparece si hay algo que resolver; en marcha normal basta el punto verde -->
+    <div id="compat-banner" class="alert-banner info hidden">
       <div class="alert-content">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"></circle>

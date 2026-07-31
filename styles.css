@@ -4,27 +4,35 @@
    ========================================================================== */
 
 :root {
-  /* Color Palette */
-  --bg-primary: #0b0f19;
-  --bg-secondary: #111827;
-  --bg-card: rgba(17, 24, 39, 0.75);
-  --bg-card-hover: rgba(31, 41, 55, 0.85);
+  /* ----- Marca Ingenio Magdalena ----- */
+  --brand-indigo: #2b1a9e;
+  --brand-indigo-deep: #150c55;
+  --brand-indigo-soft: #4a33d8;
+  --brand-green: #22dc7c;
+  --brand-green-deep: #12a75a;
 
-  --accent-cyan: #38bdf8;
-  --accent-cyan-glow: rgba(56, 189, 248, 0.35);
-  --accent-blue: #3b82f6;
-  --accent-emerald: #10b981;
-  --accent-emerald-glow: rgba(16, 185, 129, 0.35);
-  --accent-amber: #f59e0b;
-  --accent-rose: #f43f5e;
-  --accent-rose-glow: rgba(244, 63, 94, 0.35);
+  /* Los nombres heredados se mantienen como alias: así el resto de la hoja
+     sigue funcionando sin tocar cada regla una por una. */
+  --bg-primary: var(--brand-indigo-deep);
+  --bg-secondary: #1e1279;
+  --bg-card: rgba(43, 26, 158, 0.55);
+  --bg-card-hover: rgba(58, 39, 196, 0.7);
 
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --accent-cyan: var(--brand-green);
+  --accent-cyan-glow: rgba(34, 220, 124, 0.35);
+  --accent-blue: var(--brand-indigo-soft);
+  --accent-emerald: var(--brand-green-deep);
+  --accent-emerald-glow: rgba(18, 167, 90, 0.35);
+  --accent-amber: #ffb020;
+  --accent-rose: #ff4d6d;
+  --accent-rose-glow: rgba(255, 77, 109, 0.35);
 
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-active: rgba(56, 189, 248, 0.4);
+  --text-primary: #f4f2ff;
+  --text-secondary: #b9b2e8;
+  --text-muted: #8f86c9;
+
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-active: rgba(34, 220, 124, 0.4);
 
   --radius-sm: 8px;
   --radius-md: 14px;
@@ -48,9 +56,10 @@
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-primary);
-  background-image: 
-    radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.06) 0%, transparent 40%);
+  background-image:
+    radial-gradient(circle at 12% 8%, rgba(74, 51, 216, 0.38) 0%, transparent 45%),
+    radial-gradient(circle at 88% 92%, rgba(34, 220, 124, 0.1) 0%, transparent 45%);
+  background-attachment: fixed;
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.5;
@@ -92,7 +101,7 @@ body {
   width: 44px;
   height: 44px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(59, 130, 246, 0.2));
+  background: linear-gradient(135deg, rgba(34, 220, 124, 0.2), rgba(74, 51, 216, 0.2));
   border: 1px solid var(--border-active);
   display: flex;
   align-items: center;
@@ -113,11 +122,11 @@ body {
 .brand-badge {
   font-size: 0.7rem;
   font-family: var(--font-mono);
-  background: rgba(56, 189, 248, 0.15);
+  background: rgba(34, 220, 124, 0.15);
   color: var(--accent-cyan);
   padding: 2px 8px;
   border-radius: var(--radius-full);
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  border: 1px solid rgba(34, 220, 124, 0.3);
   font-weight: 600;
 }
 
@@ -139,14 +148,14 @@ body {
 }
 
 .alert-banner.info {
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  background: rgba(34, 220, 124, 0.12);
+  border: 1px solid rgba(34, 220, 124, 0.3);
   color: var(--accent-cyan);
 }
 
 .alert-banner.warning {
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: rgba(255, 176, 32, 0.12);
+  border: 1px solid rgba(255, 176, 32, 0.3);
   color: var(--accent-amber);
 }
 
@@ -172,7 +181,7 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.5rem;
   margin-bottom: 1.5rem;
-  background: rgba(17, 24, 39, 0.5);
+  background: rgba(21, 12, 85, 0.55);
   padding: 6px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
@@ -201,7 +210,7 @@ body {
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(59, 130, 246, 0.2));
+  background: linear-gradient(135deg, rgba(34, 220, 124, 0.2), rgba(74, 51, 216, 0.2));
   color: var(--text-primary);
   border: 1px solid var(--border-active);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -284,8 +293,8 @@ body {
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  border: 2px solid rgba(56, 189, 248, 0.3);
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.05) 0%, rgba(11, 15, 25, 0.8) 70%);
+  border: 2px solid rgba(34, 220, 124, 0.3);
+  background: radial-gradient(circle, rgba(34, 220, 124, 0.05) 0%, rgba(21, 12, 85, 0.8) 70%);
   position: relative;
   display: flex;
   align-items: center;
@@ -304,7 +313,7 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0 320deg, rgba(56, 189, 248, 0.4) 360deg);
+  background: conic-gradient(from 0deg, transparent 0 320deg, rgba(34, 220, 124, 0.4) 360deg);
   display: none;
 }
 
@@ -430,8 +439,8 @@ body {
 }
 
 .stat-box.success {
-  border-color: rgba(16, 185, 129, 0.3);
-  background: rgba(16, 185, 129, 0.06);
+  border-color: rgba(18, 167, 90, 0.3);
+  background: rgba(18, 167, 90, 0.06);
 }
 
 .stat-box.failed {
@@ -589,7 +598,7 @@ body {
 }
 
 .option-icon.key {
-  background: rgba(56, 189, 248, 0.15);
+  background: rgba(34, 220, 124, 0.15);
   color: var(--accent-cyan);
 }
 
@@ -882,7 +891,7 @@ body {
 }
 
 .badge-status.success {
-  background: rgba(16, 185, 129, 0.15);
+  background: rgba(18, 167, 90, 0.15);
   color: var(--accent-emerald);
 }
 
@@ -940,3 +949,52 @@ body {
 .text-center { text-align: center; }
 .text-muted { color: var(--text-muted); }
 .text-sm { font-size: 0.8rem; }
+
+/* ==========================================================================
+   Indicador de estado del lector NFC
+   Sustituye al banner de "APK nativa": en marcha normal basta un punto verde.
+   ========================================================================== */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.status-dot.ok {
+  background: var(--brand-green);
+  box-shadow: 0 0 0 0 rgba(34, 220, 124, 0.6);
+  animation: statusPulse 2.4s ease-out infinite;
+}
+
+.status-dot.warn { background: var(--accent-amber); }
+.status-dot.error { background: var(--accent-rose); }
+
+.status-pill.ok { color: var(--brand-green); border-color: rgba(34, 220, 124, 0.35); }
+.status-pill.warn { color: var(--accent-amber); border-color: rgba(255, 176, 32, 0.35); }
+.status-pill.error { color: var(--accent-rose); border-color: rgba(255, 77, 109, 0.35); }
+
+@keyframes statusPulse {
+  0% { box-shadow: 0 0 0 0 rgba(34, 220, 124, 0.55); }
+  70% { box-shadow: 0 0 0 9px rgba(34, 220, 124, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 220, 124, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-dot.ok { animation: none; }
+}
