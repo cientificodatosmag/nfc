@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // STATE MANAGEMENT
   // ==========================================
   // Traducción de las pestañas de la UI a las operaciones del backend
-  const BACKEND_MODE = { burst: 'format', protect: 'protect', inspect: 'read' };
+  const BACKEND_MODE = { burst: 'format', protect: 'protect', inspect: 'read', rotular: 'rotular' };
 
   const state = {
     isScanning: false,
@@ -85,7 +85,38 @@ document.addEventListener('DOMContentLoaded', () => {
     inspectRecordsCount: document.getElementById('inspect-records-count'),
     inspectPayloadRaw: document.getElementById('inspect-payload-raw'),
     
-    // History (Tab 4)
+    // Rotular Módulos (Tab 4)
+    rotPassInput: document.getElementById('rot-pass-input'),
+    toggleRotPassVisibility: document.getElementById('toggle-rot-pass-visibility'),
+    rotRegion: document.getElementById('rot-region'),
+    rotResponsable: document.getElementById('rot-responsable'),
+    rotFinca: document.getElementById('rot-finca'),
+    rotModulo: document.getElementById('rot-modulo'),
+    rotRegionList: document.getElementById('rot-region-list'),
+    rotResponsableList: document.getElementById('rot-responsable-list'),
+    rotFincaList: document.getElementById('rot-finca-list'),
+    rotModuloList: document.getElementById('rot-modulo-list'),
+    rotModuloHint: document.getElementById('rot-modulo-hint'),
+    rotResetFilters: document.getElementById('rot-reset-filters'),
+    rotEmptyState: document.getElementById('rot-empty-state'),
+    rotActive: document.getElementById('rot-active'),
+    rotRadarCircle: document.getElementById('rot-radar-circle'),
+    rotScannerStatus: document.getElementById('rot-scanner-status'),
+    rotCurrentLabel: document.getElementById('rot-current-label'),
+    rotProgressText: document.getElementById('rot-progress-text'),
+    rotProgressDetail: document.getElementById('rot-progress-detail'),
+    rotProgressFill: document.getElementById('rot-progress-fill'),
+    rotWarning: document.getElementById('rot-warning'),
+    rotWarningText: document.getElementById('rot-warning-text'),
+    rotStartBtn: document.getElementById('rot-start-btn'),
+    rotStopBtn: document.getElementById('rot-stop-btn'),
+    rotPrevBtn: document.getElementById('rot-prev-btn'),
+    rotNextBtn: document.getElementById('rot-next-btn'),
+    rotProgressTbody: document.getElementById('rot-progress-tbody'),
+    rotExportCsv: document.getElementById('rot-export-csv'),
+    rotResetProgress: document.getElementById('rot-reset-progress'),
+
+    // History (Tab 5)
     historyTbody: document.getElementById('history-tbody'),
     exportCsvBtn: document.getElementById('export-csv-btn'),
     clearHistoryBtn: document.getElementById('clear-history-btn'),
@@ -313,6 +344,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function stopNfcScanner() {
+    // El rotulado tiene su propia interfaz y su propio ciclo de etiquetas.
+    if (state.activeMode === 'rotular') {
+      detenerRotulado();
+      return;
+    }
     state.isScanning = false;
     state.activeMode = null;
     window.NfcBackend.stop().catch(() => {});
@@ -323,6 +359,10 @@ document.addEventListener('DOMContentLoaded', () => {
   /** La contraseña y las opciones se envían al iniciar: si cambian, hay que reenviarlas. */
   async function refreshScanOptions() {
     if (!state.isScanning || state.simulatorActive || !state.activeMode) return;
+    if (state.activeMode === 'rotular') {
+      await reenviarEtiqueta();
+      return;
+    }
     try {
       await window.NfcBackend.stop();
       await window.NfcBackend.start(currentScanOptions(state.activeMode));
@@ -366,6 +406,11 @@ document.addEventListener('DOMContentLoaded', () => {
   window.NfcBackend.onResult(handleResult);
 
   function handleResult(result) {
+    if (result.mode === 'rotular') {
+      manejarResultadoRotulado(result);
+      return;
+    }
+
     triggerRadarPulse(result.success ? 'success' : 'error', state.activeMode || state.currentMode);
 
     if (result.mode === 'read' && result.success) {
@@ -492,7 +537,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // RADAR PULSE EFFECT
   // ==========================================
   function triggerRadarPulse(type, mode = 'burst') {
-    const radar = mode === 'protect' ? DOM.protectRadarCircle : DOM.radarCircle;
+    const radar = mode === 'protect' ? DOM.protectRadarCircle
+      : mode === 'rotular' ? DOM.rotRadarCircle
+      : DOM.radarCircle;
     radar.classList.remove('success-pulse', 'error-pulse');
     void radar.offsetWidth;
     
@@ -674,6 +721,471 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
+  // ROTULADO POR MÓDULO
+  // ==========================================
+  // Cada módulo se rotula con tantas etiquetas como ramales tenga, más cuatro.
+  const ETIQUETAS_EXTRA = 4;
+  const ROT_PROGRESO_KEY = 'nfc_rotulado_progreso';
+
+  const rot = {
+    modulos: [],
+    indice: 0,        // etiqueta en curso, base 0
+    seleccion: null,
+    activo: false,
+    progreso: leerProgreso()
+  };
+
+  function leerProgreso() {
+    try {
+      return JSON.parse(localStorage.getItem(ROT_PROGRESO_KEY) || '{}');
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function guardarProgreso() {
+    localStorage.setItem(ROT_PROGRESO_KEY, JSON.stringify(rot.progreso));
+  }
+
+  /** Comparación tolerante: el usuario puede escribir sin acentos ni mayúsculas. */
+  function norm(texto) {
+    return (texto || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toUpperCase();
+  }
+
+  function totalEtiquetas(modulo) {
+    return modulo.ramales + ETIQUETAS_EXTRA;
+  }
+
+  function textoEtiqueta(codigo, numero) {
+    return `${codigo}-${String(numero).padStart(3, '0')}`;
+  }
+
+  function etiquetaActual() {
+    return rot.seleccion ? textoEtiqueta(rot.seleccion.codigo, rot.indice + 1) : '';
+  }
+
+  function registroDe(codigo) {
+    return rot.progreso[codigo] || null;
+  }
+
+  function hechasDe(codigo) {
+    const registro = registroDe(codigo);
+    return registro ? Object.keys(registro.etiquetas).length : 0;
+  }
+
+  /** Primer número pendiente a partir de `desde`, o null si ya no queda ninguno. */
+  function siguientePendiente(codigo, total, desde) {
+    const registro = registroDe(codigo);
+    const hechas = registro ? registro.etiquetas : {};
+    for (let n = desde; n <= total; n++) {
+      if (!hechas[n]) return n;
+    }
+    for (let n = 1; n < desde; n++) {
+      if (!hechas[n]) return n;
+    }
+    return null;
+  }
+
+  // ------------------------------------------------------------------
+  // Carga del maestro
+  // ------------------------------------------------------------------
+  async function cargarModulos() {
+    try {
+      const respuesta = await fetch('modulos.json', { cache: 'no-store' });
+      if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
+      const datos = await respuesta.json();
+      rot.modulos = datos.modulos || [];
+      console.log(`[Rotulado] ${rot.modulos.length} módulos cargados (maestro ${datos.generado}).`);
+    } catch (err) {
+      console.error('[Rotulado] No se pudo cargar modulos.json:', err);
+      rot.modulos = [];
+      DOM.rotModuloHint.textContent = 'No se pudo cargar el maestro de módulos (modulos.json).';
+    }
+    aplicarFiltros();
+    renderProgresoTabla();
+  }
+
+  // ------------------------------------------------------------------
+  // Filtros en cascada
+  // ------------------------------------------------------------------
+  function contiene(valor, texto) {
+    return !texto || norm(valor).includes(norm(texto));
+  }
+
+  function unicos(modulos, campo) {
+    return [...new Set(modulos.map((m) => m[campo]))].sort((a, b) => a.localeCompare(b, 'es'));
+  }
+
+  function llenarDatalist(datalist, valores) {
+    datalist.innerHTML = valores.map((v) => `<option value="${v}"></option>`).join('');
+  }
+
+  function modulosVisibles() {
+    const porRegion = rot.modulos.filter((m) => contiene(m.region, DOM.rotRegion.value));
+    const porResponsable = porRegion.filter((m) => contiene(m.responsable, DOM.rotResponsable.value));
+    const porFinca = porResponsable.filter((m) => contiene(m.finca, DOM.rotFinca.value));
+    return { porRegion, porResponsable, porFinca };
+  }
+
+  function aplicarFiltros() {
+    const { porRegion, porResponsable, porFinca } = modulosVisibles();
+
+    llenarDatalist(DOM.rotRegionList, unicos(rot.modulos, 'region'));
+    llenarDatalist(DOM.rotResponsableList, unicos(porRegion, 'responsable'));
+    llenarDatalist(DOM.rotFincaList, unicos(porResponsable, 'finca'));
+
+    DOM.rotModuloList.innerHTML = porFinca
+      .map((m) => {
+        const total = totalEtiquetas(m);
+        const hechas = hechasDe(m.codigo);
+        const estado = hechas === 0 ? `${total} etiquetas`
+          : hechas >= total ? `completo (${total})`
+          : `${hechas} de ${total}`;
+        return `<option value="${m.codigo}">${m.finca} · ${estado}</option>`;
+      })
+      .join('');
+
+    if (rot.modulos.length === 0) {
+      DOM.rotModuloHint.textContent = 'No hay módulos cargados.';
+    } else if (porFinca.length === 0) {
+      DOM.rotModuloHint.textContent = 'Ningún módulo coincide con esos filtros.';
+    } else {
+      DOM.rotModuloHint.textContent = `${porFinca.length} módulo(s) disponibles de ${rot.modulos.length}.`;
+    }
+  }
+
+  function limpiarFiltros() {
+    DOM.rotRegion.value = '';
+    DOM.rotResponsable.value = '';
+    DOM.rotFinca.value = '';
+    DOM.rotModulo.value = '';
+    seleccionarModulo('');
+    aplicarFiltros();
+  }
+
+  /**
+   * Al elegir un módulo se rellenan sus filtros hacia arriba: así queda claro a
+   * qué finca y responsable pertenece aunque se haya escrito el código directo.
+   */
+  function seleccionarModulo(codigo) {
+    const modulo = rot.modulos.find((m) => norm(m.codigo) === norm(codigo)) || null;
+
+    if (rot.activo) {
+      detenerRotulado();
+    }
+
+    rot.seleccion = modulo;
+
+    if (!modulo) {
+      DOM.rotEmptyState.classList.remove('hidden');
+      DOM.rotActive.classList.add('hidden');
+      return;
+    }
+
+    DOM.rotRegion.value = modulo.region;
+    DOM.rotResponsable.value = modulo.responsable;
+    DOM.rotFinca.value = modulo.finca;
+    DOM.rotModulo.value = modulo.codigo;
+
+    const total = totalEtiquetas(modulo);
+    const siguiente = siguientePendiente(modulo.codigo, total, 1);
+    rot.indice = (siguiente === null ? total : siguiente) - 1;
+
+    DOM.rotEmptyState.classList.add('hidden');
+    DOM.rotActive.classList.remove('hidden');
+    actualizarUiRotulado();
+    aplicarFiltros();
+  }
+
+  // ------------------------------------------------------------------
+  // Interfaz del grabado
+  // ------------------------------------------------------------------
+  function actualizarUiRotulado() {
+    const modulo = rot.seleccion;
+    if (!modulo) return;
+
+    const total = totalEtiquetas(modulo);
+    const hechas = hechasDe(modulo.codigo);
+    const completo = hechas >= total;
+
+    DOM.rotCurrentLabel.textContent = completo ? '✓' : etiquetaActual();
+    DOM.rotCurrentLabel.classList.toggle('rot-modulo-completo', completo);
+
+    DOM.rotProgressText.textContent = `${hechas} de ${total}`;
+    DOM.rotProgressDetail.textContent =
+      `${modulo.ramales} ramales + ${ETIQUETAS_EXTRA} · ${modulo.finca}`;
+    DOM.rotProgressFill.style.width = `${total ? (hechas / total) * 100 : 0}%`;
+
+    DOM.rotScannerStatus.textContent = rot.activo
+      ? `Acerca la etiqueta ${etiquetaActual()}`
+      : completo ? 'Módulo completo' : 'Escáner inactivo';
+
+    DOM.rotStartBtn.classList.toggle('hidden', rot.activo);
+    DOM.rotStopBtn.classList.toggle('hidden', !rot.activo);
+    DOM.rotRadarCircle.classList.toggle('scanning', rot.activo);
+
+    const avisos = [];
+    if (modulo.duplicado) {
+      avisos.push(`El código ${modulo.codigo} aparece repetido en el maestro. Se graba un solo juego de etiquetas.`);
+    }
+    if (completo) {
+      avisos.push('Todas las etiquetas de este módulo están grabadas.');
+    }
+    DOM.rotWarning.classList.toggle('hidden', avisos.length === 0);
+    DOM.rotWarningText.textContent = avisos.join(' ');
+  }
+
+  function opcionesRotulado() {
+    return {
+      mode: 'rotular',
+      password: DOM.rotPassInput.value.trim(),
+      content: etiquetaActual(),
+      fullWipe: state.overwriteAll,
+      protectRead: false
+    };
+  }
+
+  async function iniciarRotulado() {
+    if (!rot.seleccion) {
+      showToast('Elige primero un módulo.', 'error');
+      return;
+    }
+    if (!DOM.rotPassInput.value.trim()) {
+      showToast('Escribe la contraseña que llevarán las etiquetas.', 'error');
+      DOM.rotPassInput.focus();
+      return;
+    }
+    if (hechasDe(rot.seleccion.codigo) >= totalEtiquetas(rot.seleccion)) {
+      showToast('Este módulo ya está completo. Reinicia su avance si quieres regrabarlo.', 'info');
+      return;
+    }
+    if (window.NfcBackend.kind !== 'native' && !state.simulatorActive) {
+      showToast(window.NfcBackend.reason || 'El NFC nativo no está disponible.', 'error');
+      return;
+    }
+
+    initAudio();
+    rot.activo = true;
+    state.isScanning = true;
+    state.activeMode = 'rotular';
+    actualizarUiRotulado();
+
+    if (state.simulatorActive) {
+      playSound('beep');
+      showToast('Simulador activo: usa los botones de prueba.', 'info');
+      return;
+    }
+
+    try {
+      await window.NfcBackend.start(opcionesRotulado());
+      playSound('beep');
+      showToast(`Listo. Acerca la etiqueta ${etiquetaActual()}`, 'success');
+    } catch (err) {
+      console.error('Rotulado start error:', err);
+      detenerRotulado();
+      showToast(`Error al iniciar NFC: ${err.message || err}`, 'error');
+    }
+  }
+
+  function detenerRotulado() {
+    rot.activo = false;
+    state.isScanning = false;
+    state.activeMode = null;
+    window.NfcBackend.stop().catch(() => {});
+    DOM.rotRadarCircle.classList.remove('scanning', 'success-pulse', 'error-pulse');
+    actualizarUiRotulado();
+  }
+
+  /** El texto a grabar viaja al backend al arrancar: cambiar de etiqueta obliga a reenviarlo. */
+  async function reenviarEtiqueta() {
+    if (!rot.activo || state.simulatorActive) return;
+    try {
+      await window.NfcBackend.stop();
+      await window.NfcBackend.start(opcionesRotulado());
+    } catch (err) {
+      console.warn('No se pudo actualizar la etiqueta en curso:', err);
+    }
+  }
+
+  async function irAEtiqueta(numero) {
+    if (!rot.seleccion) return;
+    const total = totalEtiquetas(rot.seleccion);
+    rot.indice = Math.max(0, Math.min(total - 1, numero - 1));
+    actualizarUiRotulado();
+    await reenviarEtiqueta();
+  }
+
+  async function avanzarTrasGrabar() {
+    const total = totalEtiquetas(rot.seleccion);
+    const siguiente = siguientePendiente(rot.seleccion.codigo, total, rot.indice + 2);
+
+    if (siguiente === null) {
+      actualizarUiRotulado();
+      showToast(`Módulo ${rot.seleccion.codigo} completo: ${total} etiquetas.`, 'success');
+      detenerRotulado();
+      return;
+    }
+
+    rot.indice = siguiente - 1;
+    actualizarUiRotulado();
+    await reenviarEtiqueta();
+  }
+
+  // ------------------------------------------------------------------
+  // Resultado de cada etiqueta
+  // ------------------------------------------------------------------
+  function registrarEtiqueta(codigo, numero, uid) {
+    const modulo = rot.seleccion;
+    if (!rot.progreso[codigo]) {
+      rot.progreso[codigo] = {
+        total: totalEtiquetas(modulo),
+        region: modulo.region,
+        responsable: modulo.responsable,
+        finca: modulo.finca,
+        etiquetas: {}
+      };
+    }
+    rot.progreso[codigo].etiquetas[numero] = {
+      texto: textoEtiqueta(codigo, numero),
+      uid: uid || '',
+      fecha: new Date().toISOString()
+    };
+    guardarProgreso();
+    renderProgresoTabla();
+    aplicarFiltros();
+  }
+
+  function manejarResultadoRotulado(result) {
+    triggerRadarPulse(result.success ? 'success' : 'error', 'rotular');
+
+    if (!rot.seleccion) return;
+    const texto = etiquetaActual();
+
+    if (!result.success) {
+      state.sessionFailedCount++;
+      DOM.statFailedCount.textContent = state.sessionFailedCount;
+      playSound('error');
+      triggerHaptic([300]);
+      addHistoryLog('ROTULADO', result.uid, 'FALLO', `${texto}: ${result.error}`);
+      showToast(`Fallo en ${texto}: ${result.error}`, 'error');
+      return; // no avanza: se reintenta la misma etiqueta
+    }
+
+    registrarEtiqueta(rot.seleccion.codigo, rot.indice + 1, result.uid);
+
+    state.sessionClearedCount++;
+    DOM.statClearedCount.textContent = state.sessionClearedCount;
+    playSound('success');
+    triggerHaptic([80, 50, 80]);
+    addHistoryLog('ROTULADO', result.uid, 'ÉXITO', `${texto} grabada y protegida`);
+    showToast(`${texto} grabada`, 'success');
+
+    avanzarTrasGrabar();
+  }
+
+  // ------------------------------------------------------------------
+  // Avance guardado
+  // ------------------------------------------------------------------
+  function renderProgresoTabla() {
+    const codigos = Object.keys(rot.progreso).sort();
+    if (codigos.length === 0) {
+      DOM.rotProgressTbody.innerHTML =
+        '<tr><td colspan="5" class="text-center text-muted">Todavía no se ha grabado ningún módulo.</td></tr>';
+      return;
+    }
+
+    DOM.rotProgressTbody.innerHTML = codigos.map((codigo) => {
+      const registro = rot.progreso[codigo];
+      const numeros = Object.keys(registro.etiquetas).map(Number).sort((a, b) => a - b);
+      const hechas = numeros.length;
+      const ultima = numeros.length ? registro.etiquetas[numeros[numeros.length - 1]] : null;
+      const completo = hechas >= registro.total;
+
+      return `
+        <tr>
+          <td><code>${codigo}</code></td>
+          <td>${registro.finca || ''}</td>
+          <td>${registro.responsable || ''}</td>
+          <td>
+            <span class="badge-status ${completo ? 'success' : 'danger'}">
+              ${hechas} / ${registro.total}
+            </span>
+          </td>
+          <td>${ultima ? `<code>${ultima.texto}</code>` : ''}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  function exportarRotuladoCSV() {
+    const filas = [];
+    Object.keys(rot.progreso).sort().forEach((codigo) => {
+      const registro = rot.progreso[codigo];
+      Object.keys(registro.etiquetas).map(Number).sort((a, b) => a - b).forEach((numero) => {
+        const etiqueta = registro.etiquetas[numero];
+        filas.push([
+          codigo,
+          registro.region || '',
+          registro.responsable || '',
+          registro.finca || '',
+          numero,
+          registro.total,
+          etiqueta.texto,
+          etiqueta.uid,
+          etiqueta.fecha
+        ]);
+      });
+    });
+
+    if (filas.length === 0) {
+      showToast('Todavía no hay etiquetas grabadas que exportar.', 'error');
+      return;
+    }
+
+    const cabecera = ['Codigo_modulo', 'Region', 'Responsable', 'Finca', 'Numero_etiqueta',
+      'Total_etiquetas', 'Texto_grabado', 'UID', 'Fecha_hora'];
+    const csv = [cabecera, ...filas]
+      .map((fila) => fila.map((celda) => `"${String(celda).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const enlace = document.createElement('a');
+    enlace.href = encodeURI(`data:text/csv;charset=utf-8,${csv}`);
+    enlace.download = `rotulado_modulos_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
+    showToast(`CSV exportado: ${filas.length} etiquetas.`, 'success');
+  }
+
+  function reiniciarAvance() {
+    const codigo = rot.seleccion ? rot.seleccion.codigo : null;
+    const soloEste = codigo && rot.progreso[codigo];
+    const mensaje = soloEste
+      ? `¿Borrar el avance de ${codigo}? Se perderá el registro de sus etiquetas grabadas.`
+      : '¿Borrar el avance de TODOS los módulos?';
+
+    if (!confirm(mensaje)) return;
+
+    if (soloEste) {
+      delete rot.progreso[codigo];
+    } else {
+      rot.progreso = {};
+    }
+    guardarProgreso();
+    renderProgresoTabla();
+    aplicarFiltros();
+    if (rot.seleccion) {
+      rot.indice = 0;
+      actualizarUiRotulado();
+    }
+    showToast('Avance reiniciado.', 'info');
+  }
+
+  // ==========================================
   // EVENT LISTENERS BINDING
   // ==========================================
   
@@ -716,6 +1228,27 @@ document.addEventListener('DOMContentLoaded', () => {
   if (DOM.protectContentInput) {
     DOM.protectContentInput.addEventListener('change', refreshScanOptions);
   }
+
+  // Rotulado por módulo
+  DOM.toggleRotPassVisibility.addEventListener('click', () => {
+    const input = DOM.rotPassInput;
+    input.type = input.type === 'password' ? 'text' : 'password';
+  });
+
+  [DOM.rotRegion, DOM.rotResponsable, DOM.rotFinca].forEach((campo) => {
+    campo.addEventListener('input', aplicarFiltros);
+  });
+
+  DOM.rotModulo.addEventListener('change', (e) => seleccionarModulo(e.target.value));
+  DOM.rotResetFilters.addEventListener('click', limpiarFiltros);
+
+  DOM.rotStartBtn.addEventListener('click', iniciarRotulado);
+  DOM.rotStopBtn.addEventListener('click', detenerRotulado);
+  DOM.rotPrevBtn.addEventListener('click', () => irAEtiqueta(rot.indice));
+  DOM.rotNextBtn.addEventListener('click', () => irAEtiqueta(rot.indice + 2));
+
+  DOM.rotExportCsv.addEventListener('click', exportarRotuladoCSV);
+  DOM.rotResetProgress.addEventListener('click', reiniciarAvance);
 
   // Simulator Triggers
   DOM.simTapBlank.addEventListener('click', () => simulateTap('blank'));
@@ -767,6 +1300,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ARRANQUE
   // ==========================================
   renderHistoryTable();
+  cargarModulos();
 
   // Detectar el puente nativo es asíncrono: hasta que responda no se sabe si
   // estamos en la APK, y de eso dependen el banner y el service worker.

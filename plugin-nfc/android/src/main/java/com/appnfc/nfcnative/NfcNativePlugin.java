@@ -80,8 +80,12 @@ public class NfcNativePlugin extends Plugin implements NfcAdapter.ReaderCallback
         String rawPassword = call.getString("password", "");
         password = (rawPassword == null || rawPassword.isEmpty()) ? null : derivePassword(rawPassword);
 
-        if ("protect".equals(mode) && password == null) {
-            call.reject("La protección masiva necesita una contraseña.");
+        if (("protect".equals(mode) || "rotular".equals(mode)) && password == null) {
+            call.reject("Esta operación necesita una contraseña.");
+            return;
+        }
+        if ("rotular".equals(mode) && (content == null || content.trim().isEmpty())) {
+            call.reject("No hay texto que grabar en la etiqueta.");
             return;
         }
 
@@ -176,6 +180,9 @@ public class NfcNativePlugin extends Plugin implements NfcAdapter.ReaderCallback
                     break;
                 case "protect":
                     doProtect(chip, result);
+                    break;
+                case "rotular":
+                    doRotular(chip, result);
                     break;
                 default:
                     doRead(chip, result);
@@ -283,6 +290,41 @@ public class NfcNativePlugin extends Plugin implements NfcAdapter.ReaderCallback
         result.put("locked", true);
         result.put("readProtected", protectRead);
         result.put("contentKept", lockOnly);
+    }
+
+    /**
+     * Rotulado de un módulo: los tres pasos sobre la misma sesión y el mismo
+     * toque, que es lo que permite avanzar etiqueta a etiqueta sin retirar el
+     * teléfono más de una vez.
+     *
+     *   1. formatear   2. grabar el texto   3. poner la contraseña
+     */
+    private void doRotular(Ntag21x chip, JSObject result) throws IOException {
+        // Autenticarse ya da permiso de escritura: no hace falta desproteger
+        // primero, y son cuatro escrituras menos por etiqueta.
+        if (chip.isProtected()) {
+            if (!chip.authenticate(password)) {
+                throw new IOException("Etiqueta protegida con otra contraseña: no se puede reutilizar.");
+            }
+            result.put("unlocked", true);
+        }
+
+        chip.formatEmpty(fullWipe ? chip.totalUserPages() : chip.usedPages());
+
+        String texto = content.trim();
+        byte[] tlv = Ntag21x.buildNdefTlv(
+                new NdefMessage(NdefRecord.createTextRecord(null, texto)).toByteArray());
+        chip.writeFrom(Ntag21x.FIRST_USER_PAGE, tlv);
+        result.put("written", texto);
+
+        if (chip.supportsHardwarePassword()) {
+            chip.applyProtection(password, DEFAULT_PACK, protectRead);
+            result.put("locked", true);
+        } else {
+            result.put("locked", false);
+            result.put("note", "Grabada, pero este chip (" + chip.model
+                    + ") no admite contraseña de hardware.");
+        }
     }
 
     // ----------------------------------------------------------------------

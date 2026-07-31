@@ -27,7 +27,7 @@ jobs:
       - name: Preparar carpeta web (www)
         run: |
           mkdir -p www
-          cp index.html app.js nfc-bridge.js styles.css manifest.json sw.js www/
+          cp index.html app.js nfc-bridge.js styles.css manifest.json sw.js modulos.json www/
 
       - name: Instalar dependencias
         run: npm install

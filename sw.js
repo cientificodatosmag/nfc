@@ -9,6 +9,7 @@ const ASSETS_TO_CACHE = [
   './index.html',
   './styles.css',
   './nfc-bridge.js',
+  './modulos.json',
   './app.js',
   './manifest.json'
 ];

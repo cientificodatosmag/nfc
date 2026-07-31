@@ -118,6 +118,7 @@
       contentKept: result.contentKept === true,
       empty: result.empty === true,
       wipedBytes: result.wipedBytes || 0,
+      written: result.written || '',
       records: result.records || [],
       note: result.note || '',
       error: result.error || ''

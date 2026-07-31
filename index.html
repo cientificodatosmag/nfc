@@ -99,6 +99,14 @@
         <span>Lectura e Inspección</span>
       </button>
 
+      <button class="tab-btn" data-tab="tab-rotular" id="tab-btn-rotular">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+          <circle cx="7" cy="7" r="1.5" fill="currentColor"/>
+        </svg>
+        <span>Rotular Módulos</span>
+      </button>
+
       <button class="tab-btn" data-tab="tab-history" id="tab-btn-history">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="12 8 12 12 14 14"/>
@@ -394,7 +402,154 @@
         </div>
       </section>
 
-      <!-- ================= TAB 4: HISTORIAL ================= -->
+      <!-- ================= TAB 4: ROTULAR MÓDULOS ================= -->
+      <section id="tab-rotular" class="tab-pane">
+        <div class="pane-grid">
+
+          <!-- Selección del módulo -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <h2>Rotulado por Módulo</h2>
+              <p>Solo aparecen los módulos marcados como <strong>ACTUALIZADO</strong> en el maestro de riego.</p>
+            </div>
+
+            <div class="form-group">
+              <label for="rot-pass-input">Contraseña para todas las etiquetas</label>
+              <div class="input-group">
+                <input type="password" id="rot-pass-input" placeholder="Se aplica a cada etiqueta grabada" class="input-control" autocomplete="off">
+                <button id="toggle-rot-pass-visibility" class="btn btn-icon btn-field" type="button">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+              <span class="text-sm text-muted">Se graba en el chip de cada etiqueta. Sin ella no se podrá reescribir.</span>
+            </div>
+
+            <div class="form-group mt-3">
+              <label for="rot-region">1 · Región</label>
+              <input id="rot-region" class="input-control" list="rot-region-list" placeholder="Escribe o despliega..." autocomplete="off">
+              <datalist id="rot-region-list"></datalist>
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="rot-responsable">2 · Responsable</label>
+              <input id="rot-responsable" class="input-control" list="rot-responsable-list" placeholder="Escribe o despliega..." autocomplete="off">
+              <datalist id="rot-responsable-list"></datalist>
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="rot-finca">3 · Finca</label>
+              <input id="rot-finca" class="input-control" list="rot-finca-list" placeholder="Escribe o despliega..." autocomplete="off">
+              <datalist id="rot-finca-list"></datalist>
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="rot-modulo">4 · Código de módulo</label>
+              <input id="rot-modulo" class="input-control" list="rot-modulo-list" placeholder="Escribe o despliega..." autocomplete="off">
+              <datalist id="rot-modulo-list"></datalist>
+              <span class="text-sm text-muted" id="rot-modulo-hint">Selecciona los filtros para ver los módulos disponibles.</span>
+            </div>
+
+            <div class="scanner-controls mt-3">
+              <button id="rot-reset-filters" class="btn btn-sm btn-outline full-width" type="button">Limpiar filtros</button>
+            </div>
+          </div>
+
+          <!-- Grabado secuencial -->
+          <div class="card glass-card scanner-card">
+            <div class="card-header">
+              <h3>Grabado Secuencial</h3>
+              <p>Formatea, graba el código y pone la contraseña en un solo toque por etiqueta.</p>
+            </div>
+
+            <div id="rot-empty-state" class="tag-info-empty">
+              Elige un módulo para empezar.
+            </div>
+
+            <div id="rot-active" class="hidden full-width">
+              <div class="radar-container">
+                <div id="rot-radar-circle" class="radar-circle">
+                  <div class="radar-sweep"></div>
+                  <div class="radar-waves"></div>
+                  <div class="radar-icon">
+                    <span id="rot-current-label" class="rot-label">—</span>
+                  </div>
+                </div>
+                <div id="rot-scanner-status" class="scanner-status-text">Escáner inactivo</div>
+              </div>
+
+              <div class="rot-progress">
+                <div class="rot-progress-head">
+                  <span id="rot-progress-text">0 de 0</span>
+                  <span id="rot-progress-detail" class="text-sm text-muted"></span>
+                </div>
+                <div class="rot-progress-bar"><div id="rot-progress-fill"></div></div>
+              </div>
+
+              <div id="rot-warning" class="alert-banner warning hidden mt-2">
+                <div class="alert-content"><span id="rot-warning-text"></span></div>
+              </div>
+
+              <div class="scanner-controls mt-3">
+                <button id="rot-start-btn" class="btn btn-lg btn-primary full-width shadow-glow">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                  <span>Iniciar grabado</span>
+                </button>
+
+                <button id="rot-stop-btn" class="btn btn-lg btn-danger full-width hidden">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="6" y="6" width="12" height="12" rx="1"/>
+                  </svg>
+                  <span>Detener</span>
+                </button>
+              </div>
+
+              <div class="rot-nav mt-2">
+                <button id="rot-prev-btn" class="btn btn-sm btn-outline" type="button">‹ Anterior</button>
+                <button id="rot-next-btn" class="btn btn-sm btn-outline" type="button">Siguiente ›</button>
+              </div>
+              <span class="text-sm text-muted">Tras cada etiqueta avanza solo. Usa estos botones para repetir una o saltarla.</span>
+            </div>
+          </div>
+
+          <!-- Avance por módulo -->
+          <div class="card glass-card full-span">
+            <div class="card-header flex-between">
+              <div>
+                <h3>Avance del rotulado</h3>
+                <p>Se guarda en el teléfono. Sobrevive a cerrar la app.</p>
+              </div>
+              <div class="header-actions">
+                <button id="rot-export-csv" class="btn btn-sm btn-outline">Exportar CSV</button>
+                <button id="rot-reset-progress" class="btn btn-sm btn-outline-warning">Reiniciar avance</button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="history-table">
+                <thead>
+                  <tr>
+                    <th>Módulo</th>
+                    <th>Finca</th>
+                    <th>Responsable</th>
+                    <th>Avance</th>
+                    <th>Última etiqueta</th>
+                  </tr>
+                </thead>
+                <tbody id="rot-progress-tbody">
+                  <tr><td colspan="5" class="text-center text-muted">Todavía no se ha grabado ningún módulo.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= TAB 5: HISTORIAL ================= -->
       <section id="tab-history" class="tab-pane">
         <div class="card glass-card">
           <div class="card-header flex-between">
