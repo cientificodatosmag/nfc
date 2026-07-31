@@ -1175,6 +1175,15 @@ body {
    El <datalist> nativo lo dibuja Android donde quiere y en el WebView aparece
    descolocado. Esta lista se ancla al campo y se puede recorrer con el dedo.
    ========================================================================== */
+/* backdrop-filter en .card crea un contexto de apilamiento propio, así que el
+   z-index de la lista solo compite dentro de su tarjeta y las tarjetas
+   siguientes, al ir después en el DOM, se pintaban encima del desplegable.
+   Elevando la tarjeta entera se resuelve para todas sus listas. */
+.tarjeta-con-combos {
+  position: relative;
+  z-index: 20;
+}
+
 .combo {
   position: relative;
   display: block;
@@ -1219,7 +1228,9 @@ body {
   margin: 0;
   padding: 0.25rem;
   list-style: none;
-  max-height: 15rem;
+  /* Con el teclado abierto queda poco alto útil: la lista se ajusta a lo que
+     haya en pantalla en vez de salirse por abajo. */
+  max-height: min(15rem, 45vh);
   overflow-y: auto;
   /* El gesto vertical es para desplazar la lista, no la página de detrás. */
   touch-action: pan-y;
