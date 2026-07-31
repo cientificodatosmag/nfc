@@ -74,6 +74,21 @@
     });
   }
 
+  /**
+   * Último recurso: si la inyección del puente no ocurrió, cargar
+   * native-bridge.js por URL. El interfaz nativo (androidBridge) lo pone el
+   * WebView, así que el script funciona igual cargado desde aquí.
+   */
+  function loadScript(src) {
+    return new Promise((resolve) => {
+      const el = document.createElement('script');
+      el.src = src;
+      el.onload = () => resolve(true);
+      el.onerror = () => resolve(false);
+      document.head.appendChild(el);
+    });
+  }
+
   /** Qué hay realmente en window.Capacitor, para no diagnosticar a ciegas. */
   function describeCapacitorGlobal() {
     const cap = window.Capacitor;
@@ -183,7 +198,24 @@
    */
   backend.ready = (async function detect() {
     backend.isApkOrigin = looksLikeApk();
-    const pluginFactory = await waitForCapacitor(3000);
+
+    let pluginFactory = await waitForCapacitor(2000);
+    let rescue = '';
+
+    // Si el puente no se inyectó, intentar cargarlo por URL antes de rendirse.
+    if (!pluginFactory && backend.isApkOrigin) {
+      const loaded = await loadScript('native-bridge.js');
+      rescue = loaded
+        ? ' Se cargó native-bridge.js a mano'
+        : ' No se pudo descargar native-bridge.js';
+      if (loaded) {
+        pluginFactory = await waitForCapacitor(2000);
+        rescue += pluginFactory ? ' y el puente respondió.' : ' pero el puente siguió sin aparecer.';
+      } else {
+        rescue += ' (no está empaquetado).';
+      }
+      console.warn('[NFC] Rescate del puente:' + rescue);
+    }
 
     if (!pluginFactory) {
       backend.kind = 'none';
@@ -210,7 +242,9 @@
       backend.reason = controlledBySw
         ? 'Un service worker bloqueaba el puente nativo. Se eliminó, pero la recarga no bastó: ' +
           'desinstala la APK e instálala de nuevo.'
-        : 'Sin service worker y sin puente nativo, el fallo está en el APK. ' + describeCapacitorGlobal();
+        : 'Sin service worker y sin puente nativo, el fallo está en el APK. ' +
+          describeCapacitorGlobal() +
+          rescue;
       console.warn('[NFC]', backend.reason);
       return backend;
     }

@@ -55,24 +55,33 @@ jobs:
           echo "===== assets/public ====="
           ls -la android/app/src/main/assets/public/ || echo "(no existe)"
 
-      - name: Garantizar native-bridge.js en los assets
+      - name: Publicar native-bridge.js como recurso alcanzable
         run: |
-          # Este archivo define window.Capacitor.registerPlugin. Sin el, el APK
-          # compila pero la app se queda sin acceso nativo. El CLI deberia
-          # copiarlo durante 'cap sync'; si no lo hace, se copia a mano.
-          mkdir -p android/app/src/main/assets
-          if [ ! -s android/app/src/main/assets/native-bridge.js ]; then
-            SRC=$(find node_modules/@capacitor -maxdepth 3 -name 'native-bridge.js' | head -1)
-            if [ -z "$SRC" ]; then
-              echo "No se encontro native-bridge.js en node_modules"
-              exit 1
+          # Define window.Capacitor.registerPlugin. Normalmente llega al APK por
+          # los assets del modulo capacitor-android, asi que faltar aqui no es
+          # un error. Se copia ademas a public/ para que la app pueda cargarlo
+          # por URL si la inyeccion del puente no ocurrio.
+          ASSETS=android/app/src/main/assets
+          mkdir -p "$ASSETS/public"
+
+          echo "--- donde aparece native-bridge.js ---"
+          find node_modules -name 'native-bridge.js' || true
+          find android -name 'native-bridge.js' || true
+
+          if [ ! -s "$ASSETS/native-bridge.js" ]; then
+            SRC=$(find node_modules -name 'native-bridge.js' | head -1)
+            if [ -n "$SRC" ]; then
+              echo "Copiando desde $SRC"
+              cp "$SRC" "$ASSETS/native-bridge.js"
             fi
-            echo "El CLI no lo copio. Copiando desde $SRC"
-            cp "$SRC" android/app/src/main/assets/native-bridge.js
-          else
-            echo "Ya estaba en su sitio"
           fi
-          wc -c android/app/src/main/assets/native-bridge.js
+
+          if [ -s "$ASSETS/native-bridge.js" ]; then
+            cp "$ASSETS/native-bridge.js" "$ASSETS/public/native-bridge.js"
+            wc -c "$ASSETS/native-bridge.js"
+          else
+            echo "AVISO: no se encontro el archivo; se confia en los assets de capacitor-android"
+          fi
 
       - name: Verificar plugin y web empaquetados
         run: |
