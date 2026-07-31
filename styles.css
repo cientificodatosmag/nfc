@@ -1075,3 +1075,75 @@ body {
 .rot-modulo-completo {
   color: var(--brand-green);
 }
+
+/* ==========================================================================
+   Ajustes para pantallas de teléfono
+   El body lleva overflow-x: hidden, así que todo lo que se pase de ancho no se
+   puede desplazar: se recorta. Aquí se evita que eso ocurra.
+   ========================================================================== */
+@media (max-width: 640px) {
+  .app-container {
+    padding: 0.75rem;
+  }
+
+  .card {
+    padding: 1.15rem;
+  }
+
+  /* Cabeceras con botones: apilan en vez de salirse por el lado derecho. */
+  .flex-between {
+    flex-wrap: wrap;
+    gap: 0.85rem;
+  }
+
+  .card-header.flex-between .header-actions {
+    width: 100%;
+  }
+
+  .card-header.flex-between .header-actions .btn {
+    flex: 1 1 0;
+    justify-content: center;
+  }
+
+  .app-header {
+    flex-wrap: wrap;
+    padding: 0.9rem 1rem;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+  }
+
+  .rot-progress-head {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  /* La tabla se desplaza dentro de su propia caja en lugar de estrujar las
+     columnas o desbordar la página. */
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .history-table {
+    min-width: 34rem;
+  }
+
+  /* Nada puede forzar el ancho de la página. */
+  .card,
+  .input-control,
+  .radar-container,
+  .scanner-controls {
+    max-width: 100%;
+  }
+
+  .input-control {
+    font-size: 16px; /* evita el zoom automático de Android al enfocar */
+  }
+}
+
+@media (max-width: 380px) {
+  .rot-nav {
+    grid-template-columns: 1fr;
+  }
+}
