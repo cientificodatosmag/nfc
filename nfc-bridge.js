@@ -107,6 +107,9 @@
   function normalize(result) {
     return {
       success: result.success === true,
+      // La etiqueta que se acaba de grabar y sigue pegada al teléfono: no se
+      // volvió a tocar, así que no es ni éxito ni fallo.
+      repeat: result.repeat === true,
       mode: result.mode || 'read',
       uid: result.uid || 'Desconocido',
       model: result.model || 'Desconocida',
@@ -149,7 +152,8 @@
         content: options.content || '',
         fullWipe: options.fullWipe !== false,
         protectRead: options.protectRead === true,
-        lockOnly: options.lockOnly !== false
+        lockOnly: options.lockOnly !== false,
+        resetTagMemory: options.resetTagMemory === true
       });
     },
 

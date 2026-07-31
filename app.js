@@ -409,7 +409,36 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   window.NfcBackend.onResult(handleResult);
 
+  /**
+   * Aviso de "esta etiqueta ya está hecha, retírala".
+   *
+   * El nativo lo repite mientras la etiqueta siga en el campo, así que se limita
+   * a uno cada par de segundos para no llenar la pantalla de avisos.
+   */
+  let ultimoAvisoRepetida = 0;
+  let temporizadorAvisoRepetida = null;
+  function avisarEtiquetaRepetida(mode) {
+    // El aviso va también al radar, que es donde mira quien está rotulando.
+    if (mode === 'rotular' && DOM.rotScannerStatus) {
+      DOM.rotScannerStatus.textContent = 'Retira la etiqueta ya grabada';
+      clearTimeout(temporizadorAvisoRepetida);
+      temporizadorAvisoRepetida = setTimeout(actualizarUiRotulado, 2000);
+    }
+
+    const ahora = Date.now();
+    if (ahora - ultimoAvisoRepetida < 2000) return;
+    ultimoAvisoRepetida = ahora;
+    playSound('error');
+    triggerHaptic([40, 60, 40]);
+    showToast('Esa etiqueta ya está grabada. Retírala y acerca la siguiente.', 'info');
+  }
+
   function handleResult(result) {
+    if (result.repeat) {
+      avisarEtiquetaRepetida(result.mode);
+      return;
+    }
+
     if (result.mode === 'rotular') {
       manejarResultadoRotulado(result);
       return;
@@ -1042,13 +1071,19 @@ document.addEventListener('DOMContentLoaded', () => {
     DOM.rotWarningText.textContent = avisos.join(' ');
   }
 
-  function opcionesRotulado() {
+  /**
+   * @param {boolean} sesionNueva Olvida la última etiqueta grabada. Solo al
+   *   pulsar Iniciar: entre etiqueta y etiqueta hay que conservar esa memoria,
+   *   que es lo que impide grabar dos veces sobre la misma.
+   */
+  function opcionesRotulado(sesionNueva) {
     return {
       mode: 'rotular',
       password: DOM.rotPassInput.value.trim(),
       content: etiquetaActual(),
       fullWipe: state.overwriteAll,
-      protectRead: false
+      protectRead: false,
+      resetTagMemory: sesionNueva === true
     };
   }
 
@@ -1084,7 +1119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      await window.NfcBackend.start(opcionesRotulado());
+      await window.NfcBackend.start(opcionesRotulado(true));
       playSound('beep');
       showToast(`Listo. Acerca la etiqueta ${etiquetaActual()}`, 'success');
     } catch (err) {
@@ -1108,7 +1143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!rot.activo || state.simulatorActive) return;
     try {
       await window.NfcBackend.stop();
-      await window.NfcBackend.start(opcionesRotulado());
+      await window.NfcBackend.start(opcionesRotulado(false));
     } catch (err) {
       console.warn('No se pudo actualizar la etiqueta en curso:', err);
     }

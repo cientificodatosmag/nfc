@@ -6,6 +6,7 @@ import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.SystemClock;
 
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -33,7 +34,23 @@ public class NfcNativePlugin extends Plugin implements NfcAdapter.ReaderCallback
     private static final byte[] DEFAULT_PACK = new byte[] { (byte) 0x80, (byte) 0x80 };
     private static final String PASSWORD_SALT = "NFC_SALT_2026::";
 
+    /**
+     * Cuánto tiempo sigue ignorada una etiqueta después de grabarla.
+     *
+     * El rotulado detiene y reanuda el lector entre etiqueta y etiqueta, porque
+     * el texto a grabar viaja en startScan(). Ese reinicio vuelve a descubrir al
+     * instante la etiqueta que aún sigue pegada al teléfono, así que sin este
+     * bloqueo la etiqueta 002 se grababa encima de la 001.
+     */
+    private static final long SAME_TAG_COOLDOWN_MS = 1500L;
+
     private NfcAdapter adapter;
+
+    // Memoria de la última etiqueta grabada con éxito. Deliberadamente NO se
+    // limpia en startScan(): es justo el reinicio entre etiquetas el que hay que
+    // sobrevivir. Solo se borra cuando JS pide empezar una sesión nueva.
+    private volatile String lastTagUid = null;
+    private volatile long lastTagSeenAt = 0L;
 
     private volatile String mode = "read";
     private volatile byte[] password = null;
@@ -76,6 +93,10 @@ public class NfcNativePlugin extends Plugin implements NfcAdapter.ReaderCallback
         fullWipe = Boolean.TRUE.equals(call.getBoolean("fullWipe", true));
         protectRead = Boolean.TRUE.equals(call.getBoolean("protectRead", false));
         lockOnly = Boolean.TRUE.equals(call.getBoolean("lockOnly", true));
+
+        if (Boolean.TRUE.equals(call.getBoolean("resetTagMemory", false))) {
+            lastTagUid = null;
+        }
 
         String rawPassword = call.getString("password", "");
         password = (rawPassword == null || rawPassword.isEmpty()) ? null : derivePassword(rawPassword);
@@ -162,8 +183,24 @@ public class NfcNativePlugin extends Plugin implements NfcAdapter.ReaderCallback
 
     @Override
     public void onTagDiscovered(Tag tag) {
+        String uid = toHex(tag.getId());
+
+        // La misma etiqueta recién grabada: no se toca. Mientras siga en el
+        // campo se refresca la espera, de modo que el desbloqueo depende de
+        // retirarla, no de que pase el tiempo con ella encima.
+        if (!"read".equals(mode) && isSameTagTooSoon(uid)) {
+            lastTagSeenAt = SystemClock.elapsedRealtime();
+            JSObject repeated = new JSObject();
+            repeated.put("uid", uid);
+            repeated.put("mode", mode);
+            repeated.put("repeat", true);
+            repeated.put("success", false);
+            notifyListeners("nfcResult", repeated);
+            return;
+        }
+
         JSObject result = new JSObject();
-        result.put("uid", toHex(tag.getId()));
+        result.put("uid", uid);
         result.put("mode", mode);
 
         Ntag21x chip = null;
@@ -189,6 +226,11 @@ public class NfcNativePlugin extends Plugin implements NfcAdapter.ReaderCallback
                     break;
             }
             result.put("success", true);
+
+            // Solo se recuerda lo que salió bien: si la grabación falló, hay que
+            // poder reintentar sobre esa misma etiqueta sin retirarla.
+            lastTagUid = uid;
+            lastTagSeenAt = SystemClock.elapsedRealtime();
         } catch (Exception e) {
             result.put("success", false);
             result.put("error", describe(e));
@@ -330,6 +372,16 @@ public class NfcNativePlugin extends Plugin implements NfcAdapter.ReaderCallback
     // ----------------------------------------------------------------------
     // Utilidades
     // ----------------------------------------------------------------------
+
+    private boolean isSameTagTooSoon(String uid) {
+        if (lastTagUid == null || uid == null || uid.isEmpty()) {
+            return false;
+        }
+        if (!lastTagUid.equals(uid)) {
+            return false;
+        }
+        return SystemClock.elapsedRealtime() - lastTagSeenAt < SAME_TAG_COOLDOWN_MS;
+    }
 
     private JSArray decodeRecords(byte[] ndef) {
         JSArray records = new JSArray();
