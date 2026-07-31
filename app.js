@@ -834,11 +834,16 @@ document.addEventListener('DOMContentLoaded', () => {
    * Desplegable propio, anclado al campo.
    *
    * El <datalist> nativo lo dibuja Android por su cuenta y en el WebView acaba
-   * en cualquier parte de la pantalla. Se usan eventos pointerdown porque el
-   * blur del input cerraría la lista antes de que llegara el click.
+   * en cualquier parte de la pantalla.
+   *
+   * La selección va en 'click', no en 'pointerdown': con pointerdown el primer
+   * contacto del gesto ya elegía una opción y era imposible deslizar la lista.
+   * Y la lista no se cierra al perder el foco, sino al tocar fuera de ella, que
+   * es lo que permite desplazarla sin que desaparezca.
    */
   function crearCombo(input, lista, toggle, alElegir) {
     const combo = { opciones: [], abierto: false, setOpciones: null, cerrar: null };
+    const contenedor = input.closest('.combo');
 
     function pintar() {
       const texto = norm(input.value);
@@ -871,7 +876,6 @@ document.addEventListener('DOMContentLoaded', () => {
       abrir();
       alElegir(input.value, false);
     });
-    input.addEventListener('blur', () => setTimeout(cerrar, 150));
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         cerrar();
@@ -879,23 +883,31 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    // La flecha despliega sin enfocar el campo: así no salta el teclado cuando
+    // solo se quiere elegir de la lista.
     toggle.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       if (combo.abierto) {
         cerrar();
-        return;
+      } else {
+        abrir();
       }
-      input.focus();
-      abrir();
     });
 
-    lista.addEventListener('pointerdown', (e) => {
+    lista.addEventListener('click', (e) => {
       const item = e.target.closest('.combo-item');
       if (!item) return;
-      e.preventDefault();
       input.value = item.dataset.valor;
       cerrar();
       alElegir(input.value, true);
+    });
+
+    // Cerrar al tocar fuera. Un 'blur' cerraría la lista en cuanto el dedo la
+    // tocara para desplazarla.
+    document.addEventListener('pointerdown', (e) => {
+      if (combo.abierto && !contenedor.contains(e.target)) {
+        cerrar();
+      }
     });
 
     combo.setOpciones = (opciones) => {

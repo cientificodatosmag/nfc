@@ -1221,6 +1221,10 @@ body {
   list-style: none;
   max-height: 15rem;
   overflow-y: auto;
+  /* El gesto vertical es para desplazar la lista, no la página de detrás. */
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background: #1b1180;
   border: 1px solid var(--border-active);
   border-radius: var(--radius-sm);
