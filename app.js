@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     simulatorActive: false,
     soundEnabled: true,
     hapticEnabled: true,
-    overwriteAll: true,
+    overwriteAll: false, // borrado profundo: lento, solo bajo petición
 
     // Stats
     sessionClearedCount: 0,
@@ -733,6 +733,11 @@ document.addEventListener('DOMContentLoaded', () => {
     state.overwriteAll = e.target.checked;
     refreshScanOptions();
   });
+
+  // El HTML manda: así el estado no puede quedar desalineado con la casilla.
+  state.overwriteAll = DOM.optOverwriteAll.checked;
+  state.soundEnabled = DOM.optSoundFeedback.checked;
+  state.hapticEnabled = DOM.optVibrateFeedback.checked;
 
   // History Controls
   DOM.exportCsvBtn.addEventListener('click', exportHistoryCSV);

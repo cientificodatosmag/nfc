@@ -378,6 +378,49 @@ class Ntag21x {
     }
 
     /**
+     * Bytes que ocupa el TLV NDEF que empieza en el buffer (cabecera + datos +
+     * terminador), o -1 si ahí no hay un TLV NDEF.
+     *
+     * Basta con los primeros 4 bytes: la longitud viene en la cabecera.
+     */
+    static int ndefTlvSpan(byte[] memory) {
+        if (memory == null || memory.length < 2) {
+            return -1;
+        }
+        if ((memory[0] & 0xFF) != 0x03) {
+            return -1;
+        }
+        int length = memory[1] & 0xFF;
+        int header = 2;
+        if (length == 0xFF) {
+            if (memory.length < 4) {
+                return -1;
+            }
+            length = ((memory[2] & 0xFF) << 8) | (memory[3] & 0xFF);
+            header = 4;
+        }
+        return header + length + 1; // + terminador 0xFE
+    }
+
+    /**
+     * Páginas que ocupa de verdad el contenido actual.
+     *
+     * Se usa para no poner a cero los 888 bytes de una NTAG216 cuando lo
+     * escrito son 30: una sola lectura evita cientos de escrituras.
+     */
+    int usedPages() {
+        try {
+            int span = ndefTlvSpan(readPages(FIRST_USER_PAGE));
+            if (span <= 0) {
+                return 16; // contenido no reconocible: se limpia un margen prudente
+            }
+            return Math.min(totalUserPages(), (span + 3) / 4);
+        } catch (IOException e) {
+            return 16;
+        }
+    }
+
+    /**
      * Deja la etiqueta como recién formateada: un TLV NDEF vacío en la página 4.
      *
      * @param pagesToWipe cuántas páginas de usuario poner a cero después del TLV.

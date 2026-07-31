@@ -237,9 +237,13 @@ public class NfcNativePlugin extends Plugin implements NfcAdapter.ReaderCallback
             result.put("unlocked", true);
         }
 
-        int pagesToWipe = fullWipe ? chip.totalUserPages() : 16;
+        // Por defecto solo se limpia lo que estaba ocupado: cada pagina es una
+        // escritura de ~10 ms, y arrasar una NTAG216 entera cuesta ~3 segundos
+        // por etiqueta sin que el resultado cambie para ningun lector NDEF.
+        int pagesToWipe = fullWipe ? chip.totalUserPages() : chip.usedPages();
         chip.formatEmpty(pagesToWipe);
         result.put("wipedBytes", Math.min(pagesToWipe, chip.totalUserPages()) * 4);
+        result.put("deepWipe", fullWipe);
     }
 
     /**
