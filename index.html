@@ -279,9 +279,18 @@
             <!-- Password Entry Form -->
             <div class="protect-form full-width">
               <div class="form-group">
+                <label class="toggle-option">
+                  <input type="checkbox" id="opt-lock-only" checked>
+                  <span class="toggle-slider"></span>
+                  <span>Conservar el contenido (solo añadir el bloqueo)</span>
+                </label>
+                <span class="text-sm text-muted">Recomendado si las etiquetas ya vienen grabadas: no se toca ni un byte del contenido, solo se graba la contraseña en el chip.</span>
+              </div>
+
+              <div class="form-group" id="protect-content-group">
                 <label for="protect-content-input">Contenido Texto/URL de la Etiqueta (Limpio y Visible)</label>
                 <input type="text" id="protect-content-input" placeholder="Ej: Mi Etiqueta de Empresa / https://miweb.com" class="input-control" value="Etiqueta Protegida">
-                <span class="text-sm text-muted">Este texto será el contenido visible normal en lectores como NFC Tools.</span>
+                <span class="text-sm text-muted">Este texto será el contenido visible normal en lectores como NFC Tools. <strong>Sobrescribe lo que ya tenga la etiqueta.</strong></span>
               </div>
 
               <div class="form-group mt-2">

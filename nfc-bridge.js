@@ -115,6 +115,7 @@
       unlocked: result.unlocked === true,
       locked: result.locked === true,
       readProtected: result.readProtected === true,
+      contentKept: result.contentKept === true,
       empty: result.empty === true,
       wipedBytes: result.wipedBytes || 0,
       records: result.records || [],
@@ -146,7 +147,8 @@
         password: options.password || '',
         content: options.content || '',
         fullWipe: options.fullWipe !== false,
-        protectRead: options.protectRead === true
+        protectRead: options.protectRead === true,
+        lockOnly: options.lockOnly !== false
       });
     },
 

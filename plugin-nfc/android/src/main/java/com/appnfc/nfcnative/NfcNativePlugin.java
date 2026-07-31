@@ -40,6 +40,7 @@ public class NfcNativePlugin extends Plugin implements NfcAdapter.ReaderCallback
     private volatile String content = "";
     private volatile boolean fullWipe = true;
     private volatile boolean protectRead = false;
+    private volatile boolean lockOnly = true;
     private volatile boolean scanning = false;
 
     @Override
@@ -74,6 +75,7 @@ public class NfcNativePlugin extends Plugin implements NfcAdapter.ReaderCallback
         content = call.getString("content", "");
         fullWipe = Boolean.TRUE.equals(call.getBoolean("fullWipe", true));
         protectRead = Boolean.TRUE.equals(call.getBoolean("protectRead", false));
+        lockOnly = Boolean.TRUE.equals(call.getBoolean("lockOnly", true));
 
         String rawPassword = call.getString("password", "");
         password = (rawPassword == null || rawPassword.isEmpty()) ? null : derivePassword(rawPassword);
@@ -240,36 +242,43 @@ public class NfcNativePlugin extends Plugin implements NfcAdapter.ReaderCallback
         result.put("wipedBytes", Math.min(pagesToWipe, chip.totalUserPages()) * 4);
     }
 
-    /** Protección masiva: escribe el contenido visible y activa PWD/PACK/AUTH0. */
+    /**
+     * Protección masiva: activa PWD/PACK/AUTH0.
+     *
+     * Con lockOnly no se escribe nada en la memoria de usuario, para etiquetas
+     * que ya vienen grabadas desde otra herramienta.
+     */
     private void doProtect(Ntag21x chip, JSObject result) throws IOException {
         if (!chip.supportsHardwarePassword()) {
             throw new IOException("Este chip (" + chip.model
                     + ") no admite contraseña de hardware. Se necesita NTAG213, NTAG215 o NTAG216.");
         }
 
-        if (chip.isProtected()) {
-            if (!chip.authenticate(password)) {
-                throw new IOException("La etiqueta ya está protegida con otra contraseña.");
+        // Autenticar basta para poder escribir: no hace falta quitar la
+        // protección primero, y así no queda una ventana con la etiqueta libre.
+        if (chip.isProtected() && !chip.authenticate(password)) {
+            throw new IOException("La etiqueta ya está protegida con otra contraseña. "
+                    + "Bórrala primero desde Borrado Masivo con su clave actual.");
+        }
+
+        if (!lockOnly) {
+            String text = (content == null || content.trim().isEmpty()) ? "Etiqueta Protegida" : content.trim();
+            NdefRecord record;
+            String lower = text.toLowerCase(Locale.ROOT);
+            if (lower.startsWith("http://") || lower.startsWith("https://")) {
+                record = NdefRecord.createUri(text);
+            } else {
+                record = NdefRecord.createTextRecord(null, text);
             }
-            // Se desactiva para poder reescribir el contenido antes de volver a proteger.
-            chip.removeProtection();
-        }
 
-        String text = (content == null || content.trim().isEmpty()) ? "Etiqueta Protegida" : content.trim();
-        NdefRecord record;
-        String lower = text.toLowerCase(Locale.ROOT);
-        if (lower.startsWith("http://") || lower.startsWith("https://")) {
-            record = NdefRecord.createUri(text);
-        } else {
-            record = NdefRecord.createTextRecord(null, text);
+            byte[] tlv = Ntag21x.buildNdefTlv(new NdefMessage(record).toByteArray());
+            chip.writeFrom(Ntag21x.FIRST_USER_PAGE, tlv);
         }
-
-        byte[] tlv = Ntag21x.buildNdefTlv(new NdefMessage(record).toByteArray());
-        chip.writeFrom(Ntag21x.FIRST_USER_PAGE, tlv);
 
         chip.applyProtection(password, DEFAULT_PACK, protectRead);
         result.put("locked", true);
         result.put("readProtected", protectRead);
+        result.put("contentKept", lockOnly);
     }
 
     // ----------------------------------------------------------------------

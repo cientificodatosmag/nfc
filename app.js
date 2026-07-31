@@ -73,6 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
     protectRadarCircle: document.getElementById('protect-radar-circle'),
     protectScannerStatus: document.getElementById('protect-scanner-status'),
     protectPassInput: document.getElementById('protect-pass-input'),
+    protectContentInput: document.getElementById('protect-content-input'),
+    protectContentGroup: document.getElementById('protect-content-group'),
+    optLockOnly: document.getElementById('opt-lock-only'),
     togglePassVisibility: document.getElementById('toggle-pass-visibility'),
     startProtectBurstBtn: document.getElementById('start-protect-burst-btn'),
     stopProtectBurstBtn: document.getElementById('stop-protect-burst-btn'),
@@ -250,14 +253,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // CONTROLADOR DEL ESCÁNER
   // ==========================================
   function currentScanOptions(mode) {
-    const contentInput = document.getElementById('protect-content-input');
+    const lockOnly = DOM.optLockOnly ? DOM.optLockOnly.checked : true;
     return {
       mode: BACKEND_MODE[mode],
       password: mode === 'protect'
         ? DOM.protectPassInput.value.trim()
         : DOM.burstPassInput.value.trim(),
-      content: contentInput ? contentInput.value.trim() : '',
-      fullWipe: state.overwriteAll
+      content: DOM.protectContentInput ? DOM.protectContentInput.value.trim() : '',
+      fullWipe: state.overwriteAll,
+      lockOnly
     };
   }
 
@@ -387,9 +391,11 @@ document.addEventListener('DOMContentLoaded', () => {
         : `Memoria borrada (${result.wipedBytes || 0} bytes a cero)`;
     } else {
       headline = 'PROTEGIDA OK';
+      const alcance = result.readProtected ? 'lectura y escritura' : 'escritura';
+      const contenido = result.contentKept ? ', contenido intacto' : ', contenido reescrito';
       detail = state.simulatorActive
         ? 'Contraseña grabada en el chip (simulado)'
-        : `Contraseña grabada en el chip${result.readProtected ? ' (lectura y escritura)' : ' (escritura)'}`;
+        : `Contraseña grabada en el chip (${alcance}${contenido})`;
     }
 
     const timeStr = new Date().toLocaleTimeString();
@@ -596,6 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
       unlocked: false,
       locked: false,
       readProtected: false,
+      contentKept: DOM.optLockOnly ? DOM.optLockOnly.checked : true,
       empty: false,
       capacity: 504,
       wipedBytes: 504,
@@ -693,6 +700,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = DOM.burstPassInput;
     input.type = input.type === 'password' ? 'text' : 'password';
   });
+
+  // Solo bloquear: el campo de contenido no pinta nada si no se va a escribir.
+  function syncLockOnlyUI() {
+    if (!DOM.optLockOnly || !DOM.protectContentGroup) return;
+    DOM.protectContentGroup.classList.toggle('hidden', DOM.optLockOnly.checked);
+  }
+
+  if (DOM.optLockOnly) {
+    DOM.optLockOnly.addEventListener('change', () => {
+      syncLockOnlyUI();
+      refreshScanOptions();
+    });
+    syncLockOnlyUI();
+  }
+
+  if (DOM.protectContentInput) {
+    DOM.protectContentInput.addEventListener('change', refreshScanOptions);
+  }
 
   // Simulator Triggers
   DOM.simTapBlank.addEventListener('click', () => simulateTap('blank'));
