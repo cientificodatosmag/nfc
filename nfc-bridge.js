@@ -17,6 +17,8 @@
 (function () {
   'use strict';
 
+  const RELOAD_FLAG = 'nfc_bridge_sw_purged';
+
   let listener = null;
   let plugin = null;
   let nativeHandle = null;
@@ -71,10 +73,11 @@
   }
 
   const backend = {
-    kind: 'none',     // 'native' | 'none'
+    kind: 'none',       // 'native' | 'none'
     hardwareLock: false,
-    status: null,     // { hasNfc, enabled }
-    reason: '',       // por qué no hay backend nativo, si es el caso
+    status: null,       // { hasNfc, enabled }
+    reason: '',         // por qué no hay backend nativo, si es el caso
+    isApkOrigin: false, // servido por el WebView de Capacitor
 
     onResult(callback) {
       listener = callback;
@@ -143,18 +146,36 @@
    * plugin conteste. Si contesta, estamos en la APK con el plugin enlazado.
    */
   backend.ready = (async function detect() {
+    backend.isApkOrigin = looksLikeApk();
     const capacitor = await waitForCapacitor(3000);
 
     if (!capacitor) {
       backend.kind = 'none';
-      if (looksLikeApk()) {
-        await purgeServiceWorkers();
-        backend.reason =
-          'Estás en la APK pero el puente de Capacitor no cargó (service worker viejo sirviendo HTML en caché). ' +
-          'Se limpió la caché: cierra la app del todo y vuelve a abrirla.';
-      } else {
+
+      if (!backend.isApkOrigin) {
         backend.reason = 'No se encontró el puente de Capacitor: esto no es la APK, es el navegador.';
+        console.warn('[NFC]', backend.reason);
+        return backend;
       }
+
+      // ¿Nos está sirviendo un service worker? Es la prueba, no la sospecha.
+      const controlledBySw = !!(navigator.serviceWorker && navigator.serviceWorker.controller);
+      await purgeServiceWorkers();
+
+      // Recargar una sola vez: ya sin service worker, el HTML vuelve a venir
+      // del servidor de Capacitor, que es quien inyecta el puente.
+      if (controlledBySw && !sessionStorage.getItem(RELOAD_FLAG)) {
+        sessionStorage.setItem(RELOAD_FLAG, '1');
+        console.warn('[NFC] Service worker eliminado. Recargando para recuperar el puente nativo.');
+        window.location.reload();
+        return backend;
+      }
+
+      backend.reason = controlledBySw
+        ? 'Un service worker estaba sirviendo la app en caché y bloqueaba el puente nativo. ' +
+          'Se eliminó, pero la recarga no bastó: desinstala la APK e instálala de nuevo.'
+        : 'Estás en la APK y no hay service worker, pero el puente de Capacitor no cargó. ' +
+          'El problema está en la compilación, no en la caché.';
       console.warn('[NFC]', backend.reason);
       return backend;
     }

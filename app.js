@@ -43,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     compatBanner: document.getElementById('compat-banner'),
     compatStatusText: document.getElementById('compat-status-text'),
     pwaInstallBtn: document.getElementById('pwa-install-btn'),
+    apkDownloadBtn: document.getElementById('apk-download-btn'),
+    brandBadge: document.querySelector('.brand-badge'),
     toggleSoundBtn: document.getElementById('toggle-sound-btn'),
     soundIconOn: document.getElementById('sound-icon-on'),
     soundIconOff: document.getElementById('sound-icon-off'),
@@ -743,9 +745,17 @@ document.addEventListener('DOMContentLoaded', () => {
   window.NfcBackend.ready.then((backend) => {
     checkCompatibility();
 
-    // En la APK los archivos ya vienen empaquetados: cachearlos otra vez solo
-    // conseguiría servir una versión vieja tras actualizar la app.
-    if ('serviceWorker' in navigator && backend.kind !== 'native') {
+    // Dentro de la APK sobra el enlace para descargarla.
+    if (backend.isApkOrigin) {
+      if (DOM.apkDownloadBtn) DOM.apkDownloadBtn.classList.add('hidden');
+      if (DOM.brandBadge) DOM.brandBadge.textContent = 'APK v1.0';
+    }
+
+    // Nunca en la APK: el service worker sirve el index.html desde caché y se
+    // salta la inyección del puente de Capacitor, dejando la app sin NFC. La
+    // condición mira el origen, no el backend: si el puente falló, kind es
+    // 'none' y registrarlo aquí perpetuaría la avería.
+    if ('serviceWorker' in navigator && !backend.isApkOrigin) {
       navigator.serviceWorker.register('./sw.js')
         .then(reg => console.log('Service Worker Registered:', reg.scope))
         .catch(err => console.warn('Service Worker Error:', err));
