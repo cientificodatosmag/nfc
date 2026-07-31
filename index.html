@@ -429,26 +429,38 @@
 
             <div class="form-group mt-3">
               <label for="rot-region">1 · Región</label>
-              <input id="rot-region" class="input-control" list="rot-region-list" placeholder="Escribe o despliega..." autocomplete="off">
-              <datalist id="rot-region-list"></datalist>
+              <div class="combo">
+                <input id="rot-region" class="input-control" placeholder="Toca para elegir o escribe..." autocomplete="off">
+                <button type="button" class="combo-toggle" id="rot-region-toggle" aria-label="Desplegar regiones"></button>
+                <ul class="combo-list hidden" id="rot-region-list"></ul>
+              </div>
             </div>
 
             <div class="form-group mt-2">
               <label for="rot-responsable">2 · Responsable</label>
-              <input id="rot-responsable" class="input-control" list="rot-responsable-list" placeholder="Escribe o despliega..." autocomplete="off">
-              <datalist id="rot-responsable-list"></datalist>
+              <div class="combo">
+                <input id="rot-responsable" class="input-control" placeholder="Toca para elegir o escribe..." autocomplete="off">
+                <button type="button" class="combo-toggle" id="rot-responsable-toggle" aria-label="Desplegar responsables"></button>
+                <ul class="combo-list hidden" id="rot-responsable-list"></ul>
+              </div>
             </div>
 
             <div class="form-group mt-2">
               <label for="rot-finca">3 · Finca</label>
-              <input id="rot-finca" class="input-control" list="rot-finca-list" placeholder="Escribe o despliega..." autocomplete="off">
-              <datalist id="rot-finca-list"></datalist>
+              <div class="combo">
+                <input id="rot-finca" class="input-control" placeholder="Toca para elegir o escribe..." autocomplete="off">
+                <button type="button" class="combo-toggle" id="rot-finca-toggle" aria-label="Desplegar fincas"></button>
+                <ul class="combo-list hidden" id="rot-finca-list"></ul>
+              </div>
             </div>
 
             <div class="form-group mt-2">
               <label for="rot-modulo">4 · Código de módulo</label>
-              <input id="rot-modulo" class="input-control" list="rot-modulo-list" placeholder="Escribe o despliega..." autocomplete="off">
-              <datalist id="rot-modulo-list"></datalist>
+              <div class="combo">
+                <input id="rot-modulo" class="input-control" placeholder="Toca para elegir o escribe..." autocomplete="off">
+                <button type="button" class="combo-toggle" id="rot-modulo-toggle" aria-label="Desplegar módulos"></button>
+                <ul class="combo-list hidden" id="rot-modulo-list"></ul>
+              </div>
               <span class="text-sm text-muted" id="rot-modulo-hint">Selecciona los filtros para ver los módulos disponibles.</span>
             </div>
 

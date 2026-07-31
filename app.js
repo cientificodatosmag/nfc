@@ -96,6 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
     rotResponsableList: document.getElementById('rot-responsable-list'),
     rotFincaList: document.getElementById('rot-finca-list'),
     rotModuloList: document.getElementById('rot-modulo-list'),
+    rotRegionToggle: document.getElementById('rot-region-toggle'),
+    rotResponsableToggle: document.getElementById('rot-responsable-toggle'),
+    rotFincaToggle: document.getElementById('rot-finca-toggle'),
+    rotModuloToggle: document.getElementById('rot-modulo-toggle'),
     rotModuloHint: document.getElementById('rot-modulo-hint'),
     rotResetFilters: document.getElementById('rot-reset-filters'),
     rotEmptyState: document.getElementById('rot-empty-state'),
@@ -820,9 +824,98 @@ document.addEventListener('DOMContentLoaded', () => {
     return [...new Set(modulos.map((m) => m[campo]))].sort((a, b) => a.localeCompare(b, 'es'));
   }
 
-  function llenarDatalist(datalist, valores) {
-    datalist.innerHTML = valores.map((v) => `<option value="${v}"></option>`).join('');
+  const ESCAPES_HTML = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
+
+  function escaparHtml(texto) {
+    return String(texto).split('').map((c) => ESCAPES_HTML[c] || c).join('');
   }
+
+  /**
+   * Desplegable propio, anclado al campo.
+   *
+   * El <datalist> nativo lo dibuja Android por su cuenta y en el WebView acaba
+   * en cualquier parte de la pantalla. Se usan eventos pointerdown porque el
+   * blur del input cerraría la lista antes de que llegara el click.
+   */
+  function crearCombo(input, lista, toggle, alElegir) {
+    const combo = { opciones: [], abierto: false, setOpciones: null, cerrar: null };
+
+    function pintar() {
+      const texto = norm(input.value);
+      const visibles = combo.opciones.filter(
+        (o) => !texto || norm(`${o.valor} ${o.detalle || ''}`).includes(texto)
+      );
+
+      lista.innerHTML = visibles.length
+        ? visibles.map((o) => `
+            <li class="combo-item" data-valor="${escaparHtml(o.valor)}">
+              <span class="combo-valor">${escaparHtml(o.valor)}</span>
+              ${o.detalle ? `<span class="combo-detalle">${escaparHtml(o.detalle)}</span>` : ''}
+            </li>`).join('')
+        : '<li class="combo-vacio">Sin coincidencias</li>';
+    }
+
+    function abrir() {
+      combo.abierto = true;
+      pintar();
+      lista.classList.remove('hidden');
+    }
+
+    function cerrar() {
+      combo.abierto = false;
+      lista.classList.add('hidden');
+    }
+
+    input.addEventListener('focus', abrir);
+    input.addEventListener('input', () => {
+      abrir();
+      alElegir(input.value, false);
+    });
+    input.addEventListener('blur', () => setTimeout(cerrar, 150));
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        cerrar();
+        input.blur();
+      }
+    });
+
+    toggle.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      if (combo.abierto) {
+        cerrar();
+        return;
+      }
+      input.focus();
+      abrir();
+    });
+
+    lista.addEventListener('pointerdown', (e) => {
+      const item = e.target.closest('.combo-item');
+      if (!item) return;
+      e.preventDefault();
+      input.value = item.dataset.valor;
+      cerrar();
+      alElegir(input.value, true);
+    });
+
+    combo.setOpciones = (opciones) => {
+      combo.opciones = opciones;
+      if (combo.abierto) pintar();
+    };
+    combo.cerrar = cerrar;
+    return combo;
+  }
+
+  const comboRegion = crearCombo(DOM.rotRegion, DOM.rotRegionList, DOM.rotRegionToggle,
+    () => aplicarFiltros());
+  const comboResponsable = crearCombo(DOM.rotResponsable, DOM.rotResponsableList, DOM.rotResponsableToggle,
+    () => aplicarFiltros());
+  const comboFinca = crearCombo(DOM.rotFinca, DOM.rotFincaList, DOM.rotFincaToggle,
+    () => aplicarFiltros());
+  const comboModulo = crearCombo(DOM.rotModulo, DOM.rotModuloList, DOM.rotModuloToggle,
+    (valor, elegido) => {
+      if (elegido) seleccionarModulo(valor);
+    });
 
   function modulosVisibles() {
     const porRegion = rot.modulos.filter((m) => contiene(m.region, DOM.rotRegion.value));
@@ -834,20 +927,18 @@ document.addEventListener('DOMContentLoaded', () => {
   function aplicarFiltros() {
     const { porRegion, porResponsable, porFinca } = modulosVisibles();
 
-    llenarDatalist(DOM.rotRegionList, unicos(rot.modulos, 'region'));
-    llenarDatalist(DOM.rotResponsableList, unicos(porRegion, 'responsable'));
-    llenarDatalist(DOM.rotFincaList, unicos(porResponsable, 'finca'));
+    comboRegion.setOpciones(unicos(rot.modulos, 'region').map((v) => ({ valor: v })));
+    comboResponsable.setOpciones(unicos(porRegion, 'responsable').map((v) => ({ valor: v })));
+    comboFinca.setOpciones(unicos(porResponsable, 'finca').map((v) => ({ valor: v })));
 
-    DOM.rotModuloList.innerHTML = porFinca
-      .map((m) => {
-        const total = totalEtiquetas(m);
-        const hechas = hechasDe(m.codigo);
-        const estado = hechas === 0 ? `${total} etiquetas`
-          : hechas >= total ? `completo (${total})`
-          : `${hechas} de ${total}`;
-        return `<option value="${m.codigo}">${m.finca} · ${estado}</option>`;
-      })
-      .join('');
+    comboModulo.setOpciones(porFinca.map((m) => {
+      const total = totalEtiquetas(m);
+      const hechas = hechasDe(m.codigo);
+      const estado = hechas === 0 ? `${total} etiquetas`
+        : hechas >= total ? `completo (${total})`
+        : `${hechas} de ${total}`;
+      return { valor: m.codigo, detalle: `${m.finca} · ${estado}` };
+    }));
 
     if (rot.modulos.length === 0) {
       DOM.rotModuloHint.textContent = 'No hay módulos cargados.';
@@ -1235,10 +1326,8 @@ document.addEventListener('DOMContentLoaded', () => {
     input.type = input.type === 'password' ? 'text' : 'password';
   });
 
-  [DOM.rotRegion, DOM.rotResponsable, DOM.rotFinca].forEach((campo) => {
-    campo.addEventListener('input', aplicarFiltros);
-  });
-
+  // Los combos ya escuchan sus propios eventos; esto cubre escribir el código
+  // completo a mano y salir del campo sin tocar la lista.
   DOM.rotModulo.addEventListener('change', (e) => seleccionarModulo(e.target.value));
   DOM.rotResetFilters.addEventListener('click', limpiarFiltros);
 
