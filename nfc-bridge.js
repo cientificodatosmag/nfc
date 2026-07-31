@@ -30,27 +30,63 @@
   }
 
   /**
+   * Devuelve una forma de obtener el plugin, o null si el puente aún no está.
+   *
+   * Se aceptan las dos vías: registerPlugin() la aporta native-bridge.js, y
+   * Capacitor.Plugins es el acceso heredado. Si solo falta la primera, el
+   * problema es que native-bridge.js no llegó al APK.
+   */
+  function getPluginFactory() {
+    const cap = window.Capacitor;
+    if (!cap) return null;
+    if (typeof cap.registerPlugin === 'function') {
+      return () => cap.registerPlugin('NfcNative');
+    }
+    if (cap.Plugins && cap.Plugins.NfcNative) {
+      return () => cap.Plugins.NfcNative;
+    }
+    return null;
+  }
+
+  /**
    * Capacitor inyecta su puente en el <head> antes que estos scripts, pero si
    * por lo que sea llega tarde, esperarlo es preferible a decidir en falso que
    * no estamos en la APK.
    */
   function waitForCapacitor(timeoutMs) {
     return new Promise((resolve) => {
-      if (window.Capacitor && typeof window.Capacitor.registerPlugin === 'function') {
-        resolve(window.Capacitor);
+      const factory = getPluginFactory();
+      if (factory) {
+        resolve(factory);
         return;
       }
       const startedAt = Date.now();
       const timer = setInterval(() => {
-        if (window.Capacitor && typeof window.Capacitor.registerPlugin === 'function') {
+        const found = getPluginFactory();
+        if (found) {
           clearInterval(timer);
-          resolve(window.Capacitor);
+          resolve(found);
         } else if (Date.now() - startedAt > timeoutMs) {
           clearInterval(timer);
           resolve(null);
         }
       }, 50);
     });
+  }
+
+  /** Qué hay realmente en window.Capacitor, para no diagnosticar a ciegas. */
+  function describeCapacitorGlobal() {
+    const cap = window.Capacitor;
+    if (!cap) {
+      return 'window.Capacitor NO existe: la inyección del puente no ocurrió.';
+    }
+    let keys;
+    try {
+      keys = Object.keys(cap).join(', ') || '(sin propiedades)';
+    } catch (e) {
+      keys = '(ilegible)';
+    }
+    return `window.Capacitor SÍ existe pero sin registerPlugin — falta native-bridge.js. Propiedades: ${keys}.`;
   }
 
   function normalize(result) {
@@ -147,9 +183,9 @@
    */
   backend.ready = (async function detect() {
     backend.isApkOrigin = looksLikeApk();
-    const capacitor = await waitForCapacitor(3000);
+    const pluginFactory = await waitForCapacitor(3000);
 
-    if (!capacitor) {
+    if (!pluginFactory) {
       backend.kind = 'none';
 
       if (!backend.isApkOrigin) {
@@ -172,16 +208,15 @@
       }
 
       backend.reason = controlledBySw
-        ? 'Un service worker estaba sirviendo la app en caché y bloqueaba el puente nativo. ' +
-          'Se eliminó, pero la recarga no bastó: desinstala la APK e instálala de nuevo.'
-        : 'Estás en la APK y no hay service worker, pero el puente de Capacitor no cargó. ' +
-          'El problema está en la compilación, no en la caché.';
+        ? 'Un service worker bloqueaba el puente nativo. Se eliminó, pero la recarga no bastó: ' +
+          'desinstala la APK e instálala de nuevo.'
+        : 'Sin service worker y sin puente nativo, el fallo está en el APK. ' + describeCapacitorGlobal();
       console.warn('[NFC]', backend.reason);
       return backend;
     }
 
     try {
-      plugin = capacitor.registerPlugin('NfcNative');
+      plugin = pluginFactory();
       backend.status = await plugin.isAvailable();
       backend.kind = 'native';
       backend.hardwareLock = true;

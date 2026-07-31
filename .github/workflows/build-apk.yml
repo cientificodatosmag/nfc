@@ -38,8 +38,33 @@ jobs:
           npx cap add android
           npx cap sync android
 
-      - name: Verificar que el plugin NFC nativo quedó enlazado
-        run: grep -q "capacitor-nfc-native" android/capacitor.settings.gradle
+      - name: Diagnóstico del proyecto Android generado
+        run: |
+          echo "===== capacitor.config.json ====="
+          cat capacitor.config.json
+          echo "===== android/app/src/main/assets ====="
+          ls -la android/app/src/main/assets/
+          echo "===== capacitor.plugins.json ====="
+          cat android/app/src/main/assets/capacitor.plugins.json || echo "(no existe)"
+          echo "===== native-bridge.js (inicio) ====="
+          head -c 400 android/app/src/main/assets/native-bridge.js || echo "(no existe)"
+          echo ""
+          echo "===== assets/public ====="
+          ls -la android/app/src/main/assets/public/
+
+      - name: Verificar que el APK tendrá puente nativo y plugin NFC
+        run: |
+          # Sin native-bridge.js no existe window.Capacitor.registerPlugin y la
+          # app queda sin acceso nativo, pero el APK compila igual: hay que
+          # cortar aquí y no descubrirlo en el telefono.
+          test -s android/app/src/main/assets/native-bridge.js \
+            || { echo "FALTA native-bridge.js: el APK no tendria puente Capacitor"; exit 1; }
+          grep -q "NfcNative" android/app/src/main/assets/capacitor.plugins.json \
+            || { echo "El plugin NfcNative no esta registrado en capacitor.plugins.json"; exit 1; }
+          grep -q "nfc-bridge.js" android/app/src/main/assets/public/index.html \
+            || { echo "index.html empaquetado sin nfc-bridge.js"; exit 1; }
+          grep -q "capacitor-nfc-native" android/capacitor.settings.gradle \
+            || { echo "El modulo Gradle del plugin no quedo enlazado"; exit 1; }
 
       - name: Compilar APK
         run: |
