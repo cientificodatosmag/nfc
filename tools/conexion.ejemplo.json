@@ -1,0 +1,8 @@
+{
+  "_comentario": "Copia este archivo como conexion.local.json y rellena los valores reales. conexion.local.json esta en .gitignore porque el repositorio es publico. La contrasena NO va aqui: se guarda en el Administrador de Credenciales de Windows con keyring.set_password(keyring_servicio, usuario, contrasena).",
+  "host": "10.0.0.1",
+  "puerto": 1521,
+  "servicio": "NOMBRE_DEL_SERVICIO",
+  "usuario": "USUARIO_LECTURA",
+  "keyring_servicio": "appnfc_oracle"
+}

@@ -1,0 +1,13 @@
+{
+  "_comentario": "Copia este archivo como normalizaciones.local.json. Lleva nombres de personas, por eso no se versiona en un repositorio publico.",
+
+  "_correcciones_nombre": "Codigo de colaborador -> grafia unica acordada. Se usa cuando el MISMO codigo llega escrito de dos formas distintas entre filas (una completa y otra abreviada, o con y sin tilde). Al ir por codigo, no existe el riesgo de fusionar a dos personas distintas.",
+  "correcciones_nombre": {
+    "1000000001": "Nombre Completo Acordado"
+  },
+
+  "_incompletos": "Codigo -> nota. Registros que el origen no tiene completos y hay que corregir en Oracle. Se cuentan igual en los resumenes, pero salen marcados.",
+  "incompletos": {
+    "1000000002": "Falta el apellido en el origen (Oracle). Revisar y corregir en la base."
+  }
+}
