@@ -102,12 +102,37 @@ jobs:
 
       - name: Verificar plugin y web empaquetados
         run: |
+          # Un <script> que no se copio a www/ produce una app que funciona
+          # perfecto en el navegador y esta muerta dentro del APK. Es el fallo
+          # mas caro posible, asi que se comprueba archivo por archivo.
+          FALTAN=0
+          for S in $(grep -o 'script src="[^"]*"' index.html | cut -d'"' -f2); do
+            case "$S" in http*) continue;; esac
+            if [ ! -f "android/app/src/main/assets/public/$S" ]; then
+              echo "index.html carga $S pero no llego al APK (falta en la lista cp de www/)"
+              FALTAN=1
+            fi
+          done
+          [ "$FALTAN" = "0" ] || exit 1
+
           grep -q "NfcNative" android/app/src/main/assets/capacitor.plugins.json \
             || { echo "El plugin NfcNative no esta registrado en capacitor.plugins.json"; exit 1; }
           grep -q "nfc-bridge.js" android/app/src/main/assets/public/index.html \
             || { echo "index.html empaquetado sin nfc-bridge.js"; exit 1; }
           grep -q "capacitor-nfc-native" android/capacitor.settings.gradle \
             || { echo "El modulo Gradle del plugin no quedo enlazado"; exit 1; }
+
+          # Exportar CSV depende de estos dos: sin ellos el boton vuelve a no
+          # hacer nada dentro del APK, que es justo el fallo que se corrigio.
+          for P in Filesystem Share; do
+            grep -q "$P" android/app/src/main/assets/capacitor.plugins.json \
+              || { echo "Falta el plugin $P en capacitor.plugins.json"; exit 1; }
+          done
+
+          # Lo trae la plantilla de Capacitor, pero el sincronizado futuro
+          # depende de ello: mejor afirmarlo que confiar.
+          grep -q "android.permission.INTERNET" android/app/src/main/AndroidManifest.xml \
+            || { echo "El APK no declara el permiso INTERNET"; exit 1; }
 
       - name: Compilar APK
         run: |

@@ -118,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     rotNextBtn: document.getElementById('rot-next-btn'),
     rotProgressTbody: document.getElementById('rot-progress-tbody'),
     rotExportCsv: document.getElementById('rot-export-csv'),
+    rotBackupJson: document.getElementById('rot-backup-json'),
     rotResetProgress: document.getElementById('rot-reset-progress'),
 
     // History (Tab 5)
@@ -487,10 +488,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const timeStr = new Date().toLocaleTimeString();
     DOM.lastTagInfo.className = 'tag-info-active';
     DOM.lastTagInfo.innerHTML = `
-      <strong>[${timeStr}] ${headline}</strong><br>
-      Serie (UID): <span style="color:var(--brand-green)">${result.uid}</span><br>
-      Chip: <span style="color:var(--brand-green)">${result.model}</span><br>
-      Estado: <em>${detail}</em>
+      <strong>[${escaparHtml(timeStr)}] ${escaparHtml(headline)}</strong><br>
+      Serie (UID): <span style="color:var(--brand-green)">${escaparHtml(result.uid)}</span><br>
+      Chip: <span style="color:var(--brand-green)">${escaparHtml(result.model)}</span><br>
+      Estado: <em>${escaparHtml(detail)}</em>
     `;
 
     playSound('success');
@@ -507,9 +508,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const timeStr = new Date().toLocaleTimeString();
     DOM.lastTagInfo.className = 'tag-info-active';
     DOM.lastTagInfo.innerHTML = `
-      <strong>[${timeStr}] FALLO</strong><br>
-      Serie (UID): <span style="color:var(--brand-green)">${result.uid}</span><br>
-      Motivo: <em>${message}</em>
+      <strong>[${escaparHtml(timeStr)}] FALLO</strong><br>
+      Serie (UID): <span style="color:var(--brand-green)">${escaparHtml(result.uid)}</span><br>
+      Motivo: <em>${escaparHtml(message)}</em>
     `;
 
     playSound('error');
@@ -609,19 +610,95 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // item.details arrastra el mensaje de error que viene del plugin nativo, y
+    // item.serial el UID de la etiqueta: nada de esto se pinta sin escapar.
     DOM.historyTbody.innerHTML = state.history.map(item => `
       <tr>
-        <td>${item.timestamp}</td>
-        <td><strong>${item.operation}</strong></td>
-        <td><code>${item.serial}</code></td>
+        <td>${escaparHtml(item.timestamp)}</td>
+        <td><strong>${escaparHtml(item.operation)}</strong></td>
+        <td><code>${escaparHtml(item.serial)}</code></td>
         <td>
           <span class="badge-status ${item.status === 'ÉXITO' ? 'success' : 'danger'}">
-            ${item.status}
+            ${escaparHtml(item.status)}
           </span>
         </td>
-        <td>${item.details}</td>
+        <td>${escaparHtml(item.details)}</td>
       </tr>
     `).join('');
+  }
+
+  // ==========================================
+  // EXPORTACIÓN DE ARCHIVOS
+  // ==========================================
+  /**
+   * Une las filas en un CSV que Excel entienda.
+   *
+   * El BOM es obligatorio: sin él, Excel en Windows lee los acentos de fincas y
+   * responsables como basura. Los saltos CRLF son los que espera Excel.
+   */
+  function construirCsv(cabecera, filas) {
+    const escapar = (celda) => `"${String(celda === null || celda === undefined ? '' : celda).replace(/"/g, '""')}"`;
+    return '﻿' + [cabecera, ...filas]
+      .map((fila) => fila.map(escapar).join(','))
+      .join('\r\n');
+  }
+
+  /**
+   * Guarda un archivo y abre el selector de Android para enviarlo.
+   *
+   * El método anterior (<a href="data:...">) nunca funcionó dentro del APK: el
+   * WebView solo descarga si la app registra un DownloadListener, y aun así
+   * DownloadManager no sabe abrir URLs data:. Además encodeURI no escapa '#',
+   * así que una almohadilla en un nombre truncaba el archivo entero.
+   *
+   * En el APK se escribe a caché y se comparte (WhatsApp, Gmail, Drive). En un
+   * navegador de verdad el Blob sí descarga, así que ahí se usa eso.
+   */
+  async function compartirArchivo(nombre, contenido, mime) {
+    // Aquí no hay empaquetador, así que los paquetes JS de Capacitor nunca se
+    // cargan y Capacitor.Plugins puede venir vacío. registerPlugin() devuelve
+    // el proxy que habla con la implementación nativa por su nombre, que es la
+    // misma vía que usa nfc-bridge.js para el plugin de NFC.
+    const cap = window.Capacitor;
+    const nativo = cap && typeof cap.registerPlugin === 'function';
+
+    if (nativo) {
+      const Filesystem = cap.registerPlugin('Filesystem');
+      const Share = cap.registerPlugin('Share');
+
+      // btoa solo acepta latin1: se codifica a UTF-8 antes de pasar a base64.
+      const bytes = new TextEncoder().encode(contenido);
+      let binario = '';
+      bytes.forEach((b) => { binario += String.fromCharCode(b); });
+
+      await Filesystem.writeFile({ path: nombre, data: btoa(binario), directory: 'CACHE' });
+      const { uri } = await Filesystem.getUri({ path: nombre, directory: 'CACHE' });
+      await Share.share({ title: nombre, dialogTitle: `Enviar ${nombre}`, files: [uri] });
+      return;
+    }
+
+    const url = URL.createObjectURL(new Blob([contenido], { type: mime }));
+    const enlace = document.createElement('a');
+    enlace.href = url;
+    enlace.download = nombre;
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  /** Envuelve compartirArchivo para que el aviso de éxito solo salga si de verdad ocurrió. */
+  async function exportar(nombre, contenido, mime, exito) {
+    try {
+      await compartirArchivo(nombre, contenido, mime);
+      showToast(exito, 'success');
+    } catch (err) {
+      // Cancelar el selector de Android también llega aquí; no es un fallo.
+      const motivo = String((err && err.message) || err);
+      if (/cancel/i.test(motivo)) return;
+      console.error('Exportación fallida:', err);
+      showToast(`No se pudo exportar: ${motivo}`, 'error');
+    }
   }
 
   function exportHistoryCSV() {
@@ -630,19 +707,13 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    let csvContent = 'data:text/csv;charset=utf-8,Fecha/Hora,Operacion,UID_Serie,Estado,Detalles\n';
-    state.history.forEach(row => {
-      csvContent += `"${row.timestamp}","${row.operation}","${row.serial}","${row.status}","${row.details}"\n`;
-    });
+    const csv = construirCsv(
+      ['Fecha/Hora', 'Operacion', 'UID_Serie', 'Estado', 'Detalles'],
+      state.history.map((row) => [row.timestamp, row.operation, row.serial, row.status, row.details])
+    );
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `nfc_historial_${Date.now()}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showToast('Historial CSV exportado con éxito.', 'success');
+    exportar(`nfc_historial_${new Date().toISOString().slice(0, 10)}.csv`, csv,
+      'text/csv;charset=utf-8', `Historial exportado: ${state.history.length} registros.`);
   }
 
   function clearHistory() {
@@ -657,15 +728,27 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // TOAST NOTIFICATIONS
   // ==========================================
+  /**
+   * Se construye con nodos de texto, no con innerHTML.
+   *
+   * Llega aquí texto que no controlamos (errores del chip, códigos de módulo,
+   * y en cuanto haya sincronización, cadenas de otros teléfonos). Escapar en el
+   * sumidero una sola vez no se pudre; hacerlo en las ~20 llamadas, sí.
+   */
   function showToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    
+
     let icon = 'ℹ️';
     if (type === 'success') icon = '✅';
     if (type === 'error') icon = '❌';
 
-    toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+    const spanIcono = document.createElement('span');
+    spanIcono.textContent = icon;
+    const spanTexto = document.createElement('span');
+    spanTexto.textContent = String(message);
+
+    toast.append(spanIcono, ' ', spanTexto);
     DOM.toastContainer.appendChild(toast);
 
     setTimeout(() => {
@@ -853,10 +936,19 @@ document.addEventListener('DOMContentLoaded', () => {
     return [...new Set(modulos.map((m) => m[campo]))].sort((a, b) => a.localeCompare(b, 'es'));
   }
 
-  const ESCAPES_HTML = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
-
+  /**
+   * Escapa para interpolar en innerHTML.
+   *
+   * La tabla vive dentro de la función a propósito: se llama desde sitios
+   * declarados más arriba en el archivo, y una const externa quedaría en zona
+   * muerta si alguna vez se invocara antes de tiempo.
+   *
+   * Incluye la comilla simple: hoy solo sería prescindible porque todos los
+   * atributos de la plantilla usan comillas dobles, y eso nadie lo va a mantener.
+   */
   function escaparHtml(texto) {
-    return String(texto).split('').map((c) => ESCAPES_HTML[c] || c).join('');
+    const escapes = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+    return String(texto).split('').map((c) => escapes[c] || c).join('');
   }
 
   /**
@@ -1245,15 +1337,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       return `
         <tr>
-          <td><code>${codigo}</code></td>
-          <td>${registro.finca || ''}</td>
-          <td>${registro.responsable || ''}</td>
+          <td><code>${escaparHtml(codigo)}</code></td>
+          <td>${escaparHtml(registro.finca || '')}</td>
+          <td>${escaparHtml(registro.responsable || '')}</td>
           <td>
             <span class="badge-status ${completo ? 'success' : 'danger'}">
-              ${hechas} / ${registro.total}
+              ${hechas} / ${escaparHtml(registro.total)}
             </span>
           </td>
-          <td>${ultima ? `<code>${ultima.texto}</code>` : ''}</td>
+          <td>${ultima ? `<code>${escaparHtml(ultima.texto)}</code>` : ''}</td>
         </tr>
       `;
     }).join('');
@@ -1284,19 +1376,42 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const cabecera = ['Codigo_modulo', 'Region', 'Responsable', 'Finca', 'Numero_etiqueta',
-      'Total_etiquetas', 'Texto_grabado', 'UID', 'Fecha_hora'];
-    const csv = [cabecera, ...filas]
-      .map((fila) => fila.map((celda) => `"${String(celda).replace(/"/g, '""')}"`).join(','))
-      .join('\n');
+    const csv = construirCsv(
+      ['Codigo_modulo', 'Region', 'Responsable', 'Finca', 'Numero_etiqueta',
+        'Total_etiquetas', 'Texto_grabado', 'UID', 'Fecha_hora'],
+      filas
+    );
 
-    const enlace = document.createElement('a');
-    enlace.href = encodeURI(`data:text/csv;charset=utf-8,${csv}`);
-    enlace.download = `rotulado_modulos_${new Date().toISOString().slice(0, 10)}.csv`;
-    document.body.appendChild(enlace);
-    enlace.click();
-    document.body.removeChild(enlace);
-    showToast(`CSV exportado: ${filas.length} etiquetas.`, 'success');
+    exportar(`rotulado_modulos_${new Date().toISOString().slice(0, 10)}.csv`, csv,
+      'text/csv;charset=utf-8', `CSV exportado: ${filas.length} etiquetas.`);
+  }
+
+  /**
+   * Respaldo crudo del avance, tal cual está en el teléfono.
+   *
+   * Es la red de seguridad antes de cualquier cambio de formato: si una
+   * migración futura sale mal, de este archivo se recupera todo. Se exporta el
+   * contenido literal de localStorage, sin reinterpretarlo.
+   */
+  function exportarRespaldoAvance() {
+    const crudo = localStorage.getItem(ROT_PROGRESO_KEY);
+    if (!crudo || crudo === '{}') {
+      showToast('No hay avance guardado que respaldar.', 'error');
+      return;
+    }
+
+    const respaldo = JSON.stringify({
+      formato: 'nfc-rotulado-respaldo-v1',
+      exportado: new Date().toISOString(),
+      clave: ROT_PROGRESO_KEY,
+      progreso: JSON.parse(crudo)
+    }, null, 2);
+
+    const etiquetas = Object.values(JSON.parse(crudo))
+      .reduce((suma, r) => suma + Object.keys(r.etiquetas || {}).length, 0);
+
+    exportar(`respaldo_avance_${new Date().toISOString().slice(0, 10)}.json`, respaldo,
+      'application/json', `Respaldo generado: ${etiquetas} etiquetas.`);
   }
 
   function reiniciarAvance() {
@@ -1384,6 +1499,7 @@ document.addEventListener('DOMContentLoaded', () => {
   DOM.rotNextBtn.addEventListener('click', () => irAEtiqueta(rot.indice + 2));
 
   DOM.rotExportCsv.addEventListener('click', exportarRotuladoCSV);
+  DOM.rotBackupJson.addEventListener('click', exportarRespaldoAvance);
   DOM.rotResetProgress.addEventListener('click', reiniciarAvance);
 
   // Simulator Triggers
