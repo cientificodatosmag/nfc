@@ -49,6 +49,11 @@ jobs:
       - name: Instalar dependencias
         run: npm install
 
+      # La proyeccion del registro compartido: si dejara de ser conmutativa,
+      # dos telefonos sincronizando mostrarian cosas distintas.
+      - name: Probar la logica del backend
+        run: node tests/backend.test.mjs
+
       - name: Inicializar Capacitor y agregar Android
         run: |
           npx cap init "NFC Tag Master" "com.appnfc.master" --web-dir "www"
