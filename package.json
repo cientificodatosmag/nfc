@@ -4,7 +4,8 @@
   "description": "NFC Tag Master PWA y APK Nativo",
   "main": "index.html",
   "scripts": {
-    "start": "echo 'PWA Client Ready'"
+    "start": "echo 'PWA Client Ready'",
+    "test": "node tests/rotulado.test.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^6.0.0",

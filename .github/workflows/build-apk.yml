@@ -40,6 +40,12 @@ jobs:
           mkdir -p www
           cp index.html app.js nfc-bridge.js styles.css manifest.json sw.js modulos.json www/
 
+      # Antes de compilar nada: la logica de doble pasada y la migracion del
+      # avance guardado. Las pruebas extraen las funciones reales de app.js, asi
+      # que renombrar una tambien falla aqui.
+      - name: Probar la logica de rotulado
+        run: node tests/rotulado.test.mjs
+
       - name: Instalar dependencias
         run: npm install
 

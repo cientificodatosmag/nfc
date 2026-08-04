@@ -939,7 +939,32 @@ document.addEventListener('DOMContentLoaded', () => {
    * de ahí se recupera todo.
    */
   function migrarV1() {
-    const v1 = leerJson(ROT_PROGRESO_KEY);
+    // Se lee el texto crudo, no leerJson(): hay que poder distinguir "no hay
+    // nada guardado" de "hay algo y no se puede leer". Confundirlos mostraría
+    // "0 grabadas" ante un avance corrupto, y eso hace que se re-rotule un
+    // módulo entero.
+    let crudo = null;
+    try {
+      crudo = localStorage.getItem(ROT_PROGRESO_KEY);
+    } catch (e) {
+      crudo = null;
+    }
+
+    if (!crudo || crudo === '{}') {
+      guardarClave(ROT_MIGRACION_KEY, 'sin-datos');
+      return {};
+    }
+
+    let v1 = null;
+    try {
+      v1 = JSON.parse(crudo);
+    } catch (e) {
+      console.error('[Rotulado] El avance guardado no se puede leer:', e);
+      rot.migracionFallida = 'el avance guardado está dañado';
+      guardarClave(ROT_MIGRACION_KEY, `fallida: ${rot.migracionFallida}`);
+      return {};
+    }
+
     if (!v1 || typeof v1 !== 'object' || Object.keys(v1).length === 0) {
       guardarClave(ROT_MIGRACION_KEY, 'sin-datos');
       return {};
