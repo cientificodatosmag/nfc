@@ -336,8 +336,12 @@ def informar(viejos, nuevos, avisos, informe, dudosos, rotulados, motivo_sin_reg
 
     if rotulados is None:
         print(f'\n  NOTA: no se pudo consultar el registro compartido ({motivo_sin_registro}).')
-        print('        No se puede saber que modulos ya tienen etiquetas grabadas.')
-        print('        Para comprobarlo: set NFC_APP_KEY=... antes de correr esto.')
+        print('        No se puede saber que modulos ya tienen etiquetas grabadas,')
+        print('        asi que un cambio de ramales peligroso pasaria sin aviso.')
+        if 'NFC_APP_KEY' in motivo_sin_registro:
+            print('        Para comprobarlo: set NFC_APP_KEY=... antes de correr esto.')
+        else:
+            print('        Si el diff toca ramales, vuelve a intentarlo antes de escribir.')
     elif peligrosos:
         print('\n' + '!' * 70)
         print('  CAMBIA EL NUMERO DE RAMALES EN MODULOS YA ROTULADOS')

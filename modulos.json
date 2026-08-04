@@ -1,30 +1,185 @@
 {
-  "generado": "2026-07-31",
-  "fuente": "Maestro_Modulos_Riego_20260731.xlsx",
+  "generado": "2026-08-04",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-04T14:47Z)",
+  "regla": "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0",
   "avisos": [
+    {
+      "tipo": "sinCodigo",
+      "registros": 3
+    },
     {
       "codigo": "OOC-MNA-048",
       "registros": 2,
       "columnasDistintas": [
-        "Numero de hidrantes",
-        "Presion optima",
-        "RPM optima",
-        "Numero de Posiciones",
-        "AREA_MODULO"
+        "AREA_MODULO",
+        "NO_HIDRANTES"
+      ],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORC-MNA-044",
+      "registros": 2,
+      "columnasDistintas": [
+        "AREA_MODULO",
+        "NO_HIDRANTES",
+        "TIPO_RIEGO"
       ],
       "mismoNumeroDeRamales": true
     }
   ],
   "modulos": [
     {
-      "codigo": "CEN-MNA-038",
+      "codigo": "CEN-MNA-008",
       "region": "CENTRAL NORTE",
       "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Monica",
+      "codigoFinca": "13",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-012",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Las Ilusiones",
+      "codigoFinca": "354",
+      "ramales": 22,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-032",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "Buganvilia",
+      "codigoFinca": "11",
+      "ramales": 26,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-037",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "Buganvilia",
+      "codigoFinca": "11",
+      "ramales": 18,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-038",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
       "finca": "Buganvilia",
       "codigoFinca": "11",
       "ramales": 15,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-025",
+      "region": "CENTRAL SUR",
+      "responsable": "Enzo Gonzalo Oscal Ortiz",
+      "finca": "Margaritas",
+      "codigoFinca": "26",
+      "ramales": 8,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-027",
+      "region": "CENTRAL SUR",
+      "responsable": "Enzo Gonzalo Oscal Ortiz",
+      "finca": "La Zeta",
+      "codigoFinca": "78",
+      "ramales": 5,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-031",
+      "region": "CENTRAL SUR",
+      "responsable": "Enzo Gonzalo Oscal Ortiz",
+      "finca": "Manantial",
+      "codigoFinca": "208",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-032",
+      "region": "CENTRAL SUR",
+      "responsable": "Enzo Gonzalo Oscal Ortiz",
+      "finca": "Manantial",
+      "codigoFinca": "208",
+      "ramales": 17,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-034",
+      "region": "CENTRAL SUR",
+      "responsable": "Enzo Gonzalo Oscal Ortiz",
+      "finca": "Malta",
+      "codigoFinca": "227",
+      "ramales": 16,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-037",
+      "region": "CENTRAL SUR",
+      "responsable": "Enzo Gonzalo Oscal Ortiz",
+      "finca": "Cerritos",
+      "codigoFinca": "284",
+      "ramales": 5,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-038",
+      "region": "CENTRAL SUR",
+      "responsable": "Enzo Gonzalo Oscal Ortiz",
+      "finca": "Cerritos",
+      "codigoFinca": "284",
+      "ramales": 9,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-039",
+      "region": "CENTRAL SUR",
+      "responsable": "Enzo Gonzalo Oscal Ortiz",
+      "finca": "Tierra Nueva Rodriguez I",
+      "codigoFinca": "785",
+      "ramales": 4,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-009",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "Santa Julia",
+      "codigoFinca": "563",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
       "duplicado": false
     },
     {
@@ -34,6 +189,39 @@
       "finca": "La Cebera",
       "codigoFinca": "577",
       "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-054",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Providencia Reu II",
+      "codigoFinca": "620",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-058",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Providencia Reu II",
+      "codigoFinca": "620",
+      "ramales": 19,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-061",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Rosario Fernandez",
+      "codigoFinca": "1000",
+      "ramales": 8,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -663,6 +851,501 @@
       "ramales": 11,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MDA-001",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Villa Alegre",
+      "codigoFinca": "286",
+      "ramales": 6,
+      "tipoRiego": "Midi Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-001",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "El Apipal",
+      "codigoFinca": "523",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-002",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "Santa Gregoria",
+      "codigoFinca": "484",
+      "ramales": 21,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-003",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "La Llave",
+      "codigoFinca": "482",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-005",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "El Apipal",
+      "codigoFinca": "523",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-006",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "Maria Linda Rios",
+      "codigoFinca": "560",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-007",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "El Apipal",
+      "codigoFinca": "523",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-008",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "Maria Linda Rios",
+      "codigoFinca": "560",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-009",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "La Llave",
+      "codigoFinca": "482",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-010",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "Santa Gregoria",
+      "codigoFinca": "484",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-011",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "El Chamarro",
+      "codigoFinca": "434",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-012",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "Maria Linda",
+      "codigoFinca": "481",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-013",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "Maria Linda",
+      "codigoFinca": "481",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-014",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "El Tesoro II",
+      "codigoFinca": "245",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-016",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Josefina II",
+      "codigoFinca": "202",
+      "ramales": 3,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-017",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Virginia",
+      "codigoFinca": "411",
+      "ramales": 16,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-018",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Candelaria",
+      "codigoFinca": "177",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-019",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Anabella",
+      "codigoFinca": "169",
+      "ramales": 3,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo Artesanal",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-020",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Cadiz",
+      "codigoFinca": "615",
+      "ramales": 19,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-021",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Libano",
+      "codigoFinca": "33",
+      "ramales": 7,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-023",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Cadiz",
+      "codigoFinca": "615",
+      "ramales": 7,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-024",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Oasis",
+      "codigoFinca": "32",
+      "ramales": 15,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-025",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Libano",
+      "codigoFinca": "33",
+      "ramales": 9,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-026",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Cobano",
+      "codigoFinca": "25",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-027",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Oasis",
+      "codigoFinca": "32",
+      "ramales": 23,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-028",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Candelaria",
+      "codigoFinca": "177",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-031",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "La Frontera",
+      "codigoFinca": "339",
+      "ramales": 6,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-032",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Cadiz",
+      "codigoFinca": "615",
+      "ramales": 6,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-034",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "Elycar",
+      "codigoFinca": "314",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-038",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "El Rosario",
+      "codigoFinca": "235",
+      "ramales": 24,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-039",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "El Horizonte Estrada",
+      "codigoFinca": "147",
+      "ramales": 16,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-042",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "Conquista",
+      "codigoFinca": "212",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-043",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "El Rosario",
+      "codigoFinca": "235",
+      "ramales": 6,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-044",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "El Rosario",
+      "codigoFinca": "235",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORC-MNA-045",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "El Rosario",
+      "codigoFinca": "235",
+      "ramales": 17,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-065",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Cadiz",
+      "codigoFinca": "615",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-020",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "Corocito",
+      "codigoFinca": "347",
+      "ramales": 7,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-022",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "Las Palmas Hernandez",
+      "codigoFinca": "547",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-023",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "Morelia",
+      "codigoFinca": "329",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-024",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "Canada",
+      "codigoFinca": "332",
+      "ramales": 24,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-026",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "Costa Rica II",
+      "codigoFinca": "589",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-027",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "Berta Carbonelli",
+      "codigoFinca": "680",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-031",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Trinidad",
+      "codigoFinca": "302",
+      "ramales": 16,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-032",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Rubia",
+      "codigoFinca": "723",
+      "ramales": 6,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-033",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "El Cedro",
+      "codigoFinca": "401",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
       "duplicado": false
     }
   ]
