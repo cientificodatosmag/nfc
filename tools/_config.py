@@ -53,12 +53,19 @@ def normalizaciones():
       cuando el mismo codigo llega escrito de dos formas distintas.
     - incompletos: codigo -> nota, para registros que el origen no tiene
       completos y hay que corregir en Oracle.
+    - fusiones_responsable: variante -> grafia buena. Los responsables NO traen
+      codigo, asi que aqui el parecido automatico puede equivocarse y esta lista
+      es la forma de mandar sobre el.
+    - nunca_fusionar: pares que se parecen y son personas distintas. Sin esto,
+      cualquier medida de parecido junta a "Jaime Cruz" con "Jaime de La Cruz".
     """
     cfg = _cargar("normalizaciones")
     return {
         # Las claves de un JSON son texto; los codigos se comparan como enteros.
         "correcciones_nombre": {int(k): v for k, v in cfg.get("correcciones_nombre", {}).items()},
         "incompletos": {int(k): v for k, v in cfg.get("incompletos", {}).items()},
+        "fusiones_responsable": cfg.get("fusiones_responsable", {}),
+        "nunca_fusionar": [tuple(p) for p in cfg.get("nunca_fusionar", []) if len(p) == 2],
     }
 
 

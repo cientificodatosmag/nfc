@@ -77,6 +77,11 @@ jobs:
       - name: Probar la logica de rotulado
         run: node tests/rotulado.test.mjs
 
+      # Los tres niveles del maestro. Aceptar una respuesta rara del servidor
+      # dejaria el desplegable vacio con el operador ya en el modulo.
+      - name: Probar la carga del maestro
+        run: node tests/maestro.test.mjs
+
       - name: Instalar dependencias
         run: npm install
 

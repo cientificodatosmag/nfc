@@ -865,6 +865,7 @@ document.addEventListener('DOMContentLoaded', () => {
     seleccion: null,
     activo: false,
     progreso: {},     // se llena en arrancarProgreso()
+    maestro: null,    // {generado, origen, guardado} — de dónde salió la lista
     migracionFallida: ''
   };
 
@@ -1170,21 +1171,126 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ------------------------------------------------------------------
   // Carga del maestro
+  //
+  // Tres niveles, en este orden: servidor, copia guardada, copia del APK. Es lo
+  // que permite corregir los ramales de un módulo sin reinstalar la app en cada
+  // teléfono, y a la vez no depender de que haya señal para poder rotular.
   // ------------------------------------------------------------------
-  async function cargarModulos() {
+  const MAESTRO_CACHE_KEY = 'nfc_maestro_cache';
+  const MAESTRO_TIMEOUT_MS = 8000;
+
+  /**
+   * ¿Esto sirve como maestro?
+   *
+   * Es la comprobación que impide el peor final: una respuesta truncada o una
+   * página de error de un portal cautivo sustituyendo al maestro bueno y
+   * dejando el desplegable vacío en pleno campo. Ante la duda se usa el nivel
+   * siguiente, que en el peor caso es el que viene dentro del APK.
+   */
+  function maestroValido(datos) {
+    if (!datos || typeof datos !== 'object') return false;
+    if (!Array.isArray(datos.modulos) || datos.modulos.length === 0) return false;
+    return datos.modulos.every((m) => m && typeof m.codigo === 'string' && m.codigo
+      && Number.isInteger(m.ramales) && m.ramales >= 0);
+  }
+
+  async function bajarMaestro() {
+    const base = (window.APP_CONFIG && window.APP_CONFIG.apiBase) || '';
+    if (!base) return null;
+
+    // Sin cabeceras condicionales a propósito. If-None-Match no está en la
+    // lista blanca de CORS, así que obligaría a un preflight que el servidor de
+    // archivos estáticos no contesta. El maestro pesa 18 KB: no compensa.
+    const control = new AbortController();
+    const reloj = setTimeout(() => control.abort(), MAESTRO_TIMEOUT_MS);
+    try {
+      const respuesta = await fetch(`${base.replace(/\/+$/, '')}/modulos.json`,
+        { cache: 'no-store', signal: control.signal });
+      if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
+      const datos = await respuesta.json();
+      if (!maestroValido(datos)) throw new Error('el maestro recibido no tiene forma de maestro');
+      guardarClave(MAESTRO_CACHE_KEY, JSON.stringify({ guardado: new Date().toISOString(), datos }));
+      return { datos, origen: 'servidor' };
+    } catch (err) {
+      // Un fallo aquí es lo normal en campo, no una avería: se sigue al
+      // siguiente nivel sin ruido.
+      console.log(`[Rotulado] Maestro por red no disponible (${err.message}).`);
+      return null;
+    } finally {
+      clearTimeout(reloj);
+    }
+  }
+
+  function maestroDeCache() {
+    const guardado = leerJson(MAESTRO_CACHE_KEY);
+    if (!guardado || !maestroValido(guardado.datos)) return null;
+    return { datos: guardado.datos, origen: 'cache', guardado: guardado.guardado };
+  }
+
+  async function maestroDelApk() {
     try {
       const respuesta = await fetch('modulos.json', { cache: 'no-store' });
       if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
       const datos = await respuesta.json();
-      rot.modulos = datos.modulos || [];
-      console.log(`[Rotulado] ${rot.modulos.length} módulos cargados (maestro ${datos.generado}).`);
+      if (!maestroValido(datos)) throw new Error('el maestro empaquetado no es válido');
+      return { datos, origen: 'app' };
     } catch (err) {
       console.error('[Rotulado] No se pudo cargar modulos.json:', err);
-      rot.modulos = [];
-      DOM.rotModuloHint.textContent = 'No se pudo cargar el maestro de módulos (modulos.json).';
+      return null;
     }
+  }
+
+  async function cargarModulos() {
+    const antes = rot.modulos.map((m) => m.codigo);
+
+    const fuente = (await bajarMaestro()) || maestroDeCache() || (await maestroDelApk());
+
+    if (!fuente) {
+      rot.modulos = [];
+      rot.maestro = null;
+      DOM.rotModuloHint.textContent = 'No se pudo cargar el maestro de módulos.';
+      renderProgresoTabla();
+      return;
+    }
+
+    rot.modulos = fuente.datos.modulos;
+    rot.maestro = {
+      generado: fuente.datos.generado || '',
+      origen: fuente.origen,
+      guardado: fuente.guardado || null
+    };
+
+    avisarModulosQueSalieron(antes);
+    console.log(`[Rotulado] ${rot.modulos.length} módulos (maestro ${rot.maestro.generado}, `
+      + `origen: ${fuente.origen}).`);
+
     aplicarFiltros();
     renderProgresoTabla();
+  }
+
+  /**
+   * Avisa si un maestro nuevo se llevó por delante un módulo con avance.
+   *
+   * Que un módulo se retire es legítimo, y su avance no se borra: la tabla lo
+   * sigue mostrando, solo que sin denominador. Lo que no puede es desaparecer
+   * en silencio, porque alguien puede estar a mitad de rotularlo.
+   */
+  function avisarModulosQueSalieron(antes) {
+    if (antes.length === 0) return;
+    const ahora = new Set(rot.modulos.map((m) => m.codigo));
+    const salieron = antes.filter((c) => !ahora.has(c) && hechasDe(c) > 0);
+    if (salieron.length === 0) return;
+    console.warn('[Rotulado] Salieron del maestro con avance grabado:', salieron);
+    showToast(`El maestro nuevo ya no trae ${salieron.join(', ')}, y tienen etiquetas grabadas.`, 'error');
+  }
+
+  /** De dónde salió el maestro, en una frase que sirva a quien está en campo. */
+  function procedenciaMaestro() {
+    if (!rot.maestro) return '';
+    const fecha = rot.maestro.generado ? `Maestro ${rot.maestro.generado}` : 'Maestro';
+    if (rot.maestro.origen === 'servidor') return `${fecha} (del servidor).`;
+    if (rot.maestro.origen === 'cache') return `${fecha} (guardado ${haceCuanto(rot.maestro.guardado)}).`;
+    return `${fecha} (el de la app).`;
   }
 
   // ------------------------------------------------------------------
@@ -1336,12 +1442,16 @@ document.addEventListener('DOMContentLoaded', () => {
       return { valor: m.codigo, detalle: `${m.finca} · ${estado}` };
     }));
 
+    // La procedencia se dice siempre. Un maestro de hace tres semanas no se
+    // distingue de uno recién bajado si nadie lo cuenta, y de esa diferencia
+    // depende que los ramales de un módulo sean los buenos.
     if (rot.modulos.length === 0) {
       DOM.rotModuloHint.textContent = 'No hay módulos cargados.';
     } else if (porFinca.length === 0) {
-      DOM.rotModuloHint.textContent = 'Ningún módulo coincide con esos filtros.';
+      DOM.rotModuloHint.textContent = `Ningún módulo coincide con esos filtros. ${procedenciaMaestro()}`;
     } else {
-      DOM.rotModuloHint.textContent = `${porFinca.length} módulo(s) disponibles de ${rot.modulos.length}.`;
+      DOM.rotModuloHint.textContent =
+        `${porFinca.length} módulo(s) disponibles de ${rot.modulos.length}. ${procedenciaMaestro()}`;
     }
   }
 
@@ -2141,6 +2251,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!window.NfcSync) return;
     const antes = window.NfcSync.estado();
     if (!antes.configurado) return;
+
+    // Sincronizar a mano refresca también el maestro. Quien toca el botón
+    // quiere "ponerme al día", no "sube mis etiquetas y deja la lista vieja".
+    cargarModulos();
+
     window.NfcSync.sincronizar('manual').then((despues) => {
       if (despues.ultimoError) {
         showToast(`No se pudo sincronizar: ${despues.ultimoError}`, 'error');

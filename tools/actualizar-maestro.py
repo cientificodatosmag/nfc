@@ -1,0 +1,424 @@
+"""
+Genera modulos.json desde Oracle, pero solo despues de ensenar lo que cambia.
+
+    python tools/actualizar-maestro.py              # muestra el diff y pregunta
+    python tools/actualizar-maestro.py --solo-ver   # nunca escribe
+    python tools/actualizar-maestro.py --si         # escribe sin preguntar
+    python tools/actualizar-maestro.py --si --commit
+
+El .xlsx sale del circuito: SDEUSR.MAESTRO_MODULOS_RIEGO es esa misma tabla.
+
+Por que se pregunta antes de escribir
+-------------------------------------
+Un cambio en el numero de ramales de un modulo que YA tiene etiquetas grabadas
+deja rotulado huerfano: las etiquetas fisicas dicen 001..N y el maestro pasa a
+esperar otra cantidad. No es reversible con un git revert, porque las etiquetas
+ya estan pegadas en el campo. Por eso el diff se mira antes, y por eso el script
+consulta el registro compartido para saber cuales de esos modulos estan en
+juego de verdad.
+
+Por que no hay tarea programada
+-------------------------------
+GitHub Actions no alcanza la IP interna de Oracle. Cualquier automatizacion
+tiene que correr desde dentro de la red. El push si dispara Vercel y la
+recompilacion del APK, que es lo unico que necesita estar en la nube.
+
+Que exige "actualizado"
+-----------------------
+NO_RAMALES no nulo y mayor que cero. Se comprobo contra la realidad: exigir mas
+campos (responsable, finca, region, hidrantes, area) mueve el total de 121 a
+119 y no recupera ni descarta ninguno de los 59 que ya se rotulaban. Los
+ramales son ademas el unico dato del que depende cuantas etiquetas se graban.
+"""
+import argparse
+import json
+import os
+import subprocess
+import sys
+import urllib.error
+import urllib.request
+from collections import defaultdict
+from datetime import date, datetime, timezone
+from decimal import Decimal
+from pathlib import Path
+
+import _config
+from normalizar_nombres import (
+    agrupar_por_parecido, clave, normalizar_finca, normalizar_responsable,
+    normalizar_simple, pares_dudosos,
+)
+
+RAIZ = Path(__file__).resolve().parent.parent
+DESTINO = RAIZ / 'modulos.json'
+
+REGLA_ACTUALIZADO = "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0"
+
+QUERY = f"""
+SELECT
+    M.CODIGO_MODULO,
+    M.REGION,
+    M.RESPONSABLE,
+    M.FINCA,
+    M.C_FINCA,
+    M.NO_RAMALES,
+    M.TIPO_RIEGO,
+    M.FUENTE_AGUA,
+    M.NO_HIDRANTES,
+    M.AREA_MODULO
+FROM
+    SDEUSR.MAESTRO_MODULOS_RIEGO M
+WHERE
+    {REGLA_ACTUALIZADO}
+ORDER BY
+    M.CODIGO_MODULO
+"""
+
+
+# ------------------------------------------------------------------ Oracle
+
+def leer_oracle():
+    with _config.abrir_oracle() as con:
+        cur = con.cursor()
+        cur.execute(QUERY)
+        cols = [d[0] for d in cur.description]
+        return [dict(zip(cols, fila)) for fila in cur]
+
+
+def texto(valor):
+    """
+    Valor de Oracle -> texto para el JSON.
+
+    Los NUMBER llegan como float o Decimal, asi que un str() directo convierte
+    el codigo de finca 577 en "577.0". Parece cosmetico y no lo es: ese codigo
+    se compara contra el del maestro anterior, y con el sufijo los 59 modulos
+    que ya existian aparecian los 59 como "cambiados".
+    """
+    if valor is None:
+        return ''
+    if isinstance(valor, (int, float, Decimal)) and not isinstance(valor, bool):
+        entero = int(valor)
+        return str(entero) if valor == entero else str(valor)
+    return normalizar_simple(str(valor))
+
+
+def fila_representante(repetidas):
+    """
+    De varias filas con el mismo codigo de modulo, cual manda.
+
+    Gana la mas completa, y a igualdad la menor en orden alfabetico de todos sus
+    campos. Lo importante no es cual gane sino que gane SIEMPRE la misma: una
+    consulta a Oracle no garantiza el orden de las filas empatadas, asi que
+    quedarse con la primera que llega hace que dos corridas seguidas produzcan
+    archivos distintos y un commit que no cambia nada real.
+    """
+    def peso(fila):
+        llenos = sum(1 for v in fila.values() if texto(v))
+        return (-llenos, tuple(texto(fila[c]) for c in sorted(fila)))
+
+    return sorted(repetidas, key=peso)[0]
+
+
+def construir(filas, cfg):
+    """Filas de Oracle -> lista de modulos lista para el JSON, mas los avisos."""
+    avisos = []
+    por_codigo = defaultdict(list)
+    sin_codigo = 0
+
+    for fila in filas:
+        codigo = texto(fila['CODIGO_MODULO']).upper()
+        if not codigo:
+            sin_codigo += 1
+            continue
+        por_codigo[codigo].append(fila)
+
+    if sin_codigo:
+        avisos.append({'tipo': 'sinCodigo', 'registros': sin_codigo})
+        print(f'  AVISO: {sin_codigo} fila(s) sin codigo de modulo, descartadas')
+
+    # El parecido se aplica SOLO a responsables. En fincas seria destructivo:
+    # "Providencia I" y "Providencia II" se parecen muchisimo y son dos fincas
+    # distintas. Ahi mandan las reglas deterministas de romanos y abreviaturas.
+    crudos = [normalizar_responsable(texto(f['RESPONSABLE']))
+              for filas_mod in por_codigo.values() for f in filas_mod]
+    mapa_resp, informe = agrupar_por_parecido(
+        crudos, cfg['fusiones_responsable'], cfg['nunca_fusionar'])
+    dudosos = pares_dudosos(crudos, cfg['nunca_fusionar'])
+
+    # Una sola grafia por clave para tipo de riego y fuente de agua: son
+    # catalogos cortos y las variantes son solo de mayusculas. Se elige la
+    # primera alfabeticamente, no la primera que aparezca: el orden de las filas
+    # de Oracle no esta garantizado y eso haria que dos corridas seguidas
+    # produjeran archivos distintos.
+    variantes = {'TIPO_RIEGO': defaultdict(set), 'FUENTE_AGUA': defaultdict(set)}
+    for filas_mod in por_codigo.values():
+        for f in filas_mod:
+            for campo in variantes:
+                v = texto(f[campo])
+                if v:
+                    variantes[campo][clave(v)].add(v)
+    canon_riego = {k: sorted(v)[0] for k, v in variantes['TIPO_RIEGO'].items()}
+    canon_agua = {k: sorted(v)[0] for k, v in variantes['FUENTE_AGUA'].items()}
+
+    modulos = []
+    for codigo in sorted(por_codigo):
+        repetidas = por_codigo[codigo]
+        primera = fila_representante(repetidas)
+
+        if len(repetidas) > 1:
+            ramales_distintos = {int(r['NO_RAMALES']) for r in repetidas}
+            difieren = sorted(c for c in primera
+                              if len({texto(r[c]) for r in repetidas}) > 1)
+            avisos.append({
+                'codigo': codigo,
+                'registros': len(repetidas),
+                'columnasDistintas': difieren,
+                'mismoNumeroDeRamales': len(ramales_distintos) == 1,
+            })
+            if len(ramales_distintos) > 1:
+                print(f'  AVISO: {codigo} repetido CON ramales distintos '
+                      f'{sorted(ramales_distintos)}; se usa {int(primera["NO_RAMALES"])}')
+
+        responsable = normalizar_responsable(texto(primera['RESPONSABLE']))
+        modulos.append({
+            'codigo': codigo,
+            'region': texto(primera['REGION']),
+            'responsable': mapa_resp.get(responsable, responsable),
+            'finca': normalizar_finca(texto(primera['FINCA'])),
+            'codigoFinca': texto(primera['C_FINCA']),
+            'ramales': int(primera['NO_RAMALES']),
+            'tipoRiego': canon_riego.get(clave(texto(primera['TIPO_RIEGO'])), ''),
+            'fuenteAgua': canon_agua.get(clave(texto(primera['FUENTE_AGUA'])), ''),
+            'duplicado': len(repetidas) > 1,
+        })
+
+    return modulos, avisos, informe, dudosos
+
+
+# ------------------------------------------------- registro compartido (opcional)
+
+def modulos_con_etiquetas():
+    """
+    Modulos que ya tienen etiquetas grabadas, segun el registro compartido.
+
+    Es opcional: sin llave el script sigue, solo que no puede distinguir un
+    cambio de ramales inofensivo de uno que deja rotulado huerfano. Cuando no
+    puede saberlo lo dice, en vez de callarse y dar una falsa tranquilidad.
+
+    Aplica las mismas barreras de reinicio que el servidor: un modulo cuyo
+    avance se reinicio no cuenta como rotulado.
+    """
+    llave = os.environ.get('NFC_APP_KEY')
+    if not llave:
+        return None, 'sin NFC_APP_KEY en el entorno'
+
+    base = ''
+    cfg = RAIZ / 'config.js'
+    if cfg.exists():
+        for linea in cfg.read_text(encoding='utf-8').splitlines():
+            if 'apiBase' in linea:
+                base = linea.split("'")[1] if "'" in linea else ''
+                break
+    if not base:
+        return None, 'no se encontro apiBase en config.js'
+
+    eventos = []
+    desde = 0
+    try:
+        for _ in range(20):
+            pet = urllib.request.Request(
+                f'{base.rstrip("/")}/api/eventos?desde={desde}&limite=1000',
+                headers={'x-app-key': llave})
+            with urllib.request.urlopen(pet, timeout=20) as r:
+                datos = json.loads(r.read().decode('utf-8'))
+            eventos.extend(datos.get('eventos', []))
+            if not datos.get('hayMas'):
+                break
+            desde = datos.get('siguienteCursor', desde)
+    except (urllib.error.URLError, TimeoutError, ValueError) as e:
+        return None, f'no se pudo consultar el registro: {e}'
+
+    barreras = defaultdict(dict)
+    for e in eventos:
+        if e.get('tipo') == 'reset':
+            clv = e.get('pasada')
+            previa = barreras[e['modulo']].get(clv)
+            if not previa or e['fecha'] > previa:
+                barreras[e['modulo']][clv] = e['fecha']
+
+    cuenta = defaultdict(int)
+    for e in eventos:
+        if e.get('tipo') == 'reset':
+            continue
+        corte = barreras.get(e['modulo'], {}).get(e.get('pasada'))
+        if corte and e['fecha'] <= corte:
+            continue
+        cuenta[e['modulo']] += 1
+
+    return {m: n for m, n in cuenta.items() if n > 0}, None
+
+
+# ---------------------------------------------------------------------- diff
+
+def comparar(viejos, nuevos):
+    antes = {m['codigo']: m for m in viejos}
+    ahora = {m['codigo']: m for m in nuevos}
+
+    entran = sorted(set(ahora) - set(antes))
+    salen = sorted(set(antes) - set(ahora))
+    cambios = []
+    for codigo in sorted(set(antes) & set(ahora)):
+        difs = {k: (antes[codigo].get(k), ahora[codigo].get(k))
+                for k in ahora[codigo]
+                if antes[codigo].get(k) != ahora[codigo].get(k)}
+        if difs:
+            cambios.append((codigo, difs))
+    return entran, salen, cambios
+
+
+def etiquetas(modulos):
+    return sum(m['ramales'] + 4 for m in modulos)
+
+
+def informar(viejos, nuevos, avisos, informe, dudosos, rotulados, motivo_sin_registro):
+    entran, salen, cambios = comparar(viejos, nuevos)
+
+    print()
+    print('=' * 70)
+    print(f'  {len(viejos)} modulos -> {len(nuevos)}      '
+          f'etiquetas por pasada: {etiquetas(viejos)} -> {etiquetas(nuevos)}')
+    print(f'  con dos pasadas: {etiquetas(nuevos) * 2} etiquetas fisicas')
+    print('=' * 70)
+
+    if informe:
+        print(f'\nNOMBRES UNIFICADOS ({len(informe)})')
+        for g in informe:
+            otras = [v for v in g['variantes'] if v != g['elegido']]
+            print(f'  {g["elegido"]}')
+            for v in otras:
+                print(f'      <- {v}   ({g["motivo"]})')
+
+    if dudosos:
+        print(f'\nPARECIDOS QUE NO SE FUSIONARON ({len(dudosos)}) — decide tu')
+        print('  Si son la misma persona, anadela a fusiones_responsable.')
+        print('  Si son dos personas, anade el par a nunca_fusionar.')
+        for a, b, r in dudosos:
+            print(f'  {r}  {a}   /   {b}')
+
+    if entran:
+        print(f'\nENTRAN ({len(entran)})')
+        for c in entran:
+            m = next(x for x in nuevos if x['codigo'] == c)
+            print(f'  + {c}  {m["finca"]}  ramales {m["ramales"]}  ({m["responsable"]})')
+
+    if salen:
+        print(f'\nSALEN ({len(salen)})')
+        for c in salen:
+            grabadas = (rotulados or {}).get(c, 0)
+            marca = f'  <-- TIENE {grabadas} ETIQUETAS GRABADAS' if grabadas else ''
+            print(f'  - {c}{marca}')
+
+    peligrosos = []
+    if cambios:
+        print(f'\nCAMBIAN ({len(cambios)})')
+        for codigo, difs in cambios:
+            grabadas = (rotulados or {}).get(codigo, 0)
+            for campo, (antes_v, ahora_v) in difs.items():
+                aviso = ''
+                if campo == 'ramales' and grabadas:
+                    aviso = f'   <-- YA TIENE {grabadas} ETIQUETAS GRABADAS'
+                    peligrosos.append((codigo, antes_v, ahora_v, grabadas))
+                print(f'  ~ {codigo}  {campo}: {antes_v!r} -> {ahora_v!r}{aviso}')
+
+    for aviso in avisos:
+        if 'codigo' in aviso:
+            print(f'\n  duplicado en Oracle {aviso["codigo"]}: {aviso["registros"]} registros, '
+                  f'difieren en {aviso["columnasDistintas"]}')
+
+    if rotulados is None:
+        print(f'\n  NOTA: no se pudo consultar el registro compartido ({motivo_sin_registro}).')
+        print('        No se puede saber que modulos ya tienen etiquetas grabadas.')
+        print('        Para comprobarlo: set NFC_APP_KEY=... antes de correr esto.')
+    elif peligrosos:
+        print('\n' + '!' * 70)
+        print('  CAMBIA EL NUMERO DE RAMALES EN MODULOS YA ROTULADOS')
+        print('  Las etiquetas fisicas dicen 001..N y el maestro va a esperar otra')
+        print('  cantidad. Eso no se arregla con un git revert.')
+        for codigo, a, b, n in peligrosos:
+            print(f'    {codigo}: {a} -> {b} ramales, con {n} etiquetas ya grabadas')
+        print('!' * 70)
+
+    if not (entran or salen or cambios):
+        print('\nSin cambios. El maestro ya esta al dia.')
+
+    return bool(entran or salen or cambios), peligrosos
+
+
+# ---------------------------------------------------------------------- main
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument('--solo-ver', action='store_true', help='muestra el diff y no escribe nada')
+    ap.add_argument('--si', action='store_true', help='no preguntar antes de escribir')
+    ap.add_argument('--commit', action='store_true', help='ademas hacer commit y push')
+    args = ap.parse_args()
+
+    cfg = _config.normalizaciones()
+
+    print('Consultando Oracle...')
+    filas = leer_oracle()
+    print(f'  {len(filas)} filas cumplen la regla ({REGLA_ACTUALIZADO})')
+
+    nuevos, avisos, informe, dudosos = construir(filas, cfg)
+
+    viejo = json.loads(DESTINO.read_text(encoding='utf-8')) if DESTINO.exists() else {'modulos': []}
+    viejos = viejo.get('modulos', [])
+
+    print('Consultando el registro compartido...')
+    rotulados, motivo = modulos_con_etiquetas()
+    if rotulados is not None:
+        print(f'  {len(rotulados)} modulos con etiquetas grabadas')
+
+    hay_cambios, peligrosos = informar(viejos, nuevos, avisos, informe, dudosos, rotulados, motivo)
+
+    if args.solo_ver:
+        return 0
+    if not hay_cambios:
+        return 0
+
+    if not args.si:
+        if peligrosos:
+            print('\nHay modulos ya rotulados a los que les cambia el numero de ramales.')
+        respuesta = input('\n¿Escribir modulos.json con estos cambios? [s/N] ').strip().lower()
+        if respuesta not in ('s', 'si', 'sí'):
+            print('No se escribio nada.')
+            return 1
+
+    salida = {
+        'generado': date.today().isoformat(),
+        'fuente': f'Oracle SDEUSR.MAESTRO_MODULOS_RIEGO ({datetime.now(timezone.utc):%Y-%m-%dT%H:%MZ})',
+        'regla': REGLA_ACTUALIZADO,
+        'avisos': avisos,
+        'modulos': nuevos,
+    }
+    DESTINO.write_text(json.dumps(salida, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    print(f'\nEscrito {DESTINO} con {len(nuevos)} modulos.')
+
+    if not args.commit:
+        print('Revisa con "git diff modulos.json" y sube cuando quieras.')
+        return 0
+
+    # El push es lo que publica: redespliega Vercel (los telefonos toman el
+    # maestro al abrir o al sincronizar a mano) y recompila el APK.
+    mensaje = (f'Actualizar el maestro desde Oracle: {len(nuevos)} modulos\n\n'
+               f'Regla: {REGLA_ACTUALIZADO}\n'
+               f'{etiquetas(nuevos)} etiquetas por pasada, {etiquetas(nuevos) * 2} con las dos.\n')
+    subprocess.run(['git', 'add', 'modulos.json'], cwd=RAIZ, check=True)
+    subprocess.run(['git', 'commit', '-m', mensaje], cwd=RAIZ, check=True)
+    subprocess.run(['git', 'push'], cwd=RAIZ, check=True)
+    print('Subido. Vercel y el APK se reconstruyen solos.')
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

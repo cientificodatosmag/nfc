@@ -9,5 +9,15 @@
   "_incompletos": "Codigo -> nota. Registros que el origen no tiene completos y hay que corregir en Oracle. Se cuentan igual en los resumenes, pero salen marcados.",
   "incompletos": {
     "1000000002": "Falta el apellido en el origen (Oracle). Revisar y corregir en la base."
-  }
+  },
+
+  "_fusiones_responsable": "Variante -> grafia buena. Los RESPONSABLES no traen codigo de colaborador, asi que aqui el parecido automatico no tiene con que verificarse y esta lista manda sobre el. Usa la clave sin acentos y en mayusculas.",
+  "fusiones_responsable": {
+    "NOMBRE ABREVIADO": "Nombre Completo Acordado"
+  },
+
+  "_nunca_fusionar": "Pares de nombres que se parecen y son personas DISTINTAS. Sin esto cualquier medida de parecido los junta: comparten primer nombre y ultimo apellido. Cada par es una decision verificada contra el codigo de colaborador.",
+  "nunca_fusionar": [
+    ["Jaime Cruz", "Jaime de La Cruz"]
+  ]
 }

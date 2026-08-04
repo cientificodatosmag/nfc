@@ -5,19 +5,13 @@ Convierte el maestro de riego en el modulos.json que viaja dentro del APK.
 
 Solo usa la libreria estandar: un .xlsx es un ZIP con XML dentro.
 
-Reglas de normalizacion (acordadas al revisar el maestro):
+EN RETIRADA: el maestro sale ahora de Oracle con tools/actualizar-maestro.py.
+Este script se conserva porque la columna ACTUALIZACION solo existe en el .xlsx
+y sigue siendo la unica forma de reproducir el modulos.json de julio.
 
-  Fincas
-    - Numeros romanos partidos en letras sueltas se unen: "I I I" -> "III",
-      "I V" -> "IV". Conviven las dos convenciones en el archivo original.
-    - Romanos en minuscula se pasan a mayuscula: "Iv" -> "IV".
-    - Abreviaturas expandidas: Sta./Sto. -> Santa/Santo, Sn. -> San,
-      Fco. -> Francisco, Agrop. -> Agropecuaria.
-
-  Responsables
-    - Se quita el prefijo de lista pegado al nombre: "1: Byron ..." -> "Byron ...".
-    - "Eddy Orellana" se unifica en "Eddy Leonardo Orellana Serrano": mismo
-      nombre, mismo apellido y misma administracion.
+Las reglas de normalizacion viven en normalizar_nombres.py, compartidas con el
+generador de Oracle: que los dos apliquen lo mismo es lo que permite comparar
+sus salidas.
 
   Modulos
     - Solo entran los que tienen ACTUALIZACION = ACTUALIZADO.
@@ -28,25 +22,16 @@ Reglas de normalizacion (acordadas al revisar el maestro):
 import json
 import re
 import sys
-import unicodedata
 import zipfile
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from datetime import date
 
+from normalizar_nombres import (
+    clave, normalizar_finca, normalizar_responsable, normalizar_simple,
+)
+
 NS = '{http://schemas.openxmlformats.org/spreadsheetml/2006/main}'
-
-ABREVIATURAS = {
-    'STA': 'Santa',
-    'STO': 'Santo',
-    'SN': 'San',
-    'FCO': 'Francisco',
-    'AGROP': 'Agropecuaria',
-}
-
-FUSION_RESPONSABLES = {
-    'EDDY ORELLANA': 'Eddy Leonardo Orellana Serrano',
-}
 
 
 # ---------------------------------------------------------------- lectura xlsx
@@ -87,51 +72,6 @@ def leer_xlsx(path):
         if celdas:
             filas.append([celdas.get(i, '') for i in range(max(celdas) + 1)])
     return filas
-
-
-# ---------------------------------------------------------- normalizacion
-
-def sin_acentos(texto):
-    descompuesto = unicodedata.normalize('NFKD', texto or '')
-    return ''.join(c for c in descompuesto if not unicodedata.combining(c))
-
-
-def clave(texto):
-    return ' '.join(sin_acentos(texto).upper().split())
-
-
-def normalizar_finca(nombre):
-    palabras = nombre.split()
-
-    # Romanos escritos en minuscula o mezclados: Ii, Iv, Iii
-    palabras = [p.upper() if re.fullmatch(r'[IiVv]{1,4}', p) and len(p) > 1 else p
-                for p in palabras]
-
-    # Romanos partidos en letras sueltas: ["I", "I", "I"] -> ["III"]
-    unidas = []
-    for palabra in palabras:
-        if palabra in ('I', 'V') and unidas and re.fullmatch(r'[IV]+', unidas[-1]):
-            unidas[-1] += palabra
-        else:
-            unidas.append(palabra)
-
-    expandidas = []
-    for palabra in unidas:
-        raiz = clave(palabra).rstrip('.')
-        expandidas.append(ABREVIATURAS.get(raiz, palabra) if palabra.endswith('.') else palabra)
-
-    return ' '.join(expandidas)
-
-
-def normalizar_responsable(nombre):
-    limpio = re.sub(r'^\s*\d+\s*[:.\-]\s*', '', nombre)   # "3: Otto ..." -> "Otto ..."
-    limpio = ' '.join(limpio.split())
-    return FUSION_RESPONSABLES.get(clave(limpio), limpio)
-
-
-def normalizar_simple(texto):
-    """Colapsa espacios y unifica variantes de capitalizacion por su clave."""
-    return ' '.join(texto.split())
 
 
 # ---------------------------------------------------------------- construccion

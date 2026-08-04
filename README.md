@@ -1,76 +1,120 @@
-# 📱 NFC Tag Master - Progressive Web App (PWA)
+# NFC Tag Master — rotulado de módulos de riego
 
-Aplicación Web Progresiva moderna diseñada para **borrado masivo (formateo continuo)**, **lectura/inspección** y **establecimiento de protección/claves** en etiquetas NFC utilizando **Web NFC API** y **Web Audio API**.
+App Android para **rotular masivamente etiquetas NTAG21x** de los módulos de
+riego de Ingenio Magdalena: graba el código del módulo en cada etiqueta y la
+protege con contraseña, en ráfaga y sin tocar la pantalla entre una y otra.
 
----
+No es una PWA con Web NFC. Es un **APK con plugin nativo**, y esa distinción es
+todo el proyecto: Web NFC solo escribe NDEF y no puede fijar la contraseña de la
+etiqueta. Escribir en los registros CFG0/CFG1 de una NTAG exige comandos crudos
+sobre `NfcA`, que solo existen en Android nativo.
 
-## 🌟 Características Principales
+## Qué hace
 
-1. **⚡ Modo Ráfaga (Borrado Masivo)**
-   - Formateo continuo sin necesidad de pulsar botones adicionales.
-   - Cada etiqueta aproximada se sobrescribe y limpia de registros NDEF automáticamente.
-   - Contador en tiempo real de etiquetas borradas exitosamente y fallidas.
-   - Retroalimentación auditiva (Web Audio Synthesizer) y vibración háptica.
-   - Efecto visual de radar con pulsos de estado verde/rojo.
+| Pestaña | Para qué |
+|---|---|
+| Modo ráfaga | Borra etiquetas una tras otra, sin pulsar nada entre ellas |
+| Protección | Pone contraseña (PWD/PACK) y protege desde AUTH0 |
+| Inspección | Lee tipo, UID, memoria y estado de protección |
+| **Rotulado por módulo** | El trabajo real: graba `CODIGO-001`…`CODIGO-NNN` en orden |
+| Historial | Registro local de todo lo hecho |
 
-2. **🔒 Protección y Clave de Acceso**
-   - **Bloqueo Permanente (Solo Lectura)**: Ejecuta `NDEFReader.makeReadOnly()` con confirmación de seguridad.
-   - **Firma / Clave Protegida**: Graba registros NDEF con hash de autenticación para control de acceso en la aplicación.
-   - Explicación técnica integrada sobre capacidades de Web NFC vs Comandos Hardware NTAG213/215/216.
+### Rotulado
 
-3. **🔍 Inspección y Lectura**
-   - Muestra el número de serie (UID) del chip NFC.
-   - Decodifica registros NDEF (Text, URL, Mime, Data Binaria).
+Cada módulo lleva **ramales + 4** etiquetas, y el juego completo se graba **dos
+veces sobre dos juegos de etiquetas distintos**. Un módulo solo cuenta como
+cumplido cuando las dos pasadas terminaron.
 
-4. **💻 Simulador NFC Integrado para PC**
-   - Permite probar **toda la experiencia** (sonidos, animación radar, borrado, historial) en computadoras sin hardware NFC físico.
+Al acabar la pasada 1 la app **se detiene y no continúa sola**. El operador
+tiene en la mano la etiqueta recién grabada, todavía pegada al teléfono, y la
+pasada 2 empieza por el 001: seguir de largo la regrabaría.
 
-5. **📊 Historial con Exportación CSV**
-   - Registro local de cada operación con fecha, hora, UID y resultado.
-   - Exportación a CSV con 1 clic.
+El avance se comparte entre teléfonos (ver abajo) y se puede exportar a CSV.
 
-6. **📱 PWA 100% Offline**
-   - Service Worker (`sw.js`) y `manifest.json` validados para la instalación en pantalla de inicio de Android/iOS.
+## Cómo está armado
 
----
+```
+index.html app.js styles.css   la app
+nfc-bridge.js                  puente al plugin nativo
+config.js sync.js              configuración y sincronización
+sw.js                          service worker (solo en la versión navegador)
+modulos.json                   maestro de módulos que viaja en el APK
+plugin-nfc/                    plugin Capacitor con el código Java del NFC
+api/                           backend en Vercel (registro compartido)
+tools/                         Oracle -> modulos.json, y reportes
+tests/                         pruebas que corren en la CI
+```
 
-## 🚀 Despliegue en Vercel (1 Clic)
+El APK lo compila **GitHub Actions** en cada push: descárgalo del artefacto
+`NFC-Tag-Master-Release.apk` de la última ejecución.
 
-La aplicación está lista para Vercel sin necesidad de compilar ni configurar bases de datos (100% cliente estático).
+### Registro compartido
 
-### Opción A: Despliegue mediante Vercel CLI
+Varios teléfonos rotulan a la vez, así que el avance vive en un **log
+append-only** en Postgres (Neon) detrás de funciones en Vercel. Nunca se
+actualiza ni se borra una fila: lo que ve la app es una *proyección* del log.
+
+Esa decisión es la que hace que dos teléfonos que trabajaron sin señal converjan
+al mismo resultado sin importar en qué orden sincronicen, y que cualquier
+destrozo sea reversible mirando `recibido_en`.
+
+Sin señal la app funciona igual y encola lo grabado. Ver
+[api/README.md](api/README.md) y [sync.js](sync.js).
+
+### El maestro de módulos
+
+`cargarModulos()` intenta tres fuentes en orden: **servidor**, **copia
+guardada**, **copia dentro del APK**. Por eso se puede corregir el número de
+ramales de un módulo sin reinstalar la app en cada teléfono, y aun así se puede
+rotular sin señal. La pantalla dice siempre de cuál de las tres salió.
+
+El maestro se regenera desde Oracle:
+
 ```bash
-npx vercel
+python tools/actualizar-maestro.py --solo-ver   # enseña el diff y no toca nada
+python tools/actualizar-maestro.py              # enseña el diff y pregunta
 ```
 
-### Opción B: Despliegue mediante GitHub
-1. Sube este repositorio a GitHub.
-2. Ve a [vercel.com](https://vercel.com) -> **Add New Project**.
-3. Selecciona tu repositorio y presiona **Deploy**.
-4. ¡Listo! Obtendrás una URL HTTPS automática (`https://tu-app.vercel.app`).
+Nunca escribe sin mostrar antes qué entra, qué sale y qué cambia, y avisa en
+rojo si a un módulo **ya rotulado** le cambia el número de ramales: eso deja
+etiquetas físicas que dicen 001..N frente a un maestro que espera otra cantidad,
+y no se arregla con un `git revert`.
 
-> **Importante para Web NFC:** La Web NFC API **requiere obligatoriamente un contexto seguro (HTTPS)**. Vercel proporciona HTTPS automáticamente en todas sus URLs.
+No hay tarea programada porque GitHub Actions no alcanza la IP interna de
+Oracle: esto se corre desde dentro de la red. El `git push` sí dispara Vercel y
+la recompilación del APK, que es lo único que necesita estar en la nube.
 
----
+## Seguridad de las etiquetas
 
-## 📱 Uso en Smartphone (Android Chrome)
+- Contraseñas de exactamente 4 caracteres se escriben tal cual. Cualquier otra
+  longitud usa los primeros 4 bytes de `SHA-256("NFC_SALT_2026::" + clave)`.
+- **`CFGLCK` y `AUTHLIM` se dejan siempre en 0.** Son irreversibles: `CFGLCK`
+  congela la configuración para siempre y `AUTHLIM` puede dejar la etiqueta
+  inservible tras unos intentos fallidos.
 
-1. Abre la URL de Vercel en Chrome para Android.
-2. Presiona el botón **Instalar PWA** o "Agregar a la pantalla principal".
-3. Asegúrate de tener activado el chip NFC en los ajustes de tu teléfono.
-4. Selecciona **Borrado Masivo**, presiona **Iniciar Borrado Masivo** y comienza a pasar tus etiquetas NFC por la parte posterior del teléfono.
+## Pruebas
 
----
-
-## 🛠️ Estructura del Código
-
+```bash
+npm test                          # las tres suites de JS, como en la CI
+python tools/prueba_normalizar.py # unificación de nombres (no corre en la CI)
 ```
-appnfc/
-├── index.html        # Interfaz de usuario (HTML5 semántico, Glassmorphism, Tabs)
-├── styles.css        # Sistema de diseño, tema oscuro, animaciones de radar neón
-├── app.js            # Lógica principal (Web NFC API, Web Audio Synth, Simulador PC, Historial)
-├── manifest.json     # Configuración PWA (Nombre, Iconos, Display Standalone)
-├── sw.js             # Service Worker para funcionamiento offline
-├── vercel.json       # Headers de seguridad y caché para Vercel
-└── README.md         # Documentación del proyecto
-```
+
+- `tests/rotulado.test.mjs` — doble pasada, migración del avance, identificadores
+- `tests/backend.test.mjs` — validación y proyección del log
+- `tests/sync.test.mjs` — que **cliente y servidor fusionen igual**; si se
+  separan, un teléfono muestra una cosa y la base otra
+- `tests/maestro.test.mjs` — los tres niveles de carga del maestro
+
+Las pruebas de JS no reimplementan nada: extraen las funciones reales de
+`app.js`, así que renombrar una también las rompe.
+
+## Este repositorio es público
+
+No se versionan: archivos `.xlsx` (llevan nombres y códigos de personal),
+`tools/*.local.json` (conexión a Oracle y correcciones de nombres), ni ninguna
+llave. `config.js` se sube con la llave **vacía** y la CI la rellena desde el
+secreto `NFC_APP_KEY`.
+
+Sobre esa llave, sin adornos: acaba dentro del APK y un `unzip` la revela. Es un
+filtro contra curiosos, no un secreto. Lo que protege el histórico es que la
+base solo crezca y que borrar exija `NFC_ADMIN_KEY`, que nunca sale de Vercel.
