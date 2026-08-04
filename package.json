@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "start": "echo 'PWA Client Ready'",
-    "test": "node tests/rotulado.test.mjs && node tests/backend.test.mjs"
+    "test": "node tests/rotulado.test.mjs && node tests/backend.test.mjs && node tests/sync.test.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",

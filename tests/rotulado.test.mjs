@@ -29,7 +29,7 @@ function extraer(nombre) {
 const FUNCIONES = [
   'totalPorPasada', 'totalModulo', 'textoEtiqueta', 'registroDe', 'etiquetasDe',
   'hechasEnPasada', 'hechasDe', 'pasadaCompleta', 'moduloCompleto',
-  'siguientePendiente', 'siguienteObjetivo', 'uidYaUsado', 'migrarV1', 'leerJson',
+  'siguientePendiente', 'siguienteObjetivo', 'uidYaUsado', 'idEvento', 'migrarV1', 'leerJson',
 ];
 
 // Entorno minimo que esas funciones esperan.
@@ -45,6 +45,7 @@ const preludio = `
     getItem: (k) => (k in almacen ? almacen[k] : null),
     setItem: (k, v) => { almacen[k] = String(v); },
   };
+  const window = {};
   function dispositivoId() { return 'd-prueba'; }
   function guardarClave(k, v) { almacen[k] = String(v); return true; }
   function showToast() {}
@@ -55,12 +56,12 @@ const cuerpo = preludio + FUNCIONES.map(extraer).join('\n');
 const api = new Function(`${cuerpo}
   return { rot, almacen, totalPorPasada, totalModulo, textoEtiqueta, etiquetasDe,
            hechasEnPasada, hechasDe, pasadaCompleta, moduloCompleto,
-           siguientePendiente, siguienteObjetivo, uidYaUsado, migrarV1 };`)();
+           siguientePendiente, siguienteObjetivo, uidYaUsado, idEvento, migrarV1 };`)();
 
 const {
   rot, almacen, totalPorPasada, totalModulo, textoEtiqueta, hechasEnPasada, hechasDe,
   pasadaCompleta, moduloCompleto, siguientePendiente, siguienteObjetivo, uidYaUsado,
-  migrarV1,
+  idEvento, migrarV1,
 } = api;
 
 let pasadas = 0;
@@ -231,6 +232,42 @@ prueba('vacio de verdad NO se marca como fallo', () => {
   assert.deepEqual(migrarV1(), {});
   assert.equal(rot.migracionFallida, '', 'sin datos no es lo mismo que datos rotos');
   assert.equal(almacen['nfc_rotulado_migracion_v2'], 'sin-datos');
+});
+
+console.log('\n== identificadores de evento ==');
+prueba('el mismo dato da siempre el mismo id', () => {
+  const a = idEvento('OOC-MNA-001', 1, 7, '2026-08-03T10:00:00Z', 'd-uno');
+  const b = idEvento('OOC-MNA-001', 1, 7, '2026-08-03T10:00:00Z', 'd-uno');
+  assert.equal(a, b, 'sin esto, reintentar una subida duplicaria filas');
+});
+prueba('dos telefonos en la misma etiqueta NO comparten id', () => {
+  const a = idEvento('OOC-MNA-001', 1, 7, '2026-08-03T10:00:00Z', 'd-uno');
+  const b = idEvento('OOC-MNA-001', 1, 7, '2026-08-03T10:00:00Z', 'd-dos');
+  assert.notEqual(a, b,
+    'compartirlo esconderia que hay DOS etiquetas fisicas con el mismo texto');
+});
+prueba('pasada y numero distinguen', () => {
+  const p1 = idEvento('OOC-MNA-001', 1, 7, '2026-08-03T10:00:00Z', 'd-uno');
+  const p2 = idEvento('OOC-MNA-001', 2, 7, '2026-08-03T10:00:00Z', 'd-uno');
+  assert.notEqual(p1, p2);
+});
+prueba('cabe en los 120 caracteres que acepta el servidor', () => {
+  const largo = idEvento('OOC-MNA-001', 2, 400,
+    '2026-08-03T10:00:00Z', 'd-9f2a1c4e-8b7d-4a3f-9e2c-1d5b7a9c3e8f');
+  assert.ok(largo.length <= 120, `mide ${largo.length}`);
+});
+prueba('migrar dos veces produce los MISMOS ids', () => {
+  almacen['nfc_rotulado_progreso'] = JSON.stringify({
+    'OOC-MNA-001': {
+      etiquetas: { 1: { texto: 'OOC-MNA-001-001', uid: 'AA', fecha: '2026-07-01T10:00:00Z' } },
+    },
+  });
+  delete almacen['nfc_rotulado_progreso_v2'];
+  const uno = migrarV1()['OOC-MNA-001'].pasadas[1][1].id;
+  delete almacen['nfc_rotulado_progreso_v2'];
+  const otro = migrarV1()['OOC-MNA-001'].pasadas[1][1].id;
+  assert.ok(uno, 'la migracion debe poner id');
+  assert.equal(uno, otro, 'repetir la migracion no puede inventar eventos nuevos');
 });
 
 console.log(`\n${pasadas} pruebas pasadas, ${fallidas} fallidas\n`);

@@ -120,6 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
     rotPrevBtn: document.getElementById('rot-prev-btn'),
     rotNextBtn: document.getElementById('rot-next-btn'),
     rotProgressTbody: document.getElementById('rot-progress-tbody'),
+    syncPill: document.getElementById('sync-pill'),
+    syncDot: document.getElementById('sync-dot'),
+    syncLabel: document.getElementById('sync-label'),
+    rotSyncBtn: document.getElementById('rot-sync-btn'),
+    rotSyncHint: document.getElementById('rot-sync-hint'),
     rotExportCsv: document.getElementById('rot-export-csv'),
     rotBackupJson: document.getElementById('rot-backup-json'),
     rotResetProgress: document.getElementById('rot-reset-progress'),
@@ -850,6 +855,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const ROT_PROGRESO_KEY = 'nfc_rotulado_progreso';   // formato v1, ya no se escribe
   const ROT_PROGRESO_V2_KEY = 'nfc_rotulado_progreso_v2';
   const ROT_MIGRACION_KEY = 'nfc_rotulado_migracion_v2';
+  const ROT_SEMBRADO_KEY = 'nfc_sync_sembrado_v1';
   const DISPOSITIVO_KEY = 'nfc_dispositivo_id';
 
   const rot = {
@@ -865,11 +871,13 @@ document.addEventListener('DOMContentLoaded', () => {
   /**
    * Identificador propio del teléfono.
    *
-   * Todavía no se sincroniza nada, pero cada etiqueta queda firmada desde ya:
-   * cuando el registro sea compartido hará falta saber qué teléfono grabó cada
-   * una, y añadirlo después obligaría a tocar otra vez los datos guardados.
+   * Cuando sync.js está cargado él es el dueño —es quien firma cada evento que
+   * sale a la red—, y aquí solo se le pregunta. La copia de abajo mantiene la
+   * app funcionando si sync.js no está: misma clave y mismo formato, así que
+   * cualquiera de los dos que se ejecute primero fija el valor y el otro lo lee.
    */
   function dispositivoId() {
+    if (window.NfcSync) return window.NfcSync.dispositivo();
     let id = null;
     try {
       id = localStorage.getItem(DISPOSITIVO_KEY);
@@ -884,6 +892,50 @@ document.addEventListener('DOMContentLoaded', () => {
       guardarClave(DISPOSITIVO_KEY, id);
     }
     return id;
+  }
+
+  /** La hora corregida por el desfase del servidor, si hay con qué corregirla. */
+  function fechaAhora() {
+    return window.NfcSync ? window.NfcSync.ahora() : new Date().toISOString();
+  }
+
+  /**
+   * Identificador del evento, derivado de su contenido.
+   *
+   * Ser determinista es lo que hace que reintentar una subida no duplique nada
+   * y que volver a correr la migración no invente eventos nuevos. Incluye el
+   * dispositivo porque dos teléfonos SÍ pueden grabar la misma etiqueta: si
+   * compartieran id, el servidor guardaría solo uno y el conflicto —que es un
+   * dato real, dos etiquetas físicas iguales— desaparecería sin dejar rastro.
+   */
+  function idEvento(codigo, pasada, numero, fecha, dispositivo) {
+    const marca = Date.parse(fecha);
+    const sufijo = String(dispositivo || dispositivoId()).replace(/[^a-zA-Z0-9]/g, '').slice(-10);
+    return `${codigo}-${pasada}-${numero}-${sufijo}-${(Number.isNaN(marca) ? 0 : marca).toString(36)}`;
+  }
+
+  /** Un registro guardado -> el evento que viaja por la red. */
+  function eventoDe(codigo, pasada, numero, entrada, registro) {
+    const modulo = rot.modulos.find((m) => m.codigo === codigo) || null;
+    return {
+      id: entrada.id || idEvento(codigo, pasada, numero, entrada.fecha, entrada.dispositivo),
+      tipo: 'grabada',
+      modulo: codigo,
+      pasada: Number(pasada),
+      numero: Number(numero),
+      texto: entrada.texto || textoEtiqueta(codigo, Number(numero)),
+      uid: entrada.uid || '',
+      fecha: entrada.fecha,
+      dispositivoId: entrada.dispositivo || dispositivoId(),
+      totalPasada: modulo ? totalPorPasada(modulo) : 0,
+      region: (registro && registro.region) || '',
+      responsable: (registro && registro.responsable) || '',
+      finca: (registro && registro.finca) || ''
+    };
+  }
+
+  function encolarEvento(evento) {
+    if (window.NfcSync) window.NfcSync.encolar(evento);
   }
 
   /**
@@ -978,11 +1030,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const primera = {};
         Object.keys(viejo.etiquetas || {}).forEach((numero) => {
           const e = viejo.etiquetas[numero] || {};
+          const fecha = e.fecha || new Date().toISOString();
+          const dispositivo = dispositivoId();
           primera[numero] = {
             texto: e.texto || textoEtiqueta(codigo, Number(numero)),
             uid: e.uid || '',
-            fecha: e.fecha || new Date().toISOString(),
-            dispositivo: dispositivoId()
+            fecha,
+            dispositivo,
+            // Determinista: volver a migrar produce los mismos identificadores,
+            // así que el servidor los reconoce como ya vistos en vez de crear
+            // una segunda copia de todo el histórico.
+            id: idEvento(codigo, 1, Number(numero), fecha, dispositivo)
           };
           etiquetas++;
         });
@@ -1562,15 +1620,160 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!registro.pasadas) registro.pasadas = {};
     if (!registro.pasadas[pasada]) registro.pasadas[pasada] = {};
 
-    registro.pasadas[pasada][numero] = {
+    const fecha = fechaAhora();
+    const dispositivo = dispositivoId();
+    const entrada = {
       texto: textoEtiqueta(codigo, numero),
       uid: uid || '',
-      fecha: new Date().toISOString(),
-      dispositivo: dispositivoId()
+      fecha,
+      dispositivo,
+      id: idEvento(codigo, pasada, numero, fecha, dispositivo)
     };
+    registro.pasadas[pasada][numero] = entrada;
+
+    // Guardar en el teléfono primero y encolar después, en ese orden: la
+    // etiqueta física ya está grabada, así que lo que no puede fallar es que
+    // quede registrada aquí. La red es lo prescindible.
     guardarProgreso();
+    encolarEvento(eventoDe(codigo, pasada, numero, entrada, registro));
     renderProgresoTabla();
     aplicarFiltros();
+  }
+
+  // ------------------------------------------------------------------
+  // Registro compartido
+  // ------------------------------------------------------------------
+
+  /**
+   * Sube al registro compartido lo que ya estaba grabado antes de encender la
+   * sincronización.
+   *
+   * Corre una sola vez. Los identificadores son deterministas y el servidor es
+   * idempotente, así que repetirlo no rompería nada — pero encolar miles de
+   * eventos en cada arranque sí sería un desperdicio. Se hace después de cargar
+   * el maestro para que cada evento lleve su total de pasada correcto.
+   */
+  function sembrarPendientes() {
+    if (!window.NfcSync || !window.NfcSync.estado().configurado) return;
+    try {
+      if (localStorage.getItem(ROT_SEMBRADO_KEY)) return;
+    } catch (e) {
+      return;
+    }
+
+    let sembrados = 0;
+    recorrerAvance((codigo, registro, pasada, numero, entrada) => {
+      if (!entrada.id) {
+        entrada.id = idEvento(codigo, pasada, numero, entrada.fecha, entrada.dispositivo);
+      }
+      encolarEvento(eventoDe(codigo, pasada, numero, entrada, registro));
+      sembrados++;
+    });
+
+    if (sembrados) {
+      guardarProgreso();
+      console.log(`[Rotulado] ${sembrados} etiquetas ya grabadas se encolaron para el registro compartido.`);
+    }
+    guardarClave(ROT_SEMBRADO_KEY, new Date().toISOString());
+  }
+
+  /**
+   * Mezcla lo que bajó del servidor con lo que hay en el teléfono.
+   *
+   * Aplica la MISMA regla que `proyectar()` en el servidor —barrera de reinicio,
+   * después la fecha mayor y a igual fecha el id mayor—, y esa coincidencia es
+   * lo único que hace que dos teléfonos que sincronizaron en distinto orden
+   * acaben viendo lo mismo. Si alguna vez cambia una, tiene que cambiar la otra.
+   */
+  function fusionarEventos(eventos) {
+    let cambios = 0;
+
+    eventos.forEach((e) => {
+      if (!e || !e.modulo) return;
+      const registro = registroParaFusion(e);
+
+      if (e.tipo === 'reset') {
+        // Se recuerda la barrera, no solo se borra: si después baja un evento
+        // anterior al reinicio (otro teléfono que subió tarde), tiene que
+        // quedar descartado igual que lo está en el servidor.
+        if (!registro.reset) registro.reset = {};
+        const clave = e.pasada === 1 || e.pasada === 2 ? String(e.pasada) : 'global';
+        if (!registro.reset[clave] || e.fecha > registro.reset[clave]) {
+          registro.reset[clave] = e.fecha;
+        }
+        for (let p = 1; p <= PASADAS; p++) {
+          if (clave !== 'global' && String(p) !== clave) continue;
+          const etiquetas = (registro.pasadas && registro.pasadas[p]) || {};
+          Object.keys(etiquetas).forEach((n) => {
+            if (etiquetas[n].fecha <= e.fecha) {
+              delete etiquetas[n];
+              cambios++;
+            }
+          });
+        }
+        return;
+      }
+
+      if (e.pasada !== 1 && e.pasada !== 2) return;
+      if (tapadoPorReinicio(registro, e)) return;
+
+      if (!registro.pasadas) registro.pasadas = {};
+      if (!registro.pasadas[e.pasada]) registro.pasadas[e.pasada] = {};
+      const actual = registro.pasadas[e.pasada][e.numero];
+
+      if (actual && !(e.fecha > actual.fecha || (e.fecha === actual.fecha && e.id > actual.id))) {
+        return;   // lo nuestro gana o es exactamente lo mismo
+      }
+      if (actual && actual.dispositivo !== e.dispositivo) {
+        console.warn(`[Sync] ${e.modulo} pasada ${e.pasada} nº ${e.numero}: `
+          + `dos teléfonos la grabaron (${window.NfcSync.alias(actual.dispositivo)} y `
+          + `${window.NfcSync.alias(e.dispositivo)}). Hay dos etiquetas físicas iguales.`);
+      }
+
+      registro.pasadas[e.pasada][e.numero] = {
+        texto: e.texto,
+        uid: e.uid || '',
+        fecha: e.fecha,
+        dispositivo: e.dispositivo,
+        id: e.id
+      };
+      cambios++;
+    });
+
+    if (cambios) {
+      guardarProgreso();
+      renderProgresoTabla();
+      aplicarFiltros();
+      if (rot.seleccion) actualizarUiRotulado();
+    }
+  }
+
+  /**
+   * El registro donde encaja un evento que llega, creándolo si hace falta.
+   *
+   * Los rótulos visibles se toman del maestro local por código de módulo, no de
+   * lo que manda el otro teléfono. Lo que llega por la red se muestra en
+   * pantalla, y no hay razón para confiar en un texto ajeno cuando el bueno ya
+   * está aquí.
+   */
+  function registroParaFusion(evento) {
+    if (!rot.progreso[evento.modulo]) {
+      const modulo = rot.modulos.find((m) => m.codigo === evento.modulo) || null;
+      rot.progreso[evento.modulo] = {
+        region: modulo ? modulo.region : (evento.region || ''),
+        responsable: modulo ? modulo.responsable : (evento.responsable || ''),
+        finca: modulo ? modulo.finca : (evento.finca || ''),
+        pasadas: {}
+      };
+    }
+    return rot.progreso[evento.modulo];
+  }
+
+  function tapadoPorReinicio(registro, evento) {
+    if (!registro.reset) return false;
+    const corte = [registro.reset.global, registro.reset[String(evento.pasada)]]
+      .filter(Boolean).sort().pop();
+    return Boolean(corte) && evento.fecha <= corte;
   }
 
   function manejarResultadoRotulado(result) {
@@ -1619,7 +1822,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Avance guardado
   // ------------------------------------------------------------------
   function renderProgresoTabla() {
-    const codigos = Object.keys(rot.progreso).sort();
+    // Un módulo sin etiquetas vivas no se lista. Pasa cuando baja un reinicio
+    // del registro compartido: queda el registro con su barrera de fecha —que
+    // hace falta, para que un evento anterior que suba tarde no lo resucite—
+    // pero una fila "0 / 0" solo sería ruido en pantalla.
+    const codigos = Object.keys(rot.progreso).filter((c) => hechasDe(c) > 0).sort();
     if (codigos.length === 0) {
       DOM.rotProgressTbody.innerHTML =
         '<tr><td colspan="5" class="text-center text-muted">Todavía no se ha grabado ningún módulo.</td></tr>';
@@ -1732,6 +1939,12 @@ document.addEventListener('DOMContentLoaded', () => {
       exportado: new Date().toISOString(),
       dispositivo: dispositivoId(),
       migracion: localStorage.getItem(ROT_MIGRACION_KEY) || '(sin registrar)',
+      // Lo que aún no subió es justo lo que se perdería al desinstalar, así que
+      // es lo primero que un respaldo tiene que llevar. Los apartados van
+      // también: son los que el servidor rechazó y hay que mirar a mano.
+      sincronizacion: window.NfcSync ? window.NfcSync.estado() : null,
+      pendientes: window.NfcSync ? window.NfcSync.pendientes() : [],
+      apartados: window.NfcSync ? window.NfcSync.apartados() : [],
       [ROT_PROGRESO_KEY]: v1 ? JSON.parse(v1) : null,
       [ROT_PROGRESO_V2_KEY]: v2 ? JSON.parse(v2) : null
     }, null, 2);
@@ -1750,7 +1963,14 @@ document.addEventListener('DOMContentLoaded', () => {
       ? `¿Borrar el avance de ${codigo}? Se perderá el registro de sus ${hechasDe(codigo)} etiquetas, de las dos pasadas.`
       : '¿Borrar el avance de TODOS los módulos?';
 
-    if (!confirm(mensaje)) return;
+    // Se dice de frente: esto limpia la pantalla de este teléfono, no el
+    // registro compartido. Creer lo contrario llevaría a rotular de nuevo algo
+    // que para los demás sigue hecho. El borrado compartido es el Paso 5.
+    const aviso = (window.NfcSync && window.NfcSync.estado().configurado)
+      ? '\n\nSolo borra lo de ESTE teléfono. Los demás seguirán viendo estas etiquetas como grabadas.'
+      : '';
+
+    if (!confirm(mensaje + aviso)) return;
 
     if (soloEste) {
       delete rot.progreso[codigo];
@@ -1766,6 +1986,87 @@ document.addEventListener('DOMContentLoaded', () => {
       actualizarUiRotulado();
     }
     showToast('Avance reiniciado.', 'info');
+  }
+
+  // ------------------------------------------------------------------
+  // Indicador de sincronización
+  // ------------------------------------------------------------------
+  function haceCuanto(iso) {
+    if (!iso) return 'nunca';
+    const minutos = Math.floor((Date.now() - Date.parse(iso)) / 60000);
+    if (!Number.isFinite(minutos) || minutos < 0) return 'hace un momento';
+    if (minutos < 1) return 'hace un momento';
+    if (minutos < 60) return `hace ${minutos} min`;
+    const horas = Math.floor(minutos / 60);
+    if (horas < 24) return `hace ${horas} h`;
+    return `hace ${Math.floor(horas / 24)} d`;
+  }
+
+  /**
+   * Pinta el estado de la red.
+   *
+   * Deliberadamente separado del punto verde del lector NFC. Son dos cosas que
+   * fallan por motivos distintos y en momentos distintos, y un solo indicador
+   * para ambas deja al operador sin saber cuál de las dos revisar.
+   */
+  function pintarSync(sync) {
+    if (!DOM.syncPill) return;
+
+    if (!sync.configurado) {
+      DOM.syncPill.classList.add('hidden');
+      if (DOM.rotSyncBtn) DOM.rotSyncBtn.classList.add('hidden');
+      return;
+    }
+
+    DOM.syncPill.classList.remove('hidden');
+    if (DOM.rotSyncBtn) DOM.rotSyncBtn.classList.remove('hidden');
+
+    let nivel = 'ok';
+    let texto = 'Al día';
+
+    if (sync.llaveInvalida) {
+      nivel = 'error';
+      texto = 'Sin acceso';
+    } else if (sync.sincronizando) {
+      nivel = 'warn';
+      texto = 'Sincronizando…';
+    } else if (sync.pendientes > 0) {
+      nivel = sync.ultimoError ? 'error' : 'warn';
+      texto = `${sync.pendientes} sin subir`;
+    } else if (sync.ultimoError) {
+      nivel = 'warn';
+      texto = 'Sin conexión';
+    }
+
+    DOM.syncDot.className = `status-dot ${nivel}`;
+    DOM.syncPill.className = `status-pill sync-pill ${nivel}`;
+    DOM.syncLabel.textContent = texto;
+    DOM.syncPill.title = sync.ultimoError
+      ? `Registro compartido: ${sync.ultimoError}. Toca para reintentar.`
+      : `Registro compartido al día (${haceCuanto(sync.ultimaSync)}). Toca para sincronizar.`;
+
+    if (!DOM.rotSyncHint) return;
+
+    const partes = [`Compartido con los demás teléfonos, como ${window.NfcSync.alias()}.`];
+    if (sync.pendientes > 0) {
+      partes.push(`${sync.pendientes} sin subir.`);
+    } else {
+      partes.push(`Al día ${haceCuanto(sync.ultimaSync)}.`);
+    }
+    if (sync.apartados > 0) {
+      partes.push(`${sync.apartados} rechazadas por el servidor.`);
+    }
+
+    // El aviso que importa: desinstalar la app con la cola llena pierde justo
+    // eso. Un número pequeño no merece ruido; un montón acumulado, sí.
+    const horasSinSubir = sync.ultimaSync
+      ? (Date.now() - Date.parse(sync.ultimaSync)) / 3600000
+      : Infinity;
+    const urgente = sync.pendientes > 20 || (sync.pendientes > 0 && horasSinSubir > 24);
+    if (urgente) partes.push('Busca señal antes de cerrar o desinstalar.');
+
+    DOM.rotSyncHint.textContent = partes.join(' ');
+    DOM.rotSyncHint.classList.toggle('text-danger', urgente);
   }
 
   // ==========================================
@@ -1833,6 +2134,27 @@ document.addEventListener('DOMContentLoaded', () => {
   DOM.rotBackupJson.addEventListener('click', exportarRespaldoAvance);
   DOM.rotResetProgress.addEventListener('click', reiniciarAvance);
 
+  // Sincronizar a mano. Existe porque el automático no siempre puede: si el
+  // operador acaba de caminar hasta donde hay señal, quiere verlo subir ahora y
+  // no esperar al siguiente intento.
+  function sincronizarAMano() {
+    if (!window.NfcSync) return;
+    const antes = window.NfcSync.estado();
+    if (!antes.configurado) return;
+    window.NfcSync.sincronizar('manual').then((despues) => {
+      if (despues.ultimoError) {
+        showToast(`No se pudo sincronizar: ${despues.ultimoError}`, 'error');
+      } else if (antes.pendientes) {
+        showToast(`Sincronizado: ${antes.pendientes} etiquetas subidas.`, 'success');
+      } else {
+        showToast('Todo estaba al día.', 'info');
+      }
+    });
+  }
+
+  if (DOM.rotSyncBtn) DOM.rotSyncBtn.addEventListener('click', sincronizarAMano);
+  if (DOM.syncPill) DOM.syncPill.addEventListener('click', sincronizarAMano);
+
   // Simulator Triggers
   DOM.simTapBlank.addEventListener('click', () => simulateTap('blank'));
   DOM.simTapError.addEventListener('click', () => simulateTap('error'));
@@ -1889,7 +2211,20 @@ document.addEventListener('DOMContentLoaded', () => {
   if (rot.migracionFallida) {
     showToast('No se pudo leer el avance guardado. Exporta un respaldo antes de seguir.', 'error');
   }
-  cargarModulos();
+
+  // El registro compartido se engancha antes de la primera sincronización, para
+  // que ningún lote baje sin que haya quien lo fusione.
+  if (window.NfcSync) {
+    window.NfcSync.alRecibir(fusionarEventos);
+    window.NfcSync.alCambiar(pintarSync);
+  }
+
+  // Sembrar necesita el maestro cargado (de ahí sale el total de cada pasada) y
+  // la migración ya hecha, así que va encadenado y no en paralelo.
+  cargarModulos().then(() => {
+    sembrarPendientes();
+    if (window.NfcSync) window.NfcSync.sincronizar('arranque');
+  });
 
   // Detectar el puente nativo es asíncrono: hasta que responda no se sabe si
   // estamos en la APK, y de eso dependen el banner y el service worker.

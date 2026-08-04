@@ -58,6 +58,17 @@
           <span id="status-dot" class="status-dot"></span>
           <span id="status-label">Conectando…</span>
         </div>
+
+        <!--
+          Píldora aparte de la de NFC a propósito. La verde de al lado dice
+          "el lector responde", no "hay señal": mezclarlas dejaría al operador
+          sin saber cuál de las dos cosas está fallando.
+        -->
+        <button id="sync-pill" class="status-pill sync-pill hidden" type="button"
+                title="Registro compartido. Toca para sincronizar ahora.">
+          <span id="sync-dot" class="status-dot"></span>
+          <span id="sync-label">Sincronizando…</span>
+        </button>
       </div>
     </header>
 
@@ -548,9 +559,10 @@
             <div class="card-header flex-between">
               <div>
                 <h3>Avance del rotulado</h3>
-                <p>Se guarda en el teléfono. Sobrevive a cerrar la app.</p>
+                <p id="rot-sync-hint">Se guarda en el teléfono. Sobrevive a cerrar la app.</p>
               </div>
               <div class="header-actions">
+                <button id="rot-sync-btn" class="btn btn-sm btn-outline hidden">Sincronizar</button>
                 <button id="rot-export-csv" class="btn btn-sm btn-outline">Exportar CSV</button>
                 <button id="rot-backup-json" class="btn btn-sm btn-outline">Respaldo</button>
                 <button id="rot-reset-progress" class="btn btn-sm btn-outline-warning">Reiniciar avance</button>
@@ -640,6 +652,9 @@
 
   <!-- Script Core -->
   <script src="nfc-bridge.js"></script>
+  <!-- config antes que sync, y sync antes que app: app.js consulta window.NfcSync -->
+  <script src="config.js"></script>
+  <script src="sync.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

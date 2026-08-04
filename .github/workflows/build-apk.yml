@@ -36,9 +36,40 @@ jobs:
           cache-read-only: false
 
       - name: Preparar carpeta web (www)
+        env:
+          NFC_APP_KEY: ${{ secrets.NFC_APP_KEY }}
         run: |
           mkdir -p www
-          cp index.html app.js nfc-bridge.js styles.css manifest.json sw.js modulos.json www/
+          cp index.html app.js nfc-bridge.js styles.css manifest.json sw.js modulos.json config.js sync.js www/
+
+          # La llave se inyecta aqui y no se versiona: el repositorio es publico.
+          #
+          # Conviene no engañarse sobre lo que esto consigue: la llave acaba
+          # dentro del APK y un `unzip` la revela. Sirve de filtro, no de
+          # secreto. Lo que protege el historico es que la base solo crezca y
+          # que borrar exija NFC_ADMIN_KEY, que nunca sale de Vercel.
+          if [ -n "$NFC_APP_KEY" ]; then
+            node -e "
+              const fs = require('fs');
+              const ruta = 'www/config.js';
+              const antes = fs.readFileSync(ruta, 'utf8');
+              const despues = antes.replace(\"appKey: ''\", 'appKey: ' + JSON.stringify(process.env.NFC_APP_KEY));
+              if (antes === despues) { console.error('No se encontro donde poner la llave en config.js'); process.exit(1); }
+              fs.writeFileSync(ruta, despues);
+            "
+            if grep -q "appKey: ''" www/config.js; then
+              echo "La llave quedo vacia despues de inyectarla"
+              exit 1
+            fi
+            echo "Llave inyectada en www/config.js"
+          else
+            echo "AVISO: sin secreto NFC_APP_KEY. El APK grabara etiquetas pero no sincronizara."
+          fi
+
+          # Y nunca al reves: si la llave llegara al repositorio, estaria
+          # publicada en internet desde el mismo commit.
+          grep -q "appKey: ''" config.js \
+            || { echo "config.js versionado trae una llave dentro. El repositorio es publico."; exit 1; }
 
       # Antes de compilar nada: la logica de doble pasada y la migracion del
       # avance guardado. Las pruebas extraen las funciones reales de app.js, asi
@@ -53,6 +84,12 @@ jobs:
       # dos telefonos sincronizando mostrarian cosas distintas.
       - name: Probar la logica del backend
         run: node tests/backend.test.mjs
+
+      # La que mas importa de las tres: compara la fusion del cliente contra la
+      # proyeccion del servidor. Si se separan, un telefono muestra una cosa y
+      # la base otra, y nadie sabe cual creer.
+      - name: Probar que cliente y servidor fusionan igual
+        run: node tests/sync.test.mjs
 
       - name: Inicializar Capacitor y agregar Android
         run: |

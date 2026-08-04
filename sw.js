@@ -3,13 +3,15 @@
  * Caches static shell assets for 100% offline functionality.
  */
 
-const CACHE_NAME = 'nfc-master-v2';
+const CACHE_NAME = 'nfc-master-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './styles.css',
   './nfc-bridge.js',
   './modulos.json',
+  './config.js',
+  './sync.js',
   './app.js',
   './manifest.json'
 ];
@@ -45,6 +47,14 @@ self.addEventListener('activate', (event) => {
 // Fetch Event - Stale while revalidate strategy
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+
+  // La API jamás pasa por caché.
+  //
+  // La estrategia de abajo devuelve primero lo cacheado, así que una bajada de
+  // eventos serviría la respuesta anterior con su cursor viejo: el teléfono
+  // volvería a pedir el mismo tramo para siempre y nunca vería lo nuevo. Que la
+  // sincronización falle sin señal es correcto; que mienta con datos rancios, no.
+  if (event.request.url.includes('/api/')) return;
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {

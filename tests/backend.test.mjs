@@ -66,10 +66,19 @@ prueba('los campos libres se recortan a 120', () => {
   assert.equal(r.ok, true);
   assert.equal(r.evento.finca.length, 120);
 });
-prueba('una fecha de hace un ano se rechaza', () => {
+prueba('una fecha en el futuro se rechaza', () => {
+  const manana = new Date(Date.now() + 5 * 24 * 3600 * 1000).toISOString();
+  const r = validarEvento({ ...base, fecha: manana });
+  assert.equal(r.ok, false, 'un reloj adelantado ganaria TODOS los desempates');
+});
+prueba('una fecha de hace un ano se acepta', () => {
   const viejo = new Date(Date.now() - 365 * 24 * 3600 * 1000).toISOString();
   const r = validarEvento({ ...base, fecha: viejo });
-  assert.equal(r.ok, false, 'un reloj muy desviado arruina el desempate por fecha');
+  assert.equal(r.ok, true, 'es lo que traen los eventos migrados del avance ya grabado');
+});
+prueba('una fecha de hace tres anos se rechaza', () => {
+  const antiguo = new Date(Date.now() - 3 * 365 * 24 * 3600 * 1000).toISOString();
+  assert.equal(validarEvento({ ...base, fecha: antiguo }).ok, false);
 });
 prueba('uid vacio se acepta', () => {
   assert.equal(validarEvento({ ...base, uid: '' }).ok, true);

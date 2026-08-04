@@ -23,7 +23,17 @@ export const LOTE_MAXIMO = 200;
 const RE_MODULO = /^[A-Z]{3}-[A-Z]{3}-\d{3}$/;
 const RE_TEXTO = /^[A-Z0-9-]{1,32}$/;
 const RE_UID = /^[0-9A-Fa-f:]{8,32}$/;
-const DIAS_30 = 30 * 24 * 60 * 60 * 1000;
+
+// La ventana es asimetrica a proposito.
+//
+// Una fecha en el FUTURO gana todos los desempates del last-write-wins, asi que
+// un telefono con el reloj adelantado pisaria el trabajo de todos los demas: se
+// tolera poco. Una fecha en el PASADO solo pierde desempates, que es inofensivo,
+// y ademas es lo que traen los eventos migrados del avance que ya estaba grabado
+// en los telefonos antes de existir el registro compartido. Rechazarlos por
+// viejos habria dejado fuera justo el historico que se quiere recuperar.
+const FUTURO_MAXIMO = 2 * 24 * 60 * 60 * 1000;
+const PASADO_MAXIMO = 2 * 365 * 24 * 60 * 60 * 1000;
 
 function recortar(valor, largo) {
   if (valor === null || valor === undefined) return '';
@@ -77,10 +87,12 @@ export function validarEvento(bruto) {
   if (Number.isNaN(fecha.getTime())) {
     return { ok: false, motivo: 'fecha ilegible' };
   }
-  // Un reloj muy desviado ensucia el desempate por fecha del last-write-wins.
-  const desvio = Math.abs(fecha.getTime() - Date.now());
-  if (desvio > DIAS_30) {
-    return { ok: false, motivo: 'fecha a mas de 30 dias de hoy: revisa el reloj del telefono' };
+  const desvio = fecha.getTime() - Date.now();
+  if (desvio > FUTURO_MAXIMO) {
+    return { ok: false, motivo: 'fecha en el futuro: revisa el reloj del telefono' };
+  }
+  if (-desvio > PASADO_MAXIMO) {
+    return { ok: false, motivo: 'fecha de hace mas de dos anos: revisa el reloj del telefono' };
   }
 
   const dispositivo = String(bruto.dispositivoId || bruto.dispositivo || '');

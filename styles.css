@@ -999,6 +999,21 @@ body {
   .status-dot.ok { animation: none; }
 }
 
+/* La píldora de sincronización es un botón: sincronizar a mano tiene que estar
+   a un toque desde cualquier pestaña, no solo desde la de rotulado. Hereda todo
+   el aspecto de .status-pill y solo deshace lo que el navegador impone a los
+   botones. */
+.sync-pill {
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.sync-pill:active { transform: scale(0.97); }
+
+.text-danger { color: var(--accent-rose); }
+
 /* ==========================================================================
    Rotulado por módulo
    ========================================================================== */
