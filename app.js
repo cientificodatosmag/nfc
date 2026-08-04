@@ -112,6 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
     rotProgressFill: document.getElementById('rot-progress-fill'),
     rotWarning: document.getElementById('rot-warning'),
     rotWarningText: document.getElementById('rot-warning-text'),
+    rotPasadaPanel: document.getElementById('rot-pasada-panel'),
+    rotPasadaTexto: document.getElementById('rot-pasada-texto'),
+    rotPasadaBtn: document.getElementById('rot-pasada-btn'),
     rotStartBtn: document.getElementById('rot-start-btn'),
     rotStopBtn: document.getElementById('rot-stop-btn'),
     rotPrevBtn: document.getElementById('rot-prev-btn'),
@@ -839,28 +842,149 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // ROTULADO POR MÓDULO
   // ==========================================
-  // Cada módulo se rotula con tantas etiquetas como ramales tenga, más cuatro.
+  // Cada módulo se rotula con tantas etiquetas como ramales tenga, más cuatro,
+  // y el juego completo se graba DOS veces sobre dos juegos de etiquetas
+  // distintos. Un módulo solo está cumplido cuando las dos pasadas terminaron.
   const ETIQUETAS_EXTRA = 4;
-  const ROT_PROGRESO_KEY = 'nfc_rotulado_progreso';
+  const PASADAS = 2;
+  const ROT_PROGRESO_KEY = 'nfc_rotulado_progreso';   // formato v1, ya no se escribe
+  const ROT_PROGRESO_V2_KEY = 'nfc_rotulado_progreso_v2';
+  const ROT_MIGRACION_KEY = 'nfc_rotulado_migracion_v2';
+  const DISPOSITIVO_KEY = 'nfc_dispositivo_id';
 
   const rot = {
     modulos: [],
-    indice: 0,        // etiqueta en curso, base 0
+    pasada: 1,        // pasada en curso, 1 o 2
+    indice: 0,        // etiqueta en curso dentro de la pasada, base 0
     seleccion: null,
     activo: false,
-    progreso: leerProgreso()
+    progreso: {},     // se llena en arrancarProgreso()
+    migracionFallida: ''
   };
 
-  function leerProgreso() {
+  /**
+   * Identificador propio del teléfono.
+   *
+   * Todavía no se sincroniza nada, pero cada etiqueta queda firmada desde ya:
+   * cuando el registro sea compartido hará falta saber qué teléfono grabó cada
+   * una, y añadirlo después obligaría a tocar otra vez los datos guardados.
+   */
+  function dispositivoId() {
+    let id = null;
     try {
-      return JSON.parse(localStorage.getItem(ROT_PROGRESO_KEY) || '{}');
+      id = localStorage.getItem(DISPOSITIVO_KEY);
     } catch (e) {
+      return 'd-sin-almacenamiento';
+    }
+    if (!id) {
+      const aleatorio = (window.crypto && window.crypto.randomUUID)
+        ? window.crypto.randomUUID()
+        : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+      id = `d-${aleatorio}`;
+      guardarClave(DISPOSITIVO_KEY, id);
+    }
+    return id;
+  }
+
+  /**
+   * Escribe en localStorage avisando si la cuota se agotó.
+   *
+   * Un fallo silencioso aquí es pérdida de trabajo: el operador ya pegó la
+   * etiqueta física y creería que quedó registrada.
+   */
+  function guardarClave(clave, valor) {
+    try {
+      localStorage.setItem(clave, valor);
+      return true;
+    } catch (e) {
+      console.error('No se pudo guardar en localStorage:', e);
+      showToast('¡No se pudo guardar el avance! Exporta un respaldo y libera espacio.', 'error');
+      return false;
+    }
+  }
+
+  function leerJson(clave) {
+    try {
+      return JSON.parse(localStorage.getItem(clave) || 'null');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /**
+   * Formato v2 del avance:
+   *
+   *   { "OOC-MNA-001": {
+   *       region, responsable, finca,
+   *       pasadas: { "1": { "7": {texto, uid, fecha, dispositivo} }, "2": {...} }
+   *   }}
+   *
+   * El total NO se guarda a propósito: se calcula del maestro vivo. Guardarlo
+   * hacía que un cambio de ramales dejara módulos "completos" que ya no lo son.
+   */
+  function arrancarProgreso() {
+    const v2 = leerJson(ROT_PROGRESO_V2_KEY);
+    if (v2 && typeof v2 === 'object') {
+      rot.progreso = v2;
+      return;
+    }
+    rot.progreso = migrarV1();
+  }
+
+  /**
+   * Convierte el avance v1 en v2 tratándolo como pasada 1.
+   *
+   * Las etiquetas del formato viejo existen físicamente y dicen CODIGO-NNN, así
+   * que son la primera pasada. La clave v1 NUNCA se borra: si esto sale mal,
+   * de ahí se recupera todo.
+   */
+  function migrarV1() {
+    const v1 = leerJson(ROT_PROGRESO_KEY);
+    if (!v1 || typeof v1 !== 'object' || Object.keys(v1).length === 0) {
+      guardarClave(ROT_MIGRACION_KEY, 'sin-datos');
+      return {};
+    }
+
+    try {
+      const migrado = {};
+      let etiquetas = 0;
+      Object.keys(v1).forEach((codigo) => {
+        const viejo = v1[codigo] || {};
+        const primera = {};
+        Object.keys(viejo.etiquetas || {}).forEach((numero) => {
+          const e = viejo.etiquetas[numero] || {};
+          primera[numero] = {
+            texto: e.texto || textoEtiqueta(codigo, Number(numero)),
+            uid: e.uid || '',
+            fecha: e.fecha || new Date().toISOString(),
+            dispositivo: dispositivoId()
+          };
+          etiquetas++;
+        });
+        migrado[codigo] = {
+          region: viejo.region || '',
+          responsable: viejo.responsable || '',
+          finca: viejo.finca || '',
+          pasadas: { 1: primera, 2: {} }
+        };
+      });
+
+      guardarClave(ROT_PROGRESO_V2_KEY, JSON.stringify(migrado));
+      guardarClave(ROT_MIGRACION_KEY, 'hecha');
+      console.log(`[Rotulado] Avance migrado a v2: ${etiquetas} etiquetas como pasada 1.`);
+      return migrado;
+    } catch (err) {
+      // Nunca presentar esto como "0 grabadas": un operador que ve un módulo
+      // vacío lo vuelve a rotular entero y gasta un juego de etiquetas.
+      console.error('[Rotulado] Falló la migración del avance:', err);
+      rot.migracionFallida = String((err && err.message) || err);
+      guardarClave(ROT_MIGRACION_KEY, `fallida: ${rot.migracionFallida}`);
       return {};
     }
   }
 
   function guardarProgreso() {
-    localStorage.setItem(ROT_PROGRESO_KEY, JSON.stringify(rot.progreso));
+    guardarClave(ROT_PROGRESO_V2_KEY, JSON.stringify(rot.progreso));
   }
 
   /** Comparación tolerante: el usuario puede escribir sin acentos ni mayúsculas. */
@@ -872,8 +996,21 @@ document.addEventListener('DOMContentLoaded', () => {
       .toUpperCase();
   }
 
-  function totalEtiquetas(modulo) {
+  // ------------------------------------------------------------------
+  // Completitud: fuente única
+  //
+  // Antes cinco sitios distintos decidían por su cuenta si un módulo estaba
+  // completo. Con dos pasadas eso era insostenible, así que todos pasan por
+  // estas funciones y ninguno vuelve a recalcular la regla.
+  // ------------------------------------------------------------------
+
+  /** Etiquetas de UNA pasada. Sale del maestro vivo, nunca de lo guardado. */
+  function totalPorPasada(modulo) {
     return modulo.ramales + ETIQUETAS_EXTRA;
+  }
+
+  function totalModulo(modulo) {
+    return totalPorPasada(modulo) * PASADAS;
   }
 
   function textoEtiqueta(codigo, numero) {
@@ -888,20 +1025,62 @@ document.addEventListener('DOMContentLoaded', () => {
     return rot.progreso[codigo] || null;
   }
 
-  function hechasDe(codigo) {
+  /** Etiquetas ya grabadas en una pasada concreta. */
+  function etiquetasDe(codigo, pasada) {
     const registro = registroDe(codigo);
-    return registro ? Object.keys(registro.etiquetas).length : 0;
+    return (registro && registro.pasadas && registro.pasadas[pasada]) || {};
   }
 
-  /** Primer número pendiente a partir de `desde`, o null si ya no queda ninguno. */
-  function siguientePendiente(codigo, total, desde) {
-    const registro = registroDe(codigo);
-    const hechas = registro ? registro.etiquetas : {};
+  function hechasEnPasada(codigo, pasada) {
+    return Object.keys(etiquetasDe(codigo, pasada)).length;
+  }
+
+  function hechasDe(codigo) {
+    let total = 0;
+    for (let p = 1; p <= PASADAS; p++) total += hechasEnPasada(codigo, p);
+    return total;
+  }
+
+  function pasadaCompleta(modulo, pasada) {
+    return hechasEnPasada(modulo.codigo, pasada) >= totalPorPasada(modulo);
+  }
+
+  function moduloCompleto(modulo) {
+    for (let p = 1; p <= PASADAS; p++) {
+      if (!pasadaCompleta(modulo, p)) return false;
+    }
+    return true;
+  }
+
+  /** Primer número pendiente de una pasada a partir de `desde`, o null. */
+  function siguientePendiente(codigo, pasada, total, desde) {
+    const hechas = etiquetasDe(codigo, pasada);
     for (let n = desde; n <= total; n++) {
       if (!hechas[n]) return n;
     }
     for (let n = 1; n < desde; n++) {
       if (!hechas[n]) return n;
+    }
+    return null;
+  }
+
+  /** Dónde retomar: primero se termina la pasada 1, luego la 2. */
+  function siguienteObjetivo(modulo) {
+    const total = totalPorPasada(modulo);
+    for (let p = 1; p <= PASADAS; p++) {
+      const numero = siguientePendiente(modulo.codigo, p, total, 1);
+      if (numero !== null) return { pasada: p, numero };
+    }
+    return null;
+  }
+
+  /** ¿Este UID ya se usó en el módulo? Devuelve dónde, o null. */
+  function uidYaUsado(codigo, uid) {
+    if (!uid) return null;
+    for (let p = 1; p <= PASADAS; p++) {
+      const etiquetas = etiquetasDe(codigo, p);
+      const encontrado = Object.keys(etiquetas).find((n) => etiquetas[n].uid === uid);
+      if (encontrado) return { pasada: p, numero: Number(encontrado) };
     }
     return null;
   }
@@ -1065,11 +1244,12 @@ document.addEventListener('DOMContentLoaded', () => {
     comboFinca.setOpciones(unicos(porResponsable, 'finca').map((v) => ({ valor: v })));
 
     comboModulo.setOpciones(porFinca.map((m) => {
-      const total = totalEtiquetas(m);
-      const hechas = hechasDe(m.codigo);
-      const estado = hechas === 0 ? `${total} etiquetas`
-        : hechas >= total ? `completo (${total})`
-        : `${hechas} de ${total}`;
+      const porPasada = totalPorPasada(m);
+      const p1 = hechasEnPasada(m.codigo, 1);
+      const p2 = hechasEnPasada(m.codigo, 2);
+      const estado = moduloCompleto(m) ? `completo (${totalModulo(m)})`
+        : (p1 + p2) === 0 ? `${porPasada} x2 etiquetas`
+        : `P1 ${p1}/${porPasada} · P2 ${p2}/${porPasada}`;
       return { valor: m.codigo, detalle: `${m.finca} · ${estado}` };
     }));
 
@@ -1115,9 +1295,15 @@ document.addEventListener('DOMContentLoaded', () => {
     DOM.rotFinca.value = modulo.finca;
     DOM.rotModulo.value = modulo.codigo;
 
-    const total = totalEtiquetas(modulo);
-    const siguiente = siguientePendiente(modulo.codigo, total, 1);
-    rot.indice = (siguiente === null ? total : siguiente) - 1;
+    // Retomar donde se quedó: primero los huecos de la pasada 1, luego la 2.
+    const objetivo = siguienteObjetivo(modulo);
+    if (objetivo) {
+      rot.pasada = objetivo.pasada;
+      rot.indice = objetivo.numero - 1;
+    } else {
+      rot.pasada = PASADAS;
+      rot.indice = totalPorPasada(modulo) - 1;
+    }
 
     DOM.rotEmptyState.classList.add('hidden');
     DOM.rotActive.classList.remove('hidden');
@@ -1132,32 +1318,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const modulo = rot.seleccion;
     if (!modulo) return;
 
-    const total = totalEtiquetas(modulo);
+    const porPasada = totalPorPasada(modulo);
+    const enPasada = hechasEnPasada(modulo.codigo, rot.pasada);
     const hechas = hechasDe(modulo.codigo);
-    const completo = hechas >= total;
+    const completo = moduloCompleto(modulo);
+    const esperandoPasada2 = pasadaCompleta(modulo, 1) && !pasadaCompleta(modulo, 2)
+      && rot.pasada === 1;
 
     DOM.rotCurrentLabel.textContent = completo ? '✓' : etiquetaActual();
     DOM.rotCurrentLabel.classList.toggle('rot-modulo-completo', completo);
 
-    DOM.rotProgressText.textContent = `${hechas} de ${total}`;
+    // La barra mide el módulo entero (las dos pasadas); el texto desglosa la
+    // pasada en curso, que es lo que el operador tiene entre manos.
+    DOM.rotProgressText.textContent = completo
+      ? `Completo · ${hechas} de ${totalModulo(modulo)}`
+      : `Pasada ${rot.pasada} de ${PASADAS} · ${enPasada} de ${porPasada}`;
     DOM.rotProgressDetail.textContent =
-      `${modulo.ramales} ramales + ${ETIQUETAS_EXTRA} · ${modulo.finca}`;
-    DOM.rotProgressFill.style.width = `${total ? (hechas / total) * 100 : 0}%`;
+      `${modulo.ramales} ramales + ${ETIQUETAS_EXTRA}, dos juegos · ${modulo.finca}`;
+    DOM.rotProgressFill.style.width =
+      `${totalModulo(modulo) ? (hechas / totalModulo(modulo)) * 100 : 0}%`;
 
     DOM.rotScannerStatus.textContent = rot.activo
-      ? `Acerca la etiqueta ${etiquetaActual()}`
-      : completo ? 'Módulo completo' : 'Escáner inactivo';
+      ? `Acerca la etiqueta ${etiquetaActual()} (pasada ${rot.pasada})`
+      : completo ? 'Módulo completo: las dos pasadas están grabadas'
+      : esperandoPasada2 ? 'Pasada 1 lista. Toma el segundo juego de etiquetas.'
+      : 'Escáner inactivo';
 
-    DOM.rotStartBtn.classList.toggle('hidden', rot.activo);
+    DOM.rotStartBtn.classList.toggle('hidden', rot.activo || esperandoPasada2);
     DOM.rotStopBtn.classList.toggle('hidden', !rot.activo);
     DOM.rotRadarCircle.classList.toggle('scanning', rot.activo);
+    DOM.rotRadarCircle.classList.toggle('rot-pasada-2', rot.pasada === 2);
+
+    // El cambio de juego de etiquetas se pide de forma explícita: ver el
+    // comentario de avanzarTrasGrabar sobre por qué no puede ser automático.
+    DOM.rotPasadaPanel.classList.toggle('hidden', !esperandoPasada2);
+    if (esperandoPasada2) {
+      DOM.rotPasadaTexto.textContent =
+        `Pasada 1 completa: ${porPasada} etiquetas grabadas. Guarda ese juego, ` +
+        'toma el segundo y pulsa el botón para grabar las mismas ' +
+        `${porPasada} otra vez.`;
+    }
 
     const avisos = [];
+    if (rot.migracionFallida) {
+      avisos.push('No se pudo leer el avance guardado con el formato anterior. ' +
+        'NO borres la app ni vuelvas a rotular: exporta un respaldo y avisa.');
+    }
     if (modulo.duplicado) {
       avisos.push(`El código ${modulo.codigo} aparece repetido en el maestro. Se graba un solo juego de etiquetas.`);
     }
     if (completo) {
-      avisos.push('Todas las etiquetas de este módulo están grabadas.');
+      avisos.push('Las dos pasadas de este módulo están grabadas.');
     }
     DOM.rotWarning.classList.toggle('hidden', avisos.length === 0);
     DOM.rotWarningText.textContent = avisos.join(' ');
@@ -1189,8 +1400,8 @@ document.addEventListener('DOMContentLoaded', () => {
       DOM.rotPassInput.focus();
       return;
     }
-    if (hechasDe(rot.seleccion.codigo) >= totalEtiquetas(rot.seleccion)) {
-      showToast('Este módulo ya está completo. Reinicia su avance si quieres regrabarlo.', 'info');
+    if (moduloCompleto(rot.seleccion)) {
+      showToast('Las dos pasadas de este módulo ya están completas. Reinicia su avance si quieres regrabarlo.', 'info');
       return;
     }
     if (window.NfcBackend.kind !== 'native' && !state.simulatorActive) {
@@ -1243,46 +1454,94 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function irAEtiqueta(numero) {
     if (!rot.seleccion) return;
-    const total = totalEtiquetas(rot.seleccion);
+    const total = totalPorPasada(rot.seleccion);
     rot.indice = Math.max(0, Math.min(total - 1, numero - 1));
     actualizarUiRotulado();
     await reenviarEtiqueta();
   }
 
-  async function avanzarTrasGrabar() {
-    const total = totalEtiquetas(rot.seleccion);
-    const siguiente = siguientePendiente(rot.seleccion.codigo, total, rot.indice + 2);
+  /**
+   * Arranca la pasada 2 tras el cambio de juego de etiquetas.
+   *
+   * Es sesión nueva por definición, así que va con resetTagMemory: el bloqueo
+   * nativo de UID recién grabado debe olvidarse antes de empezar.
+   */
+  async function empezarPasada2() {
+    if (!rot.seleccion) return;
+    rot.pasada = 2;
+    const siguiente = siguientePendiente(rot.seleccion.codigo, 2, totalPorPasada(rot.seleccion), 1);
+    rot.indice = (siguiente === null ? 1 : siguiente) - 1;
+    actualizarUiRotulado();
+    await iniciarRotulado();
+  }
 
-    if (siguiente === null) {
+  async function avanzarTrasGrabar() {
+    const modulo = rot.seleccion;
+    const total = totalPorPasada(modulo);
+    const siguiente = siguientePendiente(modulo.codigo, rot.pasada, total, rot.indice + 2);
+
+    if (siguiente !== null) {
+      rot.indice = siguiente - 1;
       actualizarUiRotulado();
-      showToast(`Módulo ${rot.seleccion.codigo} completo: ${total} etiquetas.`, 'success');
-      detenerRotulado();
+      await reenviarEtiqueta();
       return;
     }
 
-    rot.indice = siguiente - 1;
+    // Se acabó la pasada en curso.
+    //
+    // Aquí NO se continúa solo con la siguiente. El operador tiene en la mano
+    // la etiqueta que acaba de grabar, todavía pegada al teléfono, y la pasada
+    // 2 empieza por el 001: seguir de largo la regrabaría. El bloqueo nativo
+    // dura 1,5 s y no alcanza a salvarlo. Detener y exigir un toque explícito
+    // refleja el acto físico de cambiar de bulto de etiquetas.
+    detenerRotulado();
+
+    if (rot.pasada < PASADAS) {
+      playSound('success');
+      triggerHaptic([80, 60, 80, 60, 160]);
+      showToast(`Pasada ${rot.pasada} completa: ${total} etiquetas. Cambia de juego.`, 'success');
+      actualizarUiRotulado();
+      return;
+    }
+
+    // Última pasada terminada, pero puede haber huecos en una anterior.
+    const pendiente = siguienteObjetivo(modulo);
+    if (pendiente) {
+      rot.pasada = pendiente.pasada;
+      rot.indice = pendiente.numero - 1;
+      actualizarUiRotulado();
+      showToast(`Faltan etiquetas de la pasada ${pendiente.pasada}. Retoma en la ${pendiente.numero}.`, 'info');
+      return;
+    }
+
     actualizarUiRotulado();
-    await reenviarEtiqueta();
+    showToast(`Módulo ${modulo.codigo} completo: ${totalModulo(modulo)} etiquetas en ${PASADAS} pasadas.`, 'success');
   }
 
   // ------------------------------------------------------------------
   // Resultado de cada etiqueta
   // ------------------------------------------------------------------
-  function registrarEtiqueta(codigo, numero, uid) {
+  function registrarEtiqueta(codigo, pasada, numero, uid) {
     const modulo = rot.seleccion;
     if (!rot.progreso[codigo]) {
       rot.progreso[codigo] = {
-        total: totalEtiquetas(modulo),
         region: modulo.region,
         responsable: modulo.responsable,
         finca: modulo.finca,
-        etiquetas: {}
+        pasadas: {}
       };
     }
-    rot.progreso[codigo].etiquetas[numero] = {
+    // El total ya no se guarda: se calcula del maestro vivo, para que un cambio
+    // de ramales no deje módulos "completos" que ya no lo son.
+    const registro = rot.progreso[codigo];
+    if (!registro.pasadas) registro.pasadas = {};
+    if (!registro.pasadas[pasada]) registro.pasadas[pasada] = {};
+
+    registro.pasadas[pasada][numero] = {
       texto: textoEtiqueta(codigo, numero),
       uid: uid || '',
-      fecha: new Date().toISOString()
+      fecha: new Date().toISOString(),
+      dispositivo: dispositivoId()
     };
     guardarProgreso();
     renderProgresoTabla();
@@ -1305,7 +1564,21 @@ document.addEventListener('DOMContentLoaded', () => {
       return; // no avanza: se reintenta la misma etiqueta
     }
 
-    registrarEtiqueta(rot.seleccion.codigo, rot.indice + 1, result.uid);
+    // Cada pasada va sobre etiquetas físicas distintas. Si este UID ya está
+    // registrado en el módulo, el operador tomó una del juego anterior: se
+    // rechaza y no se avanza, porque grabarla destruiría la etiqueta ya hecha.
+    const repetida = uidYaUsado(rot.seleccion.codigo, result.uid);
+    if (repetida && !(repetida.pasada === rot.pasada && repetida.numero === rot.indice + 1)) {
+      playSound('error');
+      triggerHaptic([300]);
+      addHistoryLog('ROTULADO', result.uid, 'FALLO',
+        `Etiqueta ya usada en pasada ${repetida.pasada} nº ${repetida.numero}`);
+      showToast(`Esa etiqueta ya se usó en la pasada ${repetida.pasada} (nº ${repetida.numero}). ` +
+        'Toma una del juego nuevo.', 'error');
+      return;
+    }
+
+    registrarEtiqueta(rot.seleccion.codigo, rot.pasada, rot.indice + 1, result.uid);
 
     state.sessionClearedCount++;
     DOM.statClearedCount.textContent = state.sessionClearedCount;
@@ -1330,45 +1603,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
     DOM.rotProgressTbody.innerHTML = codigos.map((codigo) => {
       const registro = rot.progreso[codigo];
-      const numeros = Object.keys(registro.etiquetas).map(Number).sort((a, b) => a - b);
-      const hechas = numeros.length;
-      const ultima = numeros.length ? registro.etiquetas[numeros[numeros.length - 1]] : null;
-      const completo = hechas >= registro.total;
+      // El total sale del maestro; si el módulo ya no está en él (maestro viejo
+      // o código retirado) se muestra el avance sin denominador en vez de
+      // inventarse uno.
+      const modulo = rot.modulos.find((m) => m.codigo === codigo) || null;
+      const porPasada = modulo ? totalPorPasada(modulo) : null;
+      const p1 = hechasEnPasada(codigo, 1);
+      const p2 = hechasEnPasada(codigo, 2);
+      const completo = modulo ? moduloCompleto(modulo) : false;
+
+      const insignia = (pasada, hechas) => {
+        const lleno = porPasada !== null && hechas >= porPasada;
+        return `<span class="badge-status ${lleno ? 'success' : 'danger'}">`
+          + `P${pasada} ${hechas}${porPasada === null ? '' : ` / ${porPasada}`}</span>`;
+      };
+
+      const ultimaDe = (pasada) => {
+        const etiquetas = etiquetasDe(codigo, pasada);
+        const numeros = Object.keys(etiquetas).map(Number).sort((a, b) => a - b);
+        return numeros.length ? etiquetas[numeros[numeros.length - 1]] : null;
+      };
+      const ultima = ultimaDe(2) || ultimaDe(1);
 
       return `
-        <tr>
+        <tr${completo ? ' class="rot-fila-completa"' : ''}>
           <td><code>${escaparHtml(codigo)}</code></td>
           <td>${escaparHtml(registro.finca || '')}</td>
           <td>${escaparHtml(registro.responsable || '')}</td>
-          <td>
-            <span class="badge-status ${completo ? 'success' : 'danger'}">
-              ${hechas} / ${escaparHtml(registro.total)}
-            </span>
-          </td>
+          <td>${insignia(1, p1)} ${insignia(2, p2)}</td>
           <td>${ultima ? `<code>${escaparHtml(ultima.texto)}</code>` : ''}</td>
         </tr>
       `;
     }).join('');
   }
 
-  function exportarRotuladoCSV() {
-    const filas = [];
+  /** Recorre el avance etiqueta por etiqueta, en orden de módulo y pasada. */
+  function recorrerAvance(fn) {
     Object.keys(rot.progreso).sort().forEach((codigo) => {
       const registro = rot.progreso[codigo];
-      Object.keys(registro.etiquetas).map(Number).sort((a, b) => a - b).forEach((numero) => {
-        const etiqueta = registro.etiquetas[numero];
-        filas.push([
-          codigo,
-          registro.region || '',
-          registro.responsable || '',
-          registro.finca || '',
-          numero,
-          registro.total,
-          etiqueta.texto,
-          etiqueta.uid,
-          etiqueta.fecha
-        ]);
-      });
+      for (let pasada = 1; pasada <= PASADAS; pasada++) {
+        const etiquetas = etiquetasDe(codigo, pasada);
+        Object.keys(etiquetas).map(Number).sort((a, b) => a - b).forEach((numero) => {
+          fn(codigo, registro, pasada, numero, etiquetas[numero]);
+        });
+      }
+    });
+  }
+
+  function exportarRotuladoCSV() {
+    const filas = [];
+    recorrerAvance((codigo, registro, pasada, numero, etiqueta) => {
+      const modulo = rot.modulos.find((m) => m.codigo === codigo) || null;
+      filas.push([
+        codigo,
+        registro.region || '',
+        registro.responsable || '',
+        registro.finca || '',
+        pasada,
+        numero,
+        modulo ? totalPorPasada(modulo) : '',
+        etiqueta.texto,
+        etiqueta.uid,
+        etiqueta.fecha,
+        etiqueta.dispositivo || ''
+      ]);
     });
 
     if (filas.length === 0) {
@@ -1377,8 +1675,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const csv = construirCsv(
-      ['Codigo_modulo', 'Region', 'Responsable', 'Finca', 'Numero_etiqueta',
-        'Total_etiquetas', 'Texto_grabado', 'UID', 'Fecha_hora'],
+      ['Codigo_modulo', 'Region', 'Responsable', 'Finca', 'Pasada', 'Numero_etiqueta',
+        'Total_por_pasada', 'Texto_grabado', 'UID', 'Fecha_hora', 'Dispositivo'],
       filas
     );
 
@@ -1394,21 +1692,27 @@ document.addEventListener('DOMContentLoaded', () => {
    * contenido literal de localStorage, sin reinterpretarlo.
    */
   function exportarRespaldoAvance() {
-    const crudo = localStorage.getItem(ROT_PROGRESO_KEY);
-    if (!crudo || crudo === '{}') {
+    // Van los DOS formatos: el v1 sigue intacto en el teléfono y es la única
+    // copia de lo grabado antes de la migración.
+    const v1 = localStorage.getItem(ROT_PROGRESO_KEY);
+    const v2 = localStorage.getItem(ROT_PROGRESO_V2_KEY);
+
+    if ((!v1 || v1 === '{}') && (!v2 || v2 === '{}')) {
       showToast('No hay avance guardado que respaldar.', 'error');
       return;
     }
 
     const respaldo = JSON.stringify({
-      formato: 'nfc-rotulado-respaldo-v1',
+      formato: 'nfc-rotulado-respaldo-v2',
       exportado: new Date().toISOString(),
-      clave: ROT_PROGRESO_KEY,
-      progreso: JSON.parse(crudo)
+      dispositivo: dispositivoId(),
+      migracion: localStorage.getItem(ROT_MIGRACION_KEY) || '(sin registrar)',
+      [ROT_PROGRESO_KEY]: v1 ? JSON.parse(v1) : null,
+      [ROT_PROGRESO_V2_KEY]: v2 ? JSON.parse(v2) : null
     }, null, 2);
 
-    const etiquetas = Object.values(JSON.parse(crudo))
-      .reduce((suma, r) => suma + Object.keys(r.etiquetas || {}).length, 0);
+    let etiquetas = 0;
+    recorrerAvance(() => { etiquetas++; });
 
     exportar(`respaldo_avance_${new Date().toISOString().slice(0, 10)}.json`, respaldo,
       'application/json', `Respaldo generado: ${etiquetas} etiquetas.`);
@@ -1418,7 +1722,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const codigo = rot.seleccion ? rot.seleccion.codigo : null;
     const soloEste = codigo && rot.progreso[codigo];
     const mensaje = soloEste
-      ? `¿Borrar el avance de ${codigo}? Se perderá el registro de sus etiquetas grabadas.`
+      ? `¿Borrar el avance de ${codigo}? Se perderá el registro de sus ${hechasDe(codigo)} etiquetas, de las dos pasadas.`
       : '¿Borrar el avance de TODOS los módulos?';
 
     if (!confirm(mensaje)) return;
@@ -1432,6 +1736,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderProgresoTabla();
     aplicarFiltros();
     if (rot.seleccion) {
+      rot.pasada = 1;
       rot.indice = 0;
       actualizarUiRotulado();
     }
@@ -1494,6 +1799,7 @@ document.addEventListener('DOMContentLoaded', () => {
   DOM.rotResetFilters.addEventListener('click', limpiarFiltros);
 
   DOM.rotStartBtn.addEventListener('click', iniciarRotulado);
+  DOM.rotPasadaBtn.addEventListener('click', empezarPasada2);
   DOM.rotStopBtn.addEventListener('click', detenerRotulado);
   DOM.rotPrevBtn.addEventListener('click', () => irAEtiqueta(rot.indice));
   DOM.rotNextBtn.addEventListener('click', () => irAEtiqueta(rot.indice + 2));
@@ -1552,6 +1858,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // ARRANQUE
   // ==========================================
   renderHistoryTable();
+  // El avance se lee (y migra si hace falta) antes de pintar nada, para que la
+  // tabla nunca muestre "0 grabadas" mientras la migración está a medias.
+  arrancarProgreso();
+  if (rot.migracionFallida) {
+    showToast('No se pudo leer el avance guardado. Exporta un respaldo antes de seguir.', 'error');
+  }
   cargarModulos();
 
   // Detectar el puente nativo es asíncrono: hasta que responda no se sabe si

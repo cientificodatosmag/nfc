@@ -1065,6 +1065,50 @@ body {
   color: var(--brand-green);
 }
 
+/* Segunda pasada: el radar cambia de color para que se note de un vistazo, a
+   distancia de brazo, sobre qué juego de etiquetas se está trabajando. */
+.radar-circle.rot-pasada-2 {
+  border-color: var(--brand-indigo);
+  box-shadow: 0 0 24px rgba(43, 26, 158, 0.45);
+}
+
+/* Panel de cambio de juego de etiquetas entre pasadas. */
+.rot-pasada-panel {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(34, 220, 124, 0.35);
+  background: rgba(34, 220, 124, 0.08);
+}
+
+.rot-pasada-icono {
+  flex: 0 0 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #06210f;
+  background: var(--brand-green);
+}
+
+.rot-pasada-cuerpo {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.rot-pasada-cuerpo p {
+  margin: 0.35rem 0 0.75rem;
+}
+
+/* Módulo con las dos pasadas hechas. */
+.rot-fila-completa td {
+  background: rgba(34, 220, 124, 0.07);
+}
+
 /* ==========================================================================
    Ajustes para pantallas de teléfono
    El body lleva overflow-x: hidden, así que todo lo que se pase de ancho no se

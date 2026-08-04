@@ -504,6 +504,21 @@
                 <div class="alert-content"><span id="rot-warning-text"></span></div>
               </div>
 
+              <!-- Cambio de juego de etiquetas entre la pasada 1 y la 2. Se
+                   confirma a mano a propósito: si la app continuara sola,
+                   regrabaría la última etiqueta de la pasada 1, que sigue
+                   pegada al teléfono. -->
+              <div id="rot-pasada-panel" class="rot-pasada-panel hidden mt-3">
+                <div class="rot-pasada-icono">2</div>
+                <div class="rot-pasada-cuerpo">
+                  <strong>Cambia al segundo juego de etiquetas</strong>
+                  <p id="rot-pasada-texto" class="text-sm"></p>
+                  <button id="rot-pasada-btn" class="btn btn-lg btn-primary full-width shadow-glow" type="button">
+                    <span>Empezar pasada 2</span>
+                  </button>
+                </div>
+              </div>
+
               <div class="scanner-controls mt-3">
                 <button id="rot-start-btn" class="btn btn-lg btn-primary full-width shadow-glow">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -524,7 +539,7 @@
                 <button id="rot-prev-btn" class="btn btn-sm btn-outline" type="button">‹ Anterior</button>
                 <button id="rot-next-btn" class="btn btn-sm btn-outline" type="button">Siguiente ›</button>
               </div>
-              <span class="text-sm text-muted">Tras cada etiqueta avanza solo. Usa estos botones para repetir una o saltarla.</span>
+              <span class="text-sm text-muted">Tras cada etiqueta avanza solo dentro de la pasada. Al terminar una pasada se detiene y pide el cambio de juego. Usa estos botones para repetir una etiqueta o saltarla.</span>
             </div>
           </div>
 
