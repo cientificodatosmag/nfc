@@ -1,7 +1,7 @@
 # Registro compartido de rotulado
 
 API que permite que varios teléfonos sepan qué etiquetas ya se grabaron. La app
-todavía **no la usa**: esto es el Paso 2 del plan y se prueba solo con `curl`.
+la usa desde el Paso 3: ver [`sync.js`](../sync.js) para el lado del cliente.
 
 ## Cómo está pensado
 
@@ -122,8 +122,27 @@ curl -i -X OPTIONS .../api/eventos \
   -H "Access-Control-Request-Headers: x-app-key"
 ```
 
+## Cómo se limpian los datos de prueba
+
+No hay borrado, y es a propósito. Para hacer desaparecer un módulo de lo que ven
+los teléfonos se **añade** un evento `reset` por pasada: la proyección descarta
+todo lo anterior a esa fecha y las filas siguen ahí para auditar.
+
+```bash
+curl -X POST https://<proyecto>.vercel.app/api/eventos \
+  -H "x-app-key: $NFC_APP_KEY" -H "content-type: application/json" \
+  -d '{"eventos":[
+       {"id":"limpieza-p1","tipo":"reset","modulo":"ZZZ-TST-999","pasada":1,
+        "numero":1,"fecha":"'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'","dispositivoId":"d-limpieza"},
+       {"id":"limpieza-p2","tipo":"reset","modulo":"ZZZ-TST-999","pasada":2,
+        "numero":1,"fecha":"'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'","dispositivoId":"d-limpieza"}]}'
+```
+
+Así se limpiaron los eventos de `ZZZ-TST-999` que dejaron las pruebas: el log
+conserva sus filas y la proyección queda vacía.
+
 ## Lo que todavía no existe
 
-`/api/reset` (borrado compartido, con marca de tiempo del servidor) y
-`/api/csv` (exportación para la oficina) son el Paso 5. La lógica de proyección
-que ambos necesitan ya está escrita y probada en `_db.mjs`.
+`/api/reset` (el mismo mecanismo pero con marca de tiempo puesta por el
+servidor y detrás de la llave de admin) y `/api/csv` (exportación para la
+oficina) son el Paso 5.
