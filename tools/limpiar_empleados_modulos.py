@@ -16,9 +16,12 @@ Limpia el Excel crudo de extraer_empleados_modulos.py:
   2026-08-03, sí cuentan para el numero de telefonos porque ya tienen
   modulo asignado.
 
-Genera un Excel con: Detalle (limpio), Resumen por modulo, Resumen por
-responsable, En varios modulos, y Cambios aplicados (auditoria de que se
-toco y por que).
+Ademas cruza cada modulo con INFORME_EQUIPO_RIEGO.xlsx por el id del motor
+que lo alimenta, para ordenar por donde conviene empezar a rotular.
+
+Genera un Excel con: Prioridad rotulado, Personal, Detalle (limpio), Resumen
+por modulo, Resumen por responsable, En varios modulos, Cambios aplicados
+(auditoria de que se toco y por que) y Sin modulo vigente.
 
 OJO al leer los resumenes: la suma de "Resumen por modulo" es mayor que la
 de "Resumen por responsable" porque hay colaboradores que atienden dos
@@ -26,6 +29,7 @@ modulos y ahi cuentan una vez por cada uno. La primera suma ASIGNACIONES,
 la segunda PERSONAS. Para pedir telefonos vale la segunda. Ambas hojas
 llevan su total al pie y la hoja "En varios modulos" lista quienes son.
 """
+import datetime
 import os
 import re
 import sys
@@ -61,19 +65,23 @@ GRIS = PatternFill(start_color="FFEFEFEF", end_color="FFEFEFEF", fill_type="soli
 ETIQUETAS_EXTRA = 4
 PASADAS = 2
 
-# Niveles de prioridad para rotular, del cruce con el listado de equipos.
+# Niveles de prioridad para rotular, del cruce con el informe de equipos.
 #
-# Ojo con el matiz: el archivo de canicula es una foto de un instante. Filtrar
-# por "Operando" a secas deja fuera a los que estan parados por lluvia, que
-# siguen estando en servicio esta temporada. Por eso el nivel 2 existe: la
-# senal util no es "esta corriendo ahora" sino "aparece en el listado".
+# El INFORME_EQUIPO_RIEGO no es una foto: trae una fila por motor y por dia. Eso
+# cambia la senal util. Con una sola foto habia que dar por activo a todo el que
+# apareciera, porque "parado por lluvia hoy" no distingue de "parado desde hace
+# un mes". Con el historico se mide lo unico que importa para repartir etiquetas:
+# cuando fue la ultima vez que ese motor rego de verdad.
+DIAS_RECIENTE = 7
+
 PRIORIDADES = {
-    1: "1 - Operando ahora",
-    2: "2 - Activo, parado por lluvia",
-    3: "3 - Parqueado, otra causa",
-    4: "4 - Sin dato en el listado de equipos",
+    1: "1 - Operando en la ultima foto",
+    2: "2 - Rego en los ultimos 7 dias",
+    3: "3 - Rego antes, dentro de la ventana",
+    4: "4 - En el informe, nunca rego",
+    5: "5 - Sin dato en el informe",
 }
-RELLENO_PRIORIDAD = {1: VERDE, 2: AMARILLO, 3: AMARILLO, 4: GRIS}
+RELLENO_PRIORIDAD = {1: VERDE, 2: VERDE, 3: AMARILLO, 4: GRIS, 5: GRIS}
 
 
 def norm_motor(valor):
@@ -89,42 +97,77 @@ def norm_motor(valor):
     return (int(m.group(1)), int(m.group(2))) if m else None
 
 
+def a_fecha(valor):
+    """La columna Fecha llega como datetime; de un archivo sin fecha, como None."""
+    return valor.date() if isinstance(valor, datetime.datetime) else valor
+
+
 def leer_equipos(ruta):
-    """Indexa el listado de canicula por motor. Devuelve {} si no esta el archivo."""
+    """
+    Resume el informe de equipos por motor: dias que rego, ultimo dia que rego y
+    estado del ultimo dia en que aparece.
+
+    Devuelve ({}, None) si no esta el archivo.
+
+    El informe trae una fila por motor y por dia, en la hoja BD. Una foto suelta
+    (el viejo archivo de canicula) entra por el mismo camino y sale como un
+    historico de un solo dia, asi que el resto del script no distingue cual de
+    los dos le tocó.
+    """
     if not ruta or not os.path.exists(ruta):
-        return {}
+        return {}, None
 
-    ws = openpyxl.load_workbook(ruta, data_only=True).worksheets[0]
-    filas = list(ws.iter_rows(values_only=True))
-    cab = {str(c).strip(): i for i, c in enumerate(filas[0]) if c}
-
-    faltan = [c for c in ("ID", "Estado", "Detalle de Estado") if c not in cab]
-    if faltan:
-        print(f"AVISO: {ruta} no tiene las columnas {faltan}; se omite el cruce.",
-              file=sys.stderr)
-        return {}
-
-    equipos = {}
-    for fila in filas[1:]:
-        clave = norm_motor(fila[cab["ID"]])
-        if clave is None:
+    wb = openpyxl.load_workbook(ruta, read_only=True, data_only=True)
+    for ws in wb.worksheets:
+        filas = ws.iter_rows(values_only=True)
+        cab = {str(c).strip(): i for i, c in enumerate(next(filas, ()) or ()) if c}
+        if not {"ID", "Estado", "Detalle de Estado"} <= set(cab):
             continue
-        equipos[clave] = {
-            "estado": str(fila[cab["Estado"]] or "").strip(),
-            "detalle": str(fila[cab["Detalle de Estado"]] or "").strip(),
-        }
-    return equipos
+
+        # Sin columna Fecha todas las filas caen en el mismo dia y el historico
+        # queda de longitud 1: la clasificacion sigue funcionando.
+        i_fecha = cab.get("Fecha")
+        equipos, dias = {}, set()
+        for fila in filas:
+            clave = norm_motor(fila[cab["ID"]])
+            if clave is None:
+                continue
+            dia = a_fecha(fila[i_fecha]) if i_fecha is not None else datetime.date.min
+            if dia is None:
+                continue
+            dias.add(dia)
+
+            eq = equipos.setdefault(clave, {"dias_rego": set(), "dias_informe": set()})
+            eq["dias_informe"].add(dia)
+            estado = str(fila[cab["Estado"]] or "").strip()
+            if estado.lower() == "operando":
+                eq["dias_rego"].add(dia)
+            # El estado que se muestra es el del ultimo dia en que aparece, no
+            # el de una fila cualquiera.
+            if dia >= eq.get("ultima_fecha", datetime.date.min):
+                eq["ultima_fecha"] = dia
+                eq["estado"] = estado
+                eq["detalle"] = str(fila[cab["Detalle de Estado"]] or "").strip()
+
+        if not dias:
+            break
+        meta = {"desde": min(dias), "hasta": max(dias), "dias": len(dias)}
+        return equipos, meta
+
+    print(f"AVISO: en {ruta} no hay ninguna hoja con las columnas ID, Estado y "
+          "Detalle de Estado; se omite el cruce.", file=sys.stderr)
+    return {}, None
 
 
-def clasificar(equipo):
-    """Nivel de prioridad a partir del estado del motor que alimenta el modulo."""
-    if equipo is None:
-        return 4
-    if equipo["estado"].lower() == "operando":
+def clasificar(equipo, meta):
+    """Nivel de prioridad a partir del historial del motor que alimenta el modulo."""
+    if equipo is None or meta is None:
+        return 5
+    if equipo["estado"].lower() == "operando" and equipo["ultima_fecha"] == meta["hasta"]:
         return 1
-    if equipo["detalle"].lower() == "lluvia":
-        return 2
-    return 3
+    if not equipo["dias_rego"]:
+        return 4
+    return 2 if (meta["hasta"] - max(equipo["dias_rego"])).days <= DIAS_RECIENTE else 3
 
 
 def limpiar_espacios(texto):
@@ -143,13 +186,14 @@ def limpiar_responsable(texto):
 def main():
     in_path = sys.argv[1] if len(sys.argv) > 1 else "Empleados_Modulos_Riego.xlsx"
     out_path = sys.argv[2] if len(sys.argv) > 2 else in_path.replace(".xlsx", "_LIMPIO.xlsx")
-    equipos_path = sys.argv[3] if len(sys.argv) > 3 else "Equipos operando canicula (1).xlsx"
+    equipos_path = sys.argv[3] if len(sys.argv) > 3 else "INFORME_EQUIPO_RIEGO.xlsx"
 
-    equipos = leer_equipos(equipos_path)
+    equipos, meta = leer_equipos(equipos_path)
     if equipos:
-        print(f"Listado de equipos cruzado: {len(equipos)} motores desde {equipos_path}")
+        print(f"Informe de equipos cruzado: {len(equipos)} motores desde {equipos_path}")
+        print(f"  ventana: {meta['desde']} a {meta['hasta']} ({meta['dias']} dias con datos)")
     else:
-        print("Sin cruce de equipos: todos los modulos quedaran en prioridad 4.")
+        print("Sin cruce de equipos: todos los modulos quedaran en prioridad 5.")
 
     wb_in = openpyxl.load_workbook(in_path)
     ws_in = wb_in["Detalle"]
@@ -237,7 +281,7 @@ def main():
     for fila in datos:
         nota = INCOMPLETOS.get(fila[i_codigo], "")
         equipo = equipos.get(norm_motor(fila[i_motor]) or norm_motor(fila[i_motor2]))
-        nivel = clasificar(equipo)
+        nivel = clasificar(equipo, meta)
         ws.append(fila + [equipo["estado"] if equipo else "(no aparece)",
                           PRIORIDADES[nivel], nota])
         if nota:
@@ -339,7 +383,7 @@ def main():
         estado_modulo[modulo] = {
             "motor": fila[i_motor],
             "equipo": equipo,
-            "prioridad": clasificar(equipo),
+            "prioridad": clasificar(equipo, meta),
             "ramales": fila[i_ramales],
             "finca": fila[i_finca],
             "responsable": fila[i_resp],
@@ -348,44 +392,69 @@ def main():
 
     ws_pr = wb.create_sheet("Prioridad rotulado", 1)
     ws_pr.append(["PRIORIDAD", "CODIGO_MODULO", "FINCA", "RESPONSABLE", "REGION",
-                  "ID_MOTOR", "ESTADO_EQUIPO", "DETALLE_ESTADO", "RAMALES",
-                  "ETIQUETAS_POR_PASADA", "ETIQUETAS_TOTAL_2_PASADAS", "COLABORADORES"])
+                  "ID_MOTOR", "ESTADO_EQUIPO", "DETALLE_ESTADO", "DIAS_QUE_REGO",
+                  "ULTIMO_DIA_QUE_REGO", "RAMALES", "ETIQUETAS_POR_PASADA",
+                  "ETIQUETAS_TOTAL_2_PASADAS", "ETIQUETAS_ACUMULADAS", "COLABORADORES"])
     for cell in ws_pr[1]:
         cell.font = Font(bold=True)
 
     conteo_prioridad = defaultdict(int)
+    etiquetas_prioridad = defaultdict(int)
+    acumulado = 0
+    # Dentro de un mismo nivel manda el que mas dias rego: son modulos que se
+    # parecen y hay que romper el empate por algo mejor que el orden alfabetico.
     orden = sorted(estado_modulo.items(),
-                   key=lambda kv: (kv[1]["prioridad"], str(kv[0])))
+                   key=lambda kv: (kv[1]["prioridad"],
+                                   -len(kv[1]["equipo"]["dias_rego"]) if kv[1]["equipo"] else 0,
+                                   str(kv[0])))
     for modulo, info in orden:
         equipo = info["equipo"]
         ramales = int(info["ramales"]) if info["ramales"] else 0
         por_pasada = ramales + ETIQUETAS_EXTRA if ramales else 0
+        total = por_pasada * PASADAS
+        acumulado += total
         personas = len({f[i_codigo] for f in datos
                         if f[i_modulo] == modulo and f[i_codigo] is not None})
         conteo_prioridad[info["prioridad"]] += 1
+        etiquetas_prioridad[info["prioridad"]] += total
+        rego = max(equipo["dias_rego"]) if equipo and equipo["dias_rego"] else None
         ws_pr.append([
             PRIORIDADES[info["prioridad"]], modulo, info["finca"], info["responsable"],
             info["region"], info["motor"],
             equipo["estado"] if equipo else "(no aparece)",
             equipo["detalle"] if equipo else "(no aparece)",
-            ramales or None, por_pasada or None,
-            (por_pasada * PASADAS) or None, personas,
+            len(equipo["dias_rego"]) if equipo else None,
+            rego.isoformat() if rego else "(nunca)" if equipo else "(no aparece)",
+            ramales or None, por_pasada or None, total or None, acumulado, personas,
         ])
         relleno = RELLENO_PRIORIDAD[info["prioridad"]]
         for cell in ws_pr[ws_pr.max_row]:
             cell.fill = relleno
 
+    # El acumulado es lo que se lee para mandar a hacer etiquetas: cuantas hay
+    # que tener listas para cubrir hasta ese nivel y no mas.
     fila_total = ws_pr.max_row + 2
     ws_pr.cell(fila_total, 1, "RESUMEN").font = Font(bold=True)
+    for col, titulo in ((2, "MODULOS"), (3, "ETIQUETAS"), (4, "ETIQUETAS ACUMULADAS")):
+        ws_pr.cell(fila_total, col, titulo).font = Font(bold=True)
+    corrido = 0
     for i, nivel in enumerate(sorted(PRIORIDADES), start=1):
+        corrido += etiquetas_prioridad[nivel]
         ws_pr.cell(fila_total + i, 1, PRIORIDADES[nivel]).font = Font(bold=True)
         ws_pr.cell(fila_total + i, 2, conteo_prioridad[nivel]).font = Font(bold=True)
+        ws_pr.cell(fila_total + i, 3, etiquetas_prioridad[nivel]).font = Font(bold=True)
+        ws_pr.cell(fila_total + i, 4, corrido).font = Font(bold=True)
         ws_pr.cell(fila_total + i, 1).fill = RELLENO_PRIORIDAD[nivel]
-    ws_pr.cell(fila_total + len(PRIORIDADES) + 1, 1,
-               "El listado de equipos es una foto de un instante: la mayoria esta "
-               "parada por lluvia, no fuera de servicio. Para priorizar, los niveles "
-               "1 y 2 juntos son los modulos activos esta temporada.")
-    for i, w in enumerate([32, 20, 26, 34, 20, 16, 16, 22, 12, 22, 26, 16], start=1):
+    pie = fila_total + len(PRIORIDADES) + 1
+    if meta:
+        ws_pr.cell(pie, 1, f"Ventana del informe: {meta['desde']} a {meta['hasta']} "
+                           f"({meta['dias']} dias con datos).")
+    ws_pr.cell(pie + 1, 1,
+               "Los niveles 1 y 2 son los modulos que regaron esta semana: por ahi se "
+               "empieza. La columna ETIQUETAS_ACUMULADAS dice cuantas etiquetas hay que "
+               "tener grabadas para llegar hasta esa fila, contando las dos pasadas.")
+    for i, w in enumerate([32, 20, 26, 34, 20, 16, 16, 22, 15, 20, 12, 22, 26, 22, 16],
+                          start=1):
         ws_pr.column_dimensions[get_column_letter(i)].width = w
     ws_pr.freeze_panes = "A2"
 
