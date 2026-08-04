@@ -173,7 +173,14 @@ export function proyectar(eventos) {
     if (corte && e.fecha <= corte) mejor.delete(clave);
   }
 
-  return { etiquetas: [...mejor.values()], duplicados: [...duplicados] };
+  // Un duplicado sobre una clave que un reinicio borro ya no describe nada que
+  // este registrado, asi que no se arrastra. La proyeccion cuenta lo que hay
+  // ahora, y ademas el cliente no podria reproducir una marca sobre una
+  // etiqueta que ya no tiene guardada.
+  return {
+    etiquetas: [...mejor.values()],
+    duplicados: [...duplicados].filter((c) => mejor.has(c)),
+  };
 }
 
 /** Filas de la base -> forma que usa proyectar() y devuelve la API. */

@@ -97,10 +97,32 @@ function clavesServidor(eventos) {
     .sort();
 }
 
-/** El contrato entero, en una linea: cliente y servidor deciden lo mismo. */
+/** Las claves que el cliente marco como grabadas por dos telefonos distintos. */
+function duplicadosCliente(progreso) {
+  const fuera = [];
+  Object.keys(progreso).forEach((codigo) => {
+    const pasadas = progreso[codigo].pasadas || {};
+    Object.keys(pasadas).forEach((p) => {
+      Object.keys(pasadas[p]).forEach((n) => {
+        if (pasadas[p][n].duplicado) fuera.push(`${codigo}|${p}|${n}`);
+      });
+    });
+  });
+  return fuera.sort();
+}
+
+/**
+ * El contrato entero: cliente y servidor deciden lo mismo, tanto sobre que
+ * etiqueta vale como sobre cuales estan duplicadas. Comparar solo lo primero
+ * dejaba pasar que el cliente no detectara el duplicado cuando el evento que
+ * llegaba era el perdedor.
+ */
 function coinciden(nombre, eventos) {
   prueba(nombre, () => {
-    assert.deepEqual(clavesCliente(fusionarDesdeCero(eventos)), clavesServidor(eventos));
+    const progreso = fusionarDesdeCero(eventos);
+    assert.deepEqual(clavesCliente(progreso), clavesServidor(eventos), 'etiquetas');
+    assert.deepEqual(duplicadosCliente(progreso), proyectar(eventos).duplicados.sort(),
+      'duplicados');
   });
 }
 
@@ -140,6 +162,47 @@ coinciden('un evento anterior al reset que llega DESPUES', [
   reset('r', { fecha: '2026-08-02T10:00:00.000Z' }),
   ev('a', { fecha: '2026-08-01T10:00:00.000Z' }),
 ]);
+
+console.log('\n== dos telefonos en la misma etiqueta ==');
+// Significa que existen DOS etiquetas fisicas con el mismo texto. Esconderlo
+// dejaria una circulando sin registro.
+coinciden('llega primero el que pierde', [
+  ev('a', { fecha: '2026-08-01T12:00:00.000Z', dispositivo: 'd-1' }),
+  ev('b', { fecha: '2026-08-01T10:00:00.000Z', dispositivo: 'd-2' }),
+]);
+coinciden('llega primero el que gana', [
+  ev('b', { fecha: '2026-08-01T10:00:00.000Z', dispositivo: 'd-2' }),
+  ev('a', { fecha: '2026-08-01T12:00:00.000Z', dispositivo: 'd-1' }),
+]);
+coinciden('el mismo telefono regrabando NO es duplicado', [
+  ev('a', { fecha: '2026-08-01T10:00:00.000Z' }),
+  ev('b', { fecha: '2026-08-02T10:00:00.000Z' }),
+]);
+coinciden('el mismo evento dos veces NO es duplicado', [ev('a'), ev('a')]);
+coinciden('un reinicio se lleva la marca con la etiqueta', [
+  ev('a', { fecha: '2026-08-01T10:00:00.000Z', dispositivo: 'd-1' }),
+  ev('b', { fecha: '2026-08-01T11:00:00.000Z', dispositivo: 'd-2' }),
+  reset('r', { fecha: '2026-08-02T10:00:00.000Z' }),
+]);
+
+prueba('la marca sobrevive a que llegue una version aun mas nueva', () => {
+  rot.progreso = {};
+  fusionarEventos([ev('a', { fecha: '2026-08-01T10:00:00.000Z', dispositivo: 'd-1' })]);
+  fusionarEventos([ev('b', { fecha: '2026-08-01T11:00:00.000Z', dispositivo: 'd-2' })]);
+  fusionarEventos([ev('c', { fecha: '2026-08-01T12:00:00.000Z', dispositivo: 'd-2' })]);
+  assert.equal(rot.progreso['OOC-MNA-001'].pasadas[1][1].duplicado, true,
+    'saber que hay dos etiquetas fisicas iguales no deja de ser cierto despues');
+});
+prueba('marcar duplicado en lotes separados da lo mismo que en uno', () => {
+  const a = ev('a', { fecha: '2026-08-01T10:00:00.000Z', dispositivo: 'd-1' });
+  const b = ev('b', { fecha: '2026-08-01T11:00:00.000Z', dispositivo: 'd-2' });
+  const juntos = duplicadosCliente(fusionarDesdeCero([a, b]));
+  rot.progreso = {};
+  fusionarEventos([a]);
+  fusionarEventos([b]);
+  assert.deepEqual(duplicadosCliente(rot.progreso), juntos,
+    'bajar en dos tandas es lo normal cuando dos telefonos sincronizan');
+});
 
 console.log('\n== convergencia ==');
 prueba('dos telefonos sincronizando en distinto orden acaban igual', () => {

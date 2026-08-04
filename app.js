@@ -1158,6 +1158,24 @@ document.addEventListener('DOMContentLoaded', () => {
     return null;
   }
 
+  /**
+   * Etiquetas del módulo que dos teléfonos grabaron por separado.
+   *
+   * No es un detalle de sincronización: significa que hay dos etiquetas físicas
+   * pegadas en el campo diciendo lo mismo. Una de las dos sobra y hay que ir a
+   * buscarla.
+   */
+  function duplicadosDe(codigo) {
+    const fuera = [];
+    for (let p = 1; p <= PASADAS; p++) {
+      const etiquetas = etiquetasDe(codigo, p);
+      Object.keys(etiquetas)
+        .filter((n) => etiquetas[n].duplicado)
+        .forEach((n) => fuera.push({ pasada: p, numero: Number(n) }));
+    }
+    return fuera.sort((a, b) => a.pasada - b.pasada || a.numero - b.numero);
+  }
+
   /** ¿Este UID ya se usó en el módulo? Devuelve dónde, o null. */
   function uidYaUsado(codigo, uid) {
     if (!uid) return null;
@@ -1831,13 +1849,23 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!registro.pasadas[e.pasada]) registro.pasadas[e.pasada] = {};
       const actual = registro.pasadas[e.pasada][e.numero];
 
-      if (actual && !(e.fecha > actual.fecha || (e.fecha === actual.fecha && e.id > actual.id))) {
-        return;   // lo nuestro gana o es exactamente lo mismo
-      }
-      if (actual && actual.dispositivo !== e.dispositivo) {
+      // Que dos teléfonos hayan escrito la misma clave significa que existen
+      // DOS etiquetas físicas con el mismo texto. Se marca ANTES de decidir
+      // quién gana, y da igual quién gane: si solo se mirara al ganador, el
+      // caso en que llega la versión perdedora quedaría sin detectar y una de
+      // las dos etiquetas seguiría circulando sin que nadie lo supiera.
+      const duplicado = Boolean(actual) && actual.id !== e.id
+        && actual.dispositivo !== e.dispositivo;
+      if (duplicado && !actual.duplicado) {
+        actual.duplicado = true;
+        cambios++;
         console.warn(`[Sync] ${e.modulo} pasada ${e.pasada} nº ${e.numero}: `
           + `dos teléfonos la grabaron (${window.NfcSync.alias(actual.dispositivo)} y `
           + `${window.NfcSync.alias(e.dispositivo)}). Hay dos etiquetas físicas iguales.`);
+      }
+
+      if (actual && !(e.fecha > actual.fecha || (e.fecha === actual.fecha && e.id > actual.id))) {
+        return;   // lo nuestro gana o es exactamente lo mismo
       }
 
       registro.pasadas[e.pasada][e.numero] = {
@@ -1845,7 +1873,10 @@ document.addEventListener('DOMContentLoaded', () => {
         uid: e.uid || '',
         fecha: e.fecha,
         dispositivo: e.dispositivo,
-        id: e.id
+        id: e.id,
+        // La marca sobrevive a que cambie el ganador: una vez que se sabe que
+        // hay dos etiquetas iguales, eso ya no deja de ser cierto.
+        duplicado: duplicado || Boolean(actual && actual.duplicado) || undefined
       };
       cambios++;
     });
@@ -1967,12 +1998,23 @@ document.addEventListener('DOMContentLoaded', () => {
       };
       const ultima = ultimaDe(2) || ultimaDe(1);
 
+      // Los duplicados van en la misma fila y en rojo, no en una pantalla
+      // aparte: son etiquetas físicas repetidas que alguien tiene que ir a
+      // retirar, y en un listado secundario nadie las mira.
+      const repetidas = duplicadosDe(codigo);
+      const avisoDup = repetidas.length
+        ? `<div class="rot-dup" title="Dos teléfonos grabaron estas etiquetas por separado">`
+          + `⚠ ${repetidas.length} repetida(s): `
+          + escaparHtml(repetidas.map((d) => `P${d.pasada}·${d.numero}`).join(', '))
+          + '</div>'
+        : '';
+
       return `
         <tr${completo ? ' class="rot-fila-completa"' : ''}>
           <td><code>${escaparHtml(codigo)}</code></td>
           <td>${escaparHtml(registro.finca || '')}</td>
           <td>${escaparHtml(registro.responsable || '')}</td>
-          <td>${insignia(1, p1)} ${insignia(2, p2)}</td>
+          <td>${insignia(1, p1)} ${insignia(2, p2)}${avisoDup}</td>
           <td>${ultima ? `<code>${escaparHtml(ultima.texto)}</code>` : ''}</td>
         </tr>
       `;
@@ -2007,7 +2049,8 @@ document.addEventListener('DOMContentLoaded', () => {
         etiqueta.texto,
         etiqueta.uid,
         etiqueta.fecha,
-        etiqueta.dispositivo || ''
+        etiqueta.dispositivo || '',
+        etiqueta.duplicado ? 'SI' : ''
       ]);
     });
 
@@ -2018,12 +2061,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const csv = construirCsv(
       ['Codigo_modulo', 'Region', 'Responsable', 'Finca', 'Pasada', 'Numero_etiqueta',
-        'Total_por_pasada', 'Texto_grabado', 'UID', 'Fecha_hora', 'Dispositivo'],
+        'Total_por_pasada', 'Texto_grabado', 'UID', 'Fecha_hora', 'Dispositivo', 'Duplicado'],
       filas
     );
 
+    const repetidas = filas.filter((f) => f[f.length - 1] === 'SI').length;
+    const aviso = repetidas ? ` ${repetidas} repetida(s).` : '';
     exportar(`rotulado_modulos_${new Date().toISOString().slice(0, 10)}.csv`, csv,
-      'text/csv;charset=utf-8', `CSV exportado: ${filas.length} etiquetas.`);
+      'text/csv;charset=utf-8', `CSV exportado: ${filas.length} etiquetas.${aviso}`);
   }
 
   /**

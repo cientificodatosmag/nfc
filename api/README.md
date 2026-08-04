@@ -122,6 +122,55 @@ curl -i -X OPTIONS .../api/eventos \
   -H "Access-Control-Request-Headers: x-app-key"
 ```
 
+### `POST /api/reset` — llave de admin
+
+Reinicia el avance de un módulo para **todos** los teléfonos. No borra ninguna
+fila: añade una barrera con la marca de tiempo **del servidor**.
+
+Que la fecha la ponga el servidor es la parte que importa. Con la del cliente,
+un teléfono con el reloj adelantado podría borrar trabajo que todavía no se ha
+hecho, y con uno atrasado el reinicio no surtiría efecto.
+
+```bash
+curl -X POST https://<proyecto>.vercel.app/api/reset \
+  -H "x-admin-key: $NFC_ADMIN_KEY" -H "content-type: application/json" \
+  -d '{"modulo":"OOC-MNA-001","pasada":null,
+       "confirmacion":"OOC-MNA-001","motivo":"se mojaron las etiquetas"}'
+```
+
+`confirmacion` tiene que repetir el código. Es fricción deliberada: el error que
+se quiere evitar no es teclear mal, es reiniciar el módulo equivocado.
+
+Responde cuántas etiquetas dejan de contar. **La app no puede llamar aquí**: su
+llave sale del APK con un `unzip`, y un reinicio manda a rotular de nuevo un
+módulo entero.
+
+### `GET /api/csv` — llave de admin
+
+```bash
+curl "https://<proyecto>.vercel.app/api/csv" -H "x-admin-key: $NFC_ADMIN_KEY" -o detalle.csv
+curl "https://<proyecto>.vercel.app/api/csv?vista=resumen" -H "x-admin-key: $NFC_ADMIN_KEY"
+curl "https://<proyecto>.vercel.app/api/csv?modulo=OOC-MNA-001" -H "x-admin-key: $NFC_ADMIN_KEY"
+```
+
+Existe aparte del botón de la app porque el teléfono exporta lo que *ese*
+teléfono tiene, que es correcto pero parcial si alguno lleva días sin
+sincronizar. Esto exporta lo que hay en la base.
+
+Lleva BOM y saltos CRLF para que Excel en Windows no destroce los acentos de los
+nombres de finca, y una columna `Duplicado`.
+
+## Desde una PC, sin curl
+
+`tools/administrar.py` envuelve todo lo anterior:
+
+```bash
+python tools/administrar.py estado
+python tools/administrar.py duplicados
+python tools/administrar.py csv --vista resumen
+python tools/administrar.py reiniciar OOC-MNA-001 --pasada 2
+```
+
 ## Cómo se limpian los datos de prueba
 
 No hay borrado, y es a propósito. Para hacer desaparecer un módulo de lo que ven
@@ -141,8 +190,13 @@ curl -X POST https://<proyecto>.vercel.app/api/eventos \
 Así se limpiaron los eventos de `ZZZ-TST-999` que dejaron las pruebas: el log
 conserva sus filas y la proyección queda vacía.
 
-## Lo que todavía no existe
+## Etiquetas repetidas
 
-`/api/reset` (el mismo mecanismo pero con marca de tiempo puesta por el
-servidor y detrás de la llave de admin) y `/api/csv` (exportación para la
-oficina) son el Paso 5.
+Cuando dos teléfonos graban la misma clave `(modulo, pasada, numero)`, eso
+significa que existen **dos etiquetas físicas con el mismo texto** pegadas en el
+campo. No se esconde: el last-write-wins decide cuál mostrar, pero la clave sale
+marcada en `duplicados`, en la columna `Duplicado` del CSV y en rojo en la tabla
+de avance de la app.
+
+Un duplicado sobre una clave que un reinicio borró deja de reportarse: la
+proyección cuenta lo que hay ahora.

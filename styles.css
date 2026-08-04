@@ -1014,6 +1014,15 @@ body {
 
 .text-danger { color: var(--accent-rose); }
 
+/* Etiquetas que dos telefonos grabaron por separado: hay dos rotulos fisicos
+   iguales pegados en el campo y alguien tiene que ir a retirar uno. */
+.rot-dup {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-rose);
+}
+
 /* ==========================================================================
    Rotulado por módulo
    ========================================================================== */

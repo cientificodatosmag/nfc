@@ -8,6 +8,9 @@
  */
 import assert from 'node:assert/strict';
 import { validarEvento, proyectar } from '../api/_db.mjs';
+import {
+  aCsv, CABECERA_DETALLE, CABECERA_RESUMEN, filasDetalle, filasResumen,
+} from '../api/_csv.mjs';
 
 let ok = 0;
 let mal = 0;
@@ -172,6 +175,91 @@ prueba('el reset tambien es conmutativo', () => {
   const r = reset('r');
   const c = ev('c', { fecha: '2026-08-03T10:00:00.000Z' });
   assert.deepEqual(proyectar([a, r, c]), proyectar([c, r, a]));
+});
+
+console.log('\n== duplicados ==');
+prueba('un duplicado que un reset borro NO se arrastra', () => {
+  const { duplicados } = proyectar([
+    ev('a', { dispositivo: 'd-1' }),
+    ev('b', { dispositivo: 'd-2' }),
+    reset('r', { fecha: '2026-08-05T10:00:00.000Z' }),
+  ]);
+  assert.deepEqual(duplicados, [],
+    'la proyeccion cuenta lo que hay ahora, no lo que hubo');
+});
+prueba('un duplicado vivo si se reporta', () => {
+  const { duplicados } = proyectar([ev('a', { dispositivo: 'd-1' }), ev('b', { dispositivo: 'd-2' })]);
+  assert.deepEqual(duplicados, ['M-AAA-001|1|1']);
+});
+
+console.log('\n== csv ==');
+const etq = (mods) => ({
+  modulo: 'OOC-MNA-001', pasada: 1, numero: 1, texto: 'OOC-MNA-001-001',
+  uid: '04:A2', fecha: '2026-08-04T10:00:00.000Z', dispositivo: 'd-1',
+  totalPasada: 8, region: 'OCCIDENTE', responsable: 'Fulano', finca: 'Álamos', ...mods,
+});
+
+prueba('lleva BOM: sin el, Excel en Windows destroza los acentos', () => {
+  const csv = aCsv(['a'], [['Álamos']]);
+  assert.equal(csv.charCodeAt(0), 0xFEFF);
+});
+prueba('las lineas terminan en CRLF', () => {
+  assert.ok(aCsv(['a'], [['x']]).includes('"a"\r\n"x"'));
+});
+prueba('una comilla dentro del texto no parte la fila', () => {
+  const csv = aCsv(['a'], [['Finca "La Buena"']]);
+  assert.ok(csv.includes('"Finca ""La Buena"""'));
+  assert.equal(csv.trimEnd().split('\r\n').length, 2, 'sigue siendo una sola fila');
+});
+prueba('una coma dentro del texto tampoco', () => {
+  const csv = aCsv(['a', 'b'], [['Uno, dos', 'x']]);
+  assert.equal(csv.trimEnd().split('\r\n').length, 2);
+});
+prueba('un salto de linea dentro de un campo queda entrecomillado', () => {
+  const csv = aCsv(['a'], [['dos\nlineas']]);
+  assert.ok(csv.includes('"dos\nlineas"'));
+});
+prueba('el detalle sale ordenado por modulo, pasada y numero', () => {
+  const filas = filasDetalle([
+    etq({ numero: 2 }), etq({ pasada: 2, numero: 1 }), etq({ numero: 1 }),
+    etq({ modulo: 'CEN-MNA-038', numero: 5 }),
+  ], []);
+  assert.deepEqual(filas.map((f) => `${f[0]}|${f[4]}|${f[5]}`), [
+    'CEN-MNA-038|1|5', 'OOC-MNA-001|1|1', 'OOC-MNA-001|1|2', 'OOC-MNA-001|2|1',
+  ]);
+});
+prueba('la columna Duplicado marca solo las repetidas', () => {
+  const filas = filasDetalle([etq({ numero: 1 }), etq({ numero: 2 })],
+    ['OOC-MNA-001|1|2']);
+  const i = CABECERA_DETALLE.indexOf('Duplicado');
+  assert.equal(filas[0][i], '');
+  assert.equal(filas[1][i], 'SI');
+});
+prueba('cada fila tiene tantas celdas como la cabecera', () => {
+  const filas = filasDetalle([etq({})], []);
+  assert.equal(filas[0].length, CABECERA_DETALLE.length);
+});
+prueba('el resumen cuenta las dos pasadas por separado', () => {
+  const filas = filasResumen([
+    etq({ pasada: 1, numero: 1 }), etq({ pasada: 1, numero: 2 }), etq({ pasada: 2, numero: 1 }),
+  ], []);
+  assert.equal(filas.length, 1);
+  assert.equal(filas[0][CABECERA_RESUMEN.indexOf('Pasada_1')], 2);
+  assert.equal(filas[0][CABECERA_RESUMEN.indexOf('Pasada_2')], 1);
+  assert.equal(filas[0][CABECERA_RESUMEN.indexOf('Total_grabadas')], 3);
+});
+prueba('el resumen cuenta cuantos telefonos tocaron el modulo', () => {
+  const filas = filasResumen([
+    etq({ numero: 1, dispositivo: 'd-1' }), etq({ numero: 2, dispositivo: 'd-2' }),
+  ], []);
+  assert.equal(filas[0][CABECERA_RESUMEN.indexOf('Telefonos')], 2);
+});
+prueba('el resumen se queda con la fecha mas reciente', () => {
+  const filas = filasResumen([
+    etq({ numero: 1, fecha: '2026-08-01T10:00:00.000Z' }),
+    etq({ numero: 2, fecha: '2026-08-04T10:00:00.000Z' }),
+  ], []);
+  assert.equal(filas[0][CABECERA_RESUMEN.indexOf('Ultima_fecha')], '2026-08-04T10:00:00.000Z');
 });
 
 console.log(`\n${ok} pruebas pasadas, ${mal} fallidas\n`);
