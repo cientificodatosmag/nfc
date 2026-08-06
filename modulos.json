@@ -1,11 +1,23 @@
 {
-  "generado": "2026-08-05",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-05T16:44Z)",
+  "generado": "2026-08-06",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-06T13:08Z)",
   "regla": "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0",
   "avisos": [
     {
       "tipo": "sinCodigo",
-      "registros": 4
+      "registros": 11
+    },
+    {
+      "codigo": "CES-MNA-064",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "CES-MNA-066",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
     },
     {
       "codigo": "OOC-MNA-048",
@@ -142,6 +154,248 @@
       "ramales": 9,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-001",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "Santa Maria",
+      "codigoFinca": "27",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-002",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "Santa Maria",
+      "codigoFinca": "27",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-003",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "San Antonio",
+      "codigoFinca": "28",
+      "ramales": 9,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-004",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "San Fernando",
+      "codigoFinca": "30",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-005",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "San Fernando",
+      "codigoFinca": "30",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-006",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "San Fernando",
+      "codigoFinca": "30",
+      "ramales": 17,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-007",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "San Fernando",
+      "codigoFinca": "30",
+      "ramales": 19,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-008",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "San Antonio La Paz",
+      "codigoFinca": "228",
+      "ramales": 8,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-009",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "San Antonio La Paz",
+      "codigoFinca": "228",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-010",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "San Antonio La Paz",
+      "codigoFinca": "228",
+      "ramales": 6,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-011",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "La Paz",
+      "codigoFinca": "246",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-012",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "La Paz",
+      "codigoFinca": "246",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-013",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "La Paz",
+      "codigoFinca": "246",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-014",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "La Paz",
+      "codigoFinca": "246",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-015",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "Santa Elena Tikal",
+      "codigoFinca": "290",
+      "ramales": 19,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-016",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "Santa Elena Tikal",
+      "codigoFinca": "290",
+      "ramales": 20,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-017",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "Los Almendros",
+      "codigoFinca": "422",
+      "ramales": 4,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-018",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "Remanzo II",
+      "codigoFinca": "555",
+      "ramales": 8,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-019",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "Oro Blanco I",
+      "codigoFinca": "816",
+      "ramales": 9,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-020",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "Oro Blanco I",
+      "codigoFinca": "816",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-022",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "Oro Blanco I",
+      "codigoFinca": "816",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-023",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "Oro Blanco I",
+      "codigoFinca": "816",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
       "duplicado": false
     },
     {
@@ -398,12 +652,111 @@
       "duplicado": false
     },
     {
+      "codigo": "CES-MNA-048",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Manglares/Pijuy",
+      "codigoFinca": "48",
+      "ramales": 5,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "CES-MNA-049",
       "region": "CENTRAL SUR",
       "responsable": "Otto Rene Portillo Sandoval",
       "finca": "Manglares/Pijuy",
       "codigoFinca": "48",
       "ramales": 31,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-050",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Nvo. San Carlos",
+      "codigoFinca": "67",
+      "ramales": 5,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-051",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Nvo. San Carlos",
+      "codigoFinca": "67",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-052",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Nvo. San Carlos",
+      "codigoFinca": "67",
+      "ramales": 20,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-053",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Nvo. San Carlos",
+      "codigoFinca": "67",
+      "ramales": 15,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-054",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Las Cuevas",
+      "codigoFinca": "99",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-055",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Las Cuevas",
+      "codigoFinca": "99",
+      "ramales": 16,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-056",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Las Delicias G",
+      "codigoFinca": "127",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-057",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Las Delicias G",
+      "codigoFinca": "127",
+      "ramales": 13,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -442,12 +795,34 @@
       "duplicado": false
     },
     {
+      "codigo": "CES-MNA-063",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Santa Cecilia",
+      "codigoFinca": "230",
+      "ramales": 6,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "CES-MNA-064",
       "region": "CENTRAL SUR",
       "responsable": "Otto Rene Portillo Sandoval",
       "finca": "El Congo",
       "codigoFinca": "368",
       "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": true
+    },
+    {
+      "codigo": "CES-MNA-065",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Agropecuaria El Congo",
+      "codigoFinca": "374",
+      "ramales": 6,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -459,6 +834,61 @@
       "finca": "Agropecuaria El Congo",
       "codigoFinca": "374",
       "ramales": 9,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": true
+    },
+    {
+      "codigo": "CES-MNA-067",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Agropecuaria El Congo",
+      "codigoFinca": "374",
+      "ramales": 6,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-068",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Monterrey",
+      "codigoFinca": "375",
+      "ramales": 5,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-069",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Monterrey",
+      "codigoFinca": "375",
+      "ramales": 6,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-070",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Holanda",
+      "codigoFinca": "380",
+      "ramales": 24,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-071",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Holanda",
+      "codigoFinca": "380",
+      "ramales": 11,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -503,6 +933,17 @@
       "finca": "Ojo De Agua Cuschin II",
       "codigoFinca": "476",
       "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-078",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Agropecuaria El Congo II",
+      "codigoFinca": "518",
+      "ramales": 6,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
