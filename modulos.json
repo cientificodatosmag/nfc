@@ -1,11 +1,11 @@
 {
-  "generado": "2026-08-06",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-06T13:08Z)",
+  "generado": "2026-08-07",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-07T14:52Z)",
   "regla": "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0",
   "avisos": [
     {
       "tipo": "sinCodigo",
-      "registros": 11
+      "registros": 8
     },
     {
       "codigo": "CES-MNA-064",
@@ -29,19 +29,18 @@
       "mismoNumeroDeRamales": true
     },
     {
-      "codigo": "ORC-MNA-044",
-      "registros": 2,
-      "columnasDistintas": [
-        "AREA_MODULO",
-        "NO_HIDRANTES",
-        "TIPO_RIEGO"
-      ],
-      "mismoNumeroDeRamales": true
-    },
-    {
       "codigo": "ORO-MNA-005",
       "registros": 2,
       "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORO-MNA-007",
+      "registros": 2,
+      "columnasDistintas": [
+        "AREA_MODULO",
+        "FUENTE_AGUA"
+      ],
       "mismoNumeroDeRamales": true
     }
   ],
@@ -69,12 +68,56 @@
       "duplicado": false
     },
     {
+      "codigo": "CEN-MNA-029",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Cristina",
+      "codigoFinca": "355",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "CEN-MNA-032",
       "region": "CENTRAL NORTE",
       "responsable": "Gerson David Macario Osoy",
       "finca": "Buganvilia",
       "codigoFinca": "11",
       "ramales": 26,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-033",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "Asuncion",
+      "codigoFinca": "353",
+      "ramales": 15,
+      "tipoRiego": "Miniaspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-034",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "La Reynita",
+      "codigoFinca": "360",
+      "ramales": 15,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-036",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "La Quijada",
+      "codigoFinca": "42",
+      "ramales": 25,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -99,6 +142,94 @@
       "ramales": 15,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-039",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Polonia",
+      "codigoFinca": "377",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-040",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Luceros",
+      "codigoFinca": "372",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-041",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Luceros",
+      "codigoFinca": "372",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-042",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Luceros",
+      "codigoFinca": "372",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-043",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Polonia",
+      "codigoFinca": "377",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-044",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Luceros",
+      "codigoFinca": "372",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-045",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Luceros",
+      "codigoFinca": "372",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-046",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Luceros",
+      "codigoFinca": "372",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
       "duplicado": false
     },
     {
@@ -1845,7 +1976,7 @@
       "responsable": "Aldrin Picado",
       "finca": "Santa Gregoria",
       "codigoFinca": "484",
-      "ramales": 21,
+      "ramales": 24,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -1857,6 +1988,17 @@
       "finca": "La Llave",
       "codigoFinca": "482",
       "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-004",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "Punian",
+      "codigoFinca": "916",
+      "ramales": 10,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2035,6 +2177,17 @@
       "ramales": 7,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-022",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Cadiz",
+      "codigoFinca": "615",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
       "duplicado": false
     },
     {
@@ -2244,7 +2397,7 @@
       "ramales": 11,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
-      "duplicado": true
+      "duplicado": false
     },
     {
       "codigo": "ORC-MNA-045",
@@ -2324,6 +2477,17 @@
       "duplicado": false
     },
     {
+      "codigo": "ORO-MNA-003",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "Arizona",
+      "codigoFinca": "301",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "ORO-MNA-005",
       "region": "ORIENTE",
       "responsable": "Glenda Xiomara Mendez Ruano",
@@ -2346,6 +2510,17 @@
       "duplicado": false
     },
     {
+      "codigo": "ORO-MNA-007",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "Victorias II",
+      "codigoFinca": "699",
+      "ramales": 9,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
       "codigo": "ORO-MNA-008",
       "region": "ORIENTE",
       "responsable": "Glenda Xiomara Mendez Ruano",
@@ -2354,6 +2529,17 @@
       "ramales": 5,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-009",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "Victorias Davila",
+      "codigoFinca": "940",
+      "ramales": 4,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
       "duplicado": false
     },
     {
@@ -2423,6 +2609,17 @@
       "duplicado": false
     },
     {
+      "codigo": "ORO-MNA-019",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "Arizona",
+      "codigoFinca": "301",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "ORO-MNA-020",
       "region": "ORIENTE",
       "responsable": "Santos Felix Camajá Perez",
@@ -2467,6 +2664,17 @@
       "duplicado": false
     },
     {
+      "codigo": "ORO-MNA-025",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Trinidad",
+      "codigoFinca": "302",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
       "codigo": "ORO-MNA-026",
       "region": "ORIENTE",
       "responsable": "Santos Felix Camajá Perez",
@@ -2486,6 +2694,17 @@
       "ramales": 12,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-028",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Palma Juarez",
+      "codigoFinca": "591",
+      "ramales": 7,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
       "duplicado": false
     },
     {
