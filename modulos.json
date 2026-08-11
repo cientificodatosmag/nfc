@@ -1,6 +1,6 @@
 {
-  "generado": "2026-08-07",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-07T14:52Z)",
+  "generado": "2026-08-11",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-11T19:10Z)",
   "regla": "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0",
   "avisos": [
     {
@@ -46,12 +46,133 @@
   ],
   "modulos": [
     {
+      "codigo": "CEN-MDA-001",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Anaité",
+      "codigoFinca": "905",
+      "ramales": 4,
+      "tipoRiego": "Midi Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MDA-002",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Anaité",
+      "codigoFinca": "905",
+      "ramales": 11,
+      "tipoRiego": "Midi Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-001",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "Reynosa",
+      "codigoFinca": "15",
+      "ramales": 8,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-002",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "Reynosa",
+      "codigoFinca": "15",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-003",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "Velasquez",
+      "codigoFinca": "10",
+      "ramales": 16,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-004",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "Velasquez",
+      "codigoFinca": "10",
+      "ramales": 16,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-005",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "Reynosa",
+      "codigoFinca": "15",
+      "ramales": 9,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-006",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "Reynosa",
+      "codigoFinca": "15",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "CEN-MNA-008",
       "region": "CENTRAL NORTE",
       "responsable": "Eddy Leonardo Orellana Serrano",
       "finca": "Santa Monica",
       "codigoFinca": "13",
       "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-009",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Anaité",
+      "codigoFinca": "905",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-010",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Rita",
+      "codigoFinca": "12",
+      "ramales": 15,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-011",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Rita",
+      "codigoFinca": "12",
+      "ramales": 11,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -68,12 +189,177 @@
       "duplicado": false
     },
     {
+      "codigo": "CEN-MNA-014",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Cristina",
+      "codigoFinca": "355",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-015",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Cristina",
+      "codigoFinca": "355",
+      "ramales": 12,
+      "tipoRiego": "Miniaspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-016",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "San Patricio",
+      "codigoFinca": "351",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-017",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "San Patricio",
+      "codigoFinca": "351",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-018",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "San Patricio",
+      "codigoFinca": "351",
+      "ramales": 8,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-019",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Elisa",
+      "codigoFinca": "352",
+      "ramales": 8,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-020",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "San Patricio",
+      "codigoFinca": "351",
+      "ramales": 8,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-022",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "San Patricio",
+      "codigoFinca": "351",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-023",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Las Ilusiones",
+      "codigoFinca": "354",
+      "ramales": 15,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-024",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Rita",
+      "codigoFinca": "12",
+      "ramales": 15,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-025",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "San Carlos Arzu",
+      "codigoFinca": "83",
+      "ramales": 17,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-026",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Elisa",
+      "codigoFinca": "352",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-027",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "San Patricio",
+      "codigoFinca": "351",
+      "ramales": 5,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-028",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Elisa",
+      "codigoFinca": "352",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "CEN-MNA-029",
       "region": "CENTRAL NORTE",
       "responsable": "Eddy Leonardo Orellana Serrano",
       "finca": "Santa Cristina",
       "codigoFinca": "355",
       "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-030",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Monica",
+      "codigoFinca": "13",
+      "ramales": 12,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -109,6 +395,17 @@
       "ramales": 15,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-MNA-035",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "Buganvilia",
+      "codigoFinca": "11",
+      "ramales": 27,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
       "duplicado": false
     },
     {
@@ -1102,11 +1399,77 @@
       "duplicado": false
     },
     {
+      "codigo": "OCR-MNA-005",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "La Cebera",
+      "codigoFinca": "577",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-006",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "Colombita",
+      "codigoFinca": "600",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-007",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "La Cebera",
+      "codigoFinca": "577",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-008",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "Colombita",
+      "codigoFinca": "600",
+      "ramales": 15,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-MNA-009",
       "region": "OCCIDENTE",
       "responsable": "Juan Pablo Porres Esquina",
       "finca": "Santa Julia",
       "codigoFinca": "563",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-010",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "Colombita",
+      "codigoFinca": "600",
+      "ramales": 15,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-012",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "La Cebera",
+      "codigoFinca": "577",
       "ramales": 12,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
@@ -1119,6 +1482,28 @@
       "finca": "La Cebera",
       "codigoFinca": "577",
       "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-018",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "Colombita",
+      "codigoFinca": "600",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-021",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "Colombita",
+      "codigoFinca": "600",
+      "ramales": 14,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2477,6 +2862,28 @@
       "duplicado": false
     },
     {
+      "codigo": "ORO-MNA-001",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "Cartago",
+      "codigoFinca": "260",
+      "ramales": 8,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-002",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "Cartago",
+      "codigoFinca": "260",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "ORO-MNA-003",
       "region": "ORIENTE",
       "responsable": "Glenda Xiomara Mendez Ruano",
@@ -2554,6 +2961,17 @@
       "duplicado": false
     },
     {
+      "codigo": "ORO-MNA-011",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "Cartago",
+      "codigoFinca": "260",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "ORO-MNA-012",
       "region": "ORIENTE",
       "responsable": "Glenda Xiomara Mendez Ruano",
@@ -2593,6 +3011,17 @@
       "finca": "Flor Del Sitio",
       "codigoFinca": "415",
       "ramales": 24,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-016",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "Cartago",
+      "codigoFinca": "260",
+      "ramales": 12,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
