@@ -1,11 +1,11 @@
 {
-  "generado": "2026-08-11",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-11T19:10Z)",
+  "generado": "2026-08-12",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-12T13:45Z)",
   "regla": "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0",
   "avisos": [
     {
       "tipo": "sinCodigo",
-      "registros": 8
+      "registros": 9
     },
     {
       "codigo": "CES-MNA-064",
@@ -1190,6 +1190,28 @@
       "duplicado": false
     },
     {
+      "codigo": "CES-MNA-058",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Ojo De Agua G",
+      "codigoFinca": "159",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-059",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Ojo De Agua G",
+      "codigoFinca": "159",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "CES-MNA-060",
       "region": "CENTRAL SUR",
       "responsable": "Otto Rene Portillo Sandoval",
@@ -1322,6 +1344,17 @@
       "duplicado": false
     },
     {
+      "codigo": "CES-MNA-072",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Ojo De Agua Cuschin II",
+      "codigoFinca": "476",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "CES-MNA-073",
       "region": "CENTRAL SUR",
       "responsable": "Otto Rene Portillo Sandoval",
@@ -1366,6 +1399,17 @@
       "duplicado": false
     },
     {
+      "codigo": "CES-MNA-077",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Ojo De Agua Cuschin II",
+      "codigoFinca": "476",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "CES-MNA-078",
       "region": "CENTRAL SUR",
       "responsable": "Otto Rene Portillo Sandoval",
@@ -1395,6 +1439,17 @@
       "codigoFinca": "376",
       "ramales": 12,
       "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-PVC-007",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Agropecuaria El Congo",
+      "codigoFinca": "374",
+      "ramales": 11,
+      "tipoRiego": "Pivote Central",
       "fuenteAgua": "Pozo",
       "duplicado": false
     },
