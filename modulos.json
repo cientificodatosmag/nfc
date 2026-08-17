@@ -1,11 +1,21 @@
 {
-  "generado": "2026-08-12",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-12T13:45Z)",
+  "generado": "2026-08-17",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-17T14:45Z)",
   "regla": "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0",
   "avisos": [
     {
       "tipo": "sinCodigo",
-      "registros": 9
+      "registros": 12
+    },
+    {
+      "tipo": "otroTipoDeRiego",
+      "registros": 27,
+      "porTipo": {
+        "ASP": 7,
+        "AVF": 7,
+        "PVC": 8,
+        "CAR": 4
+      }
     },
     {
       "codigo": "CES-MNA-064",
@@ -1443,13 +1453,46 @@
       "duplicado": false
     },
     {
-      "codigo": "CES-PVC-007",
-      "region": "CENTRAL SUR",
-      "responsable": "Otto Rene Portillo Sandoval",
-      "finca": "Agropecuaria El Congo",
-      "codigoFinca": "374",
-      "ramales": 11,
-      "tipoRiego": "Pivote Central",
+      "codigo": "OCR-MNA-001",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "Santa Julia",
+      "codigoFinca": "563",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-002",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "Santa Julia",
+      "codigoFinca": "563",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-003",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "La Loma",
+      "codigoFinca": "578",
+      "ramales": 20,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-004",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "El Piñon",
+      "codigoFinca": "1011",
+      "ramales": 20,
+      "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
     },
@@ -1520,12 +1563,45 @@
       "duplicado": false
     },
     {
+      "codigo": "OCR-MNA-011",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "El Piñon",
+      "codigoFinca": "1011",
+      "ramales": 16,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-MNA-012",
       "region": "OCCIDENTE",
       "responsable": "Juan Pablo Porres Esquina",
       "finca": "La Cebera",
       "codigoFinca": "577",
       "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-013",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "Santa Julia II",
+      "codigoFinca": "937",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-014",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "Santa Julia II",
+      "codigoFinca": "937",
+      "ramales": 9,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1542,12 +1618,56 @@
       "duplicado": false
     },
     {
+      "codigo": "OCR-MNA-016",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "El Tigre",
+      "codigoFinca": "968",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-017",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "El Tigre",
+      "codigoFinca": "968",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-MNA-018",
       "region": "OCCIDENTE",
       "responsable": "Juan Pablo Porres Esquina",
       "finca": "Colombita",
       "codigoFinca": "600",
       "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-019",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "El Piñon",
+      "codigoFinca": "1011",
+      "ramales": 16,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-020",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "El Piñon",
+      "codigoFinca": "1011",
+      "ramales": 16,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1564,6 +1684,17 @@
       "duplicado": false
     },
     {
+      "codigo": "OCR-MNA-022",
+      "region": "OCCIDENTE",
+      "responsable": "Juan Pablo Porres Esquina",
+      "finca": "La Loma",
+      "codigoFinca": "578",
+      "ramales": 9,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-MNA-025",
       "region": "OCCIDENTE",
       "responsable": "Miguel Angel Romeo Garcia Vasquez",
@@ -1575,12 +1706,34 @@
       "duplicado": false
     },
     {
+      "codigo": "OCR-MNA-026",
+      "region": "OCCIDENTE",
+      "responsable": "Miguel Angel Romeo Garcia Vasquez",
+      "finca": "Sanjon Xoluta",
+      "codigoFinca": "408",
+      "ramales": 6,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-MNA-027",
       "region": "OCCIDENTE",
       "responsable": "Miguel Angel Romeo Garcia Vasquez",
       "finca": "San Mauricio",
       "codigoFinca": "599",
       "ramales": 8,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-028",
+      "region": "OCCIDENTE",
+      "responsable": "Miguel Angel Romeo Garcia Vasquez",
+      "finca": "Belgica",
+      "codigoFinca": "1010",
+      "ramales": 14,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1608,6 +1761,17 @@
       "duplicado": false
     },
     {
+      "codigo": "OCR-MNA-031",
+      "region": "OCCIDENTE",
+      "responsable": "Miguel Angel Romeo Garcia Vasquez",
+      "finca": "Belgica",
+      "codigoFinca": "1010",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-MNA-032",
       "region": "OCCIDENTE",
       "responsable": "Miguel Angel Romeo Garcia Vasquez",
@@ -1630,12 +1794,67 @@
       "duplicado": false
     },
     {
+      "codigo": "OCR-MNA-034",
+      "region": "OCCIDENTE",
+      "responsable": "Miguel Angel Romeo Garcia Vasquez",
+      "finca": "Sanjon Xoluta",
+      "codigoFinca": "408",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-MNA-035",
       "region": "OCCIDENTE",
       "responsable": "Miguel Angel Romeo Garcia Vasquez",
       "finca": "Maria Del Carmen II",
       "codigoFinca": "619",
       "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-036",
+      "region": "OCCIDENTE",
+      "responsable": "Miguel Angel Romeo Garcia Vasquez",
+      "finca": "Belgica",
+      "codigoFinca": "1010",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-037",
+      "region": "OCCIDENTE",
+      "responsable": "Miguel Angel Romeo Garcia Vasquez",
+      "finca": "Sanjon Xoluta",
+      "codigoFinca": "408",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-038",
+      "region": "OCCIDENTE",
+      "responsable": "Miguel Angel Romeo Garcia Vasquez",
+      "finca": "San Mauricio",
+      "codigoFinca": "599",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-039",
+      "region": "OCCIDENTE",
+      "responsable": "Miguel Angel Romeo Garcia Vasquez",
+      "finca": "Sanjon Xoluta",
+      "codigoFinca": "408",
+      "ramales": 9,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1663,12 +1882,122 @@
       "duplicado": false
     },
     {
+      "codigo": "OCR-MNA-043",
+      "region": "OCCIDENTE",
+      "responsable": "Miguel Angel Romeo Garcia Vasquez",
+      "finca": "Belgica",
+      "codigoFinca": "1010",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-044",
+      "region": "OCCIDENTE",
+      "responsable": "Miguel Angel Romeo Garcia Vasquez",
+      "finca": "Santa Sofia Rodas",
+      "codigoFinca": "989",
+      "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-MNA-045",
       "region": "OCCIDENTE",
       "responsable": "Miguel Angel Romeo Garcia Vasquez",
       "finca": "Sanjon Xoluta",
       "codigoFinca": "408",
       "ramales": 10,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-046",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Campo Libre Reu IV",
+      "codigoFinca": "618",
+      "ramales": 16,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-047",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "San Eduardo",
+      "codigoFinca": "678",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-048",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "San Eduardo",
+      "codigoFinca": "678",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-049",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Providencia Reu II",
+      "codigoFinca": "620",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-050",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "San Eduardo",
+      "codigoFinca": "678",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-051",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "San Eduardo",
+      "codigoFinca": "678",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-052",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Providencia Reu II",
+      "codigoFinca": "620",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-053",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Providencia Reu II",
+      "codigoFinca": "620",
+      "ramales": 14,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1685,6 +2014,28 @@
       "duplicado": false
     },
     {
+      "codigo": "OCR-MNA-056",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Mangrullo",
+      "codigoFinca": "512",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-057",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Rosario Fernandez",
+      "codigoFinca": "1000",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-MNA-058",
       "region": "OCCIDENTE",
       "responsable": "Walter Alexander Paiz Aroche",
@@ -1696,12 +2047,67 @@
       "duplicado": false
     },
     {
+      "codigo": "OCR-MNA-059",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Carmen Alejos",
+      "codigoFinca": "1001",
+      "ramales": 12,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-060",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Carmen Alejos",
+      "codigoFinca": "1001",
+      "ramales": 11,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-MNA-061",
       "region": "OCCIDENTE",
       "responsable": "Walter Alexander Paiz Aroche",
       "finca": "Rosario Fernandez",
       "codigoFinca": "1000",
       "ramales": 8,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-062",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "La Cuchilla B",
+      "codigoFinca": "1002",
+      "ramales": 13,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-063",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "La Cuchilla B",
+      "codigoFinca": "1002",
+      "ramales": 14,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-064",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "La Cuchilla B",
+      "codigoFinca": "1002",
+      "ramales": 18,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2329,6 +2735,17 @@
       "finca": "Los Patos",
       "codigoFinca": "666",
       "ramales": 6,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "OOC-MNA-059",
+      "region": "OCCIDENTE CENTRO",
+      "responsable": "Sergio Orlando Valenzuela Melgar",
+      "finca": "El Retiro",
+      "codigoFinca": "404",
+      "ramales": 17,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false

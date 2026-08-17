@@ -9,10 +9,14 @@ node_modules/
 *.apk
 
 # El repositorio es publico. Nada que lleve datos de personas ni credenciales
-# entra aqui: los .xlsx traen nombres y codigos de colaboradores, y los
-# *.local.json llevan la conexion a Oracle y las correcciones de nombres.
+# entra aqui: los .xlsx traen nombres y codigos de colaboradores, los .csv que
+# exporta tools/administrar.py traen el registro de rotulado con responsables y
+# UIDs de etiqueta, y los *.local.json llevan la conexion a Oracle y las
+# correcciones de nombres.
 # De cada *.local.json hay un *.ejemplo.json versionado con la estructura.
 *.xlsx
+*.xls
+*.csv
 tools/*.local.json
 
 __pycache__/
