@@ -1,6 +1,6 @@
 {
   "generado": "2026-08-17",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-18T01:06Z)",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-18T04:36Z)",
   "regla": "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0",
   "avisos": [
     {
@@ -9,12 +9,12 @@
     },
     {
       "tipo": "otroTipoDeRiego",
-      "registros": 25,
+      "registros": 32,
       "porTipo": {
         "AVF": 7,
+        "CAR": 8,
         "PVC": 13,
-        "CAR": 4,
-        "GRA": 1
+        "GRA": 4
       }
     },
     {
@@ -79,6 +79,84 @@
   ],
   "modulos": [
     {
+      "codigo": "CEN-ASP-001",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "Velasquez",
+      "codigoFinca": "10",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-002",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "Velasquez",
+      "codigoFinca": "10",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-003",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "Velasquez",
+      "codigoFinca": "10",
+      "ramales": 3,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-005",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "Velasquez",
+      "codigoFinca": "10",
+      "ramales": 3,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-006",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "El Carmen II",
+      "codigoFinca": "93",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-007",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "El Carmen II",
+      "codigoFinca": "93",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "CEN-ASP-008",
       "region": "CENTRAL NORTE",
       "responsable": "Carlos Enrique Sucuc Perez",
@@ -102,6 +180,19 @@
       "etiquetasExtra": 0,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-013",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "El Rincon",
+      "codigoFinca": "62",
+      "ramales": 8,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
       "duplicado": false
     },
     {
