@@ -108,6 +108,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -121,6 +122,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -134,6 +136,7 @@
       "ramales": 3,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -147,6 +150,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -160,6 +164,7 @@
       "ramales": 3,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -173,6 +178,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -186,6 +192,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -199,6 +206,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -212,6 +220,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -225,6 +234,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -238,6 +248,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -251,6 +262,7 @@
       "ramales": 8,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -264,6 +276,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -277,6 +290,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -290,6 +304,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -303,6 +318,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -316,6 +332,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -329,6 +346,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": true
@@ -342,6 +360,7 @@
       "ramales": 6,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -355,6 +374,7 @@
       "ramales": 4,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -368,6 +388,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -381,6 +402,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -394,6 +416,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -407,6 +430,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -420,6 +444,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -433,6 +458,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -446,6 +472,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -459,6 +486,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -472,6 +500,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -485,6 +514,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -498,6 +528,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -511,6 +542,7 @@
       "ramales": 22,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -524,6 +556,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -537,6 +570,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Miniaspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -550,6 +584,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -563,6 +598,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -576,6 +612,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -589,6 +626,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -602,6 +640,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -615,6 +654,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -628,6 +668,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -641,6 +682,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -654,6 +696,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -667,6 +710,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -680,6 +724,7 @@
       "ramales": 5,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -693,6 +738,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -706,6 +752,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -719,6 +766,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -732,6 +780,7 @@
       "ramales": 26,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -745,6 +794,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Miniaspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -758,6 +808,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -771,6 +822,7 @@
       "ramales": 27,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -784,6 +836,7 @@
       "ramales": 25,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -797,6 +850,7 @@
       "ramales": 18,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -810,6 +864,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -823,6 +878,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -836,6 +892,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -849,6 +906,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -862,6 +920,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -875,6 +934,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -888,6 +948,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -901,6 +962,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -914,6 +976,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -927,6 +990,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -940,6 +1004,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -953,6 +1018,7 @@
       "ramales": 7,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -966,6 +1032,7 @@
       "ramales": 7,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -979,6 +1046,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -992,6 +1060,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1005,6 +1074,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1018,6 +1088,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1031,6 +1102,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -1044,6 +1116,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -1057,6 +1130,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1070,6 +1144,7 @@
       "ramales": 19,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1083,6 +1158,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1096,6 +1172,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1109,6 +1186,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -1122,6 +1200,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1135,6 +1214,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1148,6 +1228,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1161,6 +1242,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1174,6 +1256,7 @@
       "ramales": 19,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1187,6 +1270,7 @@
       "ramales": 20,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1200,6 +1284,7 @@
       "ramales": 4,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1213,6 +1298,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -1226,6 +1312,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1239,6 +1326,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1252,6 +1340,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1265,6 +1354,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1278,6 +1368,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1291,6 +1382,7 @@
       "ramales": 24,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1304,6 +1396,7 @@
       "ramales": 5,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1317,6 +1410,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1330,6 +1424,7 @@
       "ramales": 3,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1343,6 +1438,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1356,6 +1452,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1369,6 +1466,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1382,6 +1480,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1395,6 +1494,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1408,6 +1508,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1421,6 +1522,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1434,6 +1536,7 @@
       "ramales": 5,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1447,6 +1550,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1460,6 +1564,7 @@
       "ramales": 4,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -1473,6 +1578,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1486,6 +1592,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1499,6 +1606,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1512,6 +1620,7 @@
       "ramales": 27,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1525,6 +1634,7 @@
       "ramales": 26,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1538,6 +1648,7 @@
       "ramales": 19,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1551,6 +1662,7 @@
       "ramales": 21,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1564,6 +1676,7 @@
       "ramales": 21,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1577,6 +1690,7 @@
       "ramales": 5,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1590,6 +1704,7 @@
       "ramales": 31,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1603,6 +1718,7 @@
       "ramales": 5,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1616,6 +1732,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1629,6 +1746,7 @@
       "ramales": 20,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1642,6 +1760,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1655,6 +1774,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1668,6 +1788,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1681,6 +1802,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1694,6 +1816,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1707,6 +1830,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1720,6 +1844,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1733,6 +1858,7 @@
       "ramales": 3,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1746,6 +1872,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1759,6 +1886,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1772,6 +1900,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1785,6 +1914,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": true
@@ -1798,6 +1928,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1811,6 +1942,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": true
@@ -1824,6 +1956,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1837,6 +1970,7 @@
       "ramales": 5,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1850,6 +1984,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1863,6 +1998,7 @@
       "ramales": 24,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1876,6 +2012,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1889,6 +2026,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1902,6 +2040,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1915,6 +2054,7 @@
       "ramales": 7,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1928,6 +2068,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1941,6 +2082,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1954,6 +2096,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1967,6 +2110,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1980,6 +2124,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1993,6 +2138,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2006,6 +2152,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2019,6 +2166,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2032,6 +2180,7 @@
       "ramales": 20,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2045,6 +2194,7 @@
       "ramales": 20,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2058,6 +2208,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2071,6 +2222,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2084,6 +2236,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2097,6 +2250,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2110,6 +2264,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2123,6 +2278,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2136,6 +2292,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2149,6 +2306,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2162,6 +2320,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2175,6 +2334,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2188,6 +2348,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2201,6 +2362,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2214,6 +2376,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2227,6 +2390,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2240,6 +2404,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2253,6 +2418,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2266,6 +2432,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2279,6 +2446,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2292,6 +2460,7 @@
       "ramales": 4,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2305,6 +2474,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2318,6 +2488,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2331,6 +2502,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2344,6 +2516,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2357,6 +2530,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2370,6 +2544,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2383,6 +2558,7 @@
       "ramales": 7,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2396,6 +2572,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2409,6 +2586,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2422,6 +2600,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2435,6 +2614,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2448,6 +2628,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2461,6 +2642,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2474,6 +2656,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2487,6 +2670,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": true
@@ -2500,6 +2684,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2513,6 +2698,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2526,6 +2712,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2539,6 +2726,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2552,6 +2740,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2565,6 +2754,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2578,6 +2768,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2591,6 +2782,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2604,6 +2796,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2617,6 +2810,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2630,6 +2824,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2643,6 +2838,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2656,6 +2852,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2669,6 +2866,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2682,6 +2880,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2695,6 +2894,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2708,6 +2908,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2721,6 +2922,7 @@
       "ramales": 19,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2734,6 +2936,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2747,6 +2950,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2760,6 +2964,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2773,6 +2978,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2786,6 +2992,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2799,6 +3006,7 @@
       "ramales": 18,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2812,6 +3020,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2825,6 +3034,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2838,6 +3048,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2851,6 +3062,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2864,6 +3076,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": true
@@ -2877,6 +3090,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2890,6 +3104,7 @@
       "ramales": 18,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2903,6 +3118,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2916,6 +3132,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2929,6 +3146,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2942,6 +3160,7 @@
       "ramales": 18,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2955,6 +3174,7 @@
       "ramales": 18,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2968,6 +3188,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2981,6 +3202,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2994,6 +3216,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3007,6 +3230,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3020,6 +3244,7 @@
       "ramales": 23,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3033,6 +3258,7 @@
       "ramales": 19,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3046,6 +3272,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3059,6 +3286,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3072,6 +3300,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3085,6 +3314,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3098,6 +3328,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3111,6 +3342,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3124,6 +3356,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3137,6 +3370,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3150,6 +3384,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3163,6 +3398,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3176,6 +3412,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3189,6 +3426,7 @@
       "ramales": 24,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3202,6 +3440,7 @@
       "ramales": 19,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3215,6 +3454,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3228,6 +3468,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3241,6 +3482,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3254,6 +3496,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3267,6 +3510,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3280,6 +3524,7 @@
       "ramales": 21,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3293,6 +3538,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3306,6 +3552,7 @@
       "ramales": 18,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3319,6 +3566,7 @@
       "ramales": 18,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3332,6 +3580,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3345,6 +3594,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3358,6 +3608,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3371,6 +3622,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3384,6 +3636,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3397,6 +3650,7 @@
       "ramales": 22,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3410,6 +3664,7 @@
       "ramales": 24,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3423,6 +3678,7 @@
       "ramales": 18,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3436,6 +3692,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3449,6 +3706,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3462,6 +3720,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3475,6 +3734,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3488,6 +3748,7 @@
       "ramales": 5,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3501,6 +3762,7 @@
       "ramales": 2,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": true
@@ -3514,6 +3776,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3527,6 +3790,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3540,6 +3804,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3553,6 +3818,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3566,6 +3832,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3579,6 +3846,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3592,6 +3860,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3605,6 +3874,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3618,6 +3888,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3631,6 +3902,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3644,6 +3916,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3657,6 +3930,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3670,6 +3944,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3683,6 +3958,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3696,6 +3972,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3709,6 +3986,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": true
@@ -3722,6 +4000,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3735,6 +4014,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3748,6 +4028,7 @@
       "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3761,6 +4042,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3774,6 +4056,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3787,6 +4070,7 @@
       "ramales": 24,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3800,6 +4084,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3813,6 +4098,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3826,6 +4112,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3839,6 +4126,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3852,6 +4140,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3865,6 +4154,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3878,6 +4168,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3891,6 +4182,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3904,6 +4196,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3917,6 +4210,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3930,6 +4224,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3943,6 +4238,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -3956,6 +4252,7 @@
       "ramales": 3,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -3969,6 +4266,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3982,6 +4280,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3995,6 +4294,7 @@
       "ramales": 3,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo Artesanal",
       "duplicado": false
@@ -4008,6 +4308,7 @@
       "ramales": 19,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4021,6 +4322,7 @@
       "ramales": 7,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4034,6 +4336,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4047,6 +4350,7 @@
       "ramales": 7,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4060,6 +4364,7 @@
       "ramales": 15,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4073,6 +4378,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4086,6 +4392,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4099,6 +4406,7 @@
       "ramales": 23,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4112,6 +4420,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4125,6 +4434,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -4138,6 +4448,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4151,6 +4462,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4164,6 +4476,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4177,6 +4490,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4190,6 +4504,7 @@
       "ramales": 25,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4203,6 +4518,7 @@
       "ramales": 24,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4216,6 +4532,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4229,6 +4546,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4242,6 +4560,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4255,6 +4574,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -4268,6 +4588,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4281,6 +4602,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4294,6 +4616,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -4307,6 +4630,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4320,6 +4644,7 @@
       "ramales": 17,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4333,6 +4658,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4346,6 +4672,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -4359,6 +4686,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4372,6 +4700,7 @@
       "ramales": 4,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": true
@@ -4385,6 +4714,7 @@
       "ramales": 4,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4398,6 +4728,7 @@
       "ramales": 8,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4411,6 +4742,7 @@
       "ramales": 4,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4424,6 +4756,7 @@
       "ramales": 4,
       "pasadas": 1,
       "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": true
@@ -4437,6 +4770,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4450,6 +4784,7 @@
       "ramales": 8,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4463,6 +4798,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4476,6 +4812,7 @@
       "ramales": 13,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4489,6 +4826,7 @@
       "ramales": 25,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": true
@@ -4502,6 +4840,7 @@
       "ramales": 18,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4515,6 +4854,7 @@
       "ramales": 9,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": true
@@ -4528,6 +4868,7 @@
       "ramales": 5,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4541,6 +4882,7 @@
       "ramales": 4,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4554,6 +4896,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4567,6 +4910,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4580,6 +4924,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4593,6 +4938,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4606,6 +4952,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4619,6 +4966,7 @@
       "ramales": 24,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4632,6 +4980,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4645,6 +4994,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4658,6 +5008,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4671,6 +5022,7 @@
       "ramales": 7,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -4684,6 +5036,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4697,6 +5050,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -4710,6 +5064,7 @@
       "ramales": 24,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4723,6 +5078,7 @@
       "ramales": 10,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -4736,6 +5092,7 @@
       "ramales": 14,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4749,6 +5106,7 @@
       "ramales": 12,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -4762,6 +5120,7 @@
       "ramales": 7,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4775,6 +5134,7 @@
       "ramales": 16,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4788,6 +5148,7 @@
       "ramales": 6,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -4801,6 +5162,7 @@
       "ramales": 11,
       "pasadas": 2,
       "etiquetasExtra": 4,
+      "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false

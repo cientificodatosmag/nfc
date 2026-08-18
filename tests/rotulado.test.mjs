@@ -100,7 +100,8 @@ function prueba(nombre, fn) {
 const MOD = { codigo: 'OOC-MNA-001', ramales: 3, finca: 'F', region: 'R', responsable: 'X' };
 // ramales 3 + 4 = 7 por pasada, 14 en total.
 
-// Aspersion: una etiqueta por ramal, sin extras, y una sola pasada.
+// Aspersion: seis etiquetas fijas y una sola pasada. Los ramales no cuentan,
+// por eso este de prueba tiene 2 y sigue llevando 6.
 const ASP = { codigo: 'OOC-ASP-001', ramales: 2, finca: 'F', region: 'R', responsable: 'X' };
 
 function grabarEn(codigo, pasada, numeros, uidBase = 'U') {
@@ -161,43 +162,55 @@ prueba('mas ramales en el maestro descompletan el modulo', () => {
     'el total sale del maestro vivo, no de lo guardado');
 });
 
-console.log('\n== aspersion: un juego, sin extras ==');
-prueba('ASP lleva una etiqueta por ramal y nada mas', () => {
-  assert.equal(totalPorPasada(ASP), 2, 'ramales 2, sin las cuatro extras');
+console.log('\n== aspersion: un juego, seis fijas ==');
+prueba('ASP lleva seis etiquetas, tenga los ramales que tenga', () => {
+  assert.equal(totalPorPasada(ASP), 6, 'seis fijas, no dos por sus dos ramales');
+  assert.equal(totalPorPasada({ ...ASP, ramales: 8 }), 6, 'ni ocho por sus ocho');
   assert.equal(pasadasDe(ASP), 1);
-  assert.equal(totalModulo(ASP), 2, 'un solo juego de etiquetas');
+  assert.equal(totalModulo(ASP), 6, 'un solo juego de etiquetas');
 });
 prueba('la regla sale del codigo si el maestro no la trae', () => {
   // Es el caso del maestro dentro del APK, escrito antes de que ASP existiera:
-  // sin esta deduccion mandaria a grabar 6 etiquetas por juego y dos juegos.
-  assert.deepEqual(reglaDe({ codigo: 'OOC-ASP-009', ramales: 5 }), { pasadas: 1, extra: 0 });
-  assert.deepEqual(reglaDe({ codigo: 'OOC-MNA-009', ramales: 5 }), { pasadas: 2, extra: 4 });
+  // sin esta deduccion mandaria a grabar 9 etiquetas por juego y dos juegos.
+  assert.deepEqual(reglaDe({ codigo: 'OOC-ASP-009', ramales: 5 }),
+    { pasadas: 1, extra: 0, fijas: 6 });
+  assert.deepEqual(reglaDe({ codigo: 'OOC-MNA-009', ramales: 5 }),
+    { pasadas: 2, extra: 4, fijas: null });
 });
 prueba('el maestro manda sobre la deduccion', () => {
-  assert.deepEqual(reglaDe({ codigo: 'OOC-ASP-009', ramales: 5, pasadas: 2, etiquetasExtra: 4 }),
-    { pasadas: 2, extra: 4 }, 'para poder corregirlo sin reinstalar el APK');
+  assert.deepEqual(
+    reglaDe({ codigo: 'OOC-ASP-009', ramales: 5, pasadas: 2, etiquetasExtra: 4, etiquetasFijas: 9 }),
+    { pasadas: 2, extra: 4, fijas: 9 }, 'para poder corregirlo sin reinstalar el APK');
+  assert.equal(totalPorPasada({ codigo: 'OOC-ASP-009', ramales: 5, etiquetasFijas: 9 }), 9);
 });
 prueba('un valor imposible del maestro NO se obedece', () => {
-  assert.deepEqual(reglaDe({ codigo: 'OOC-ASP-009', ramales: 5, pasadas: 0, etiquetasExtra: -1 }),
-    { pasadas: 1, extra: 0 });
+  assert.deepEqual(
+    reglaDe({ codigo: 'OOC-ASP-009', ramales: 5, pasadas: 0, etiquetasExtra: -1, etiquetasFijas: 0 }),
+    { pasadas: 1, extra: 0, fijas: 6 }, 'cero etiquetas daria el modulo por hecho sin grabar nada');
   assert.deepEqual(reglaDe({ codigo: 'OOC-ASP-009', ramales: 5, pasadas: 7 }),
-    { pasadas: 1, extra: 0 }, 'el formato guardado no tiene mas de dos pasadas');
+    { pasadas: 1, extra: 0, fijas: 6 }, 'el formato guardado no tiene mas de dos pasadas');
+});
+prueba('las fijas mandan sobre los ramales, no se suman', () => {
+  assert.equal(totalPorPasada({ codigo: 'OOC-ASP-009', ramales: 5 }), 6,
+    '5 ramales + 6 fijas serian 11: las fijas sustituyen la cuenta, no la amplian');
 });
 prueba('un codigo sin forma cae en la regla de siempre', () => {
-  assert.deepEqual(reglaDe({ codigo: 'RARO', ramales: 3 }), { pasadas: 2, extra: 4 });
+  assert.deepEqual(reglaDe({ codigo: 'RARO', ramales: 3 }),
+    { pasadas: 2, extra: 4, fijas: null });
+  assert.equal(totalPorPasada({ codigo: 'RARO', ramales: 3 }), 7);
 });
 prueba('una sola pasada llena SI completa un ASP', () => {
   reset();
-  grabarEn(ASP.codigo, 1, [1, 2]);
+  grabarEn(ASP.codigo, 1, [1, 2, 3, 4, 5, 6]);
   assert.equal(pasadaCompleta(ASP, 1), true);
   assert.equal(moduloCompleto(ASP), true, 'no hay segunda pasada que esperar');
   assert.equal(siguienteObjetivo(ASP), null, 'y no puede mandar a empezar una pasada 2');
 });
 prueba('un ASP a medias sigue pendiente', () => {
   reset();
-  grabarEn(ASP.codigo, 1, [1]);
-  assert.equal(moduloCompleto(ASP), false);
-  assert.deepEqual(siguienteObjetivo(ASP), { pasada: 1, numero: 2 });
+  grabarEn(ASP.codigo, 1, [1, 2]);
+  assert.equal(moduloCompleto(ASP), false, 'dos de seis no es completo aunque tenga dos ramales');
+  assert.deepEqual(siguienteObjetivo(ASP), { pasada: 1, numero: 3 });
 });
 prueba('etiquetas de una pasada 2 vieja se siguen viendo', () => {
   // Si a un modulo le bajaran las pasadas de 2 a 1, lo grabado en la 2 esta
@@ -207,6 +220,15 @@ prueba('etiquetas de una pasada 2 vieja se siguen viendo', () => {
   grabarEn(ASP.codigo, 2, [1]);
   assert.equal(hechasDe(ASP.codigo), 3);
   assert.deepEqual(uidYaUsado(ASP.codigo, 'U2-1'), { pasada: 2, numero: 1 });
+});
+prueba('subir las etiquetas fijas descompleta un ASP ya lleno', () => {
+  // El caso del cambio de regla: seis grabadas dejan de ser todas si mañana
+  // piden ocho. El total sale del maestro vivo, nunca de lo guardado.
+  reset();
+  grabarEn(ASP.codigo, 1, [1, 2, 3, 4, 5, 6]);
+  assert.equal(moduloCompleto(ASP), true);
+  assert.equal(moduloCompleto({ ...ASP, etiquetasFijas: 8 }), false);
+  assert.deepEqual(siguienteObjetivo({ ...ASP, etiquetasFijas: 8 }), { pasada: 1, numero: 7 });
 });
 
 console.log('\n== donde retomar ==');

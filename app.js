@@ -852,8 +852,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // sobre dos juegos de etiquetas distintos: solo está cumplido cuando las dos
   // pasadas terminaron.
   //
-  // Los de aspersión (ASP) NO. Llevan una etiqueta por ramal, sin extras, y una
-  // sola pasada. Es otro procedimiento de campo, no una variante del mismo.
+  // Los de aspersión (ASP) NO. Llevan SEIS etiquetas fijas —los ramales no
+  // entran en la cuenta— y una sola pasada. Es otro procedimiento de campo, no
+  // una variante del mismo.
   const ETIQUETAS_EXTRA = 4;
   const PASADAS = 2;
 
@@ -865,8 +866,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // La regla por tipo de riego. El tipo viaja en el código del módulo:
   // OOC-MNA-001 es mini aspersión, OOC-ASP-001 es aspersión.
-  const REGLA_POR_DEFECTO = { pasadas: PASADAS, extra: ETIQUETAS_EXTRA };
-  const REGLA_POR_TIPO = { ASP: { pasadas: 1, extra: 0 } };
+  //
+  // `fijas` en null significa "cuenta los ramales y súmales el extra". Con un
+  // número, ese número es el total y los ramales no entran en la cuenta.
+  const REGLA_POR_DEFECTO = { pasadas: PASADAS, extra: ETIQUETAS_EXTRA, fijas: null };
+  const REGLA_POR_TIPO = { ASP: { pasadas: 1, extra: 0, fijas: 6 } };
   const CODIGO_MODULO = /^[A-Z]{3}-([A-Z]{3})-\d+$/;
   const ROT_PROGRESO_KEY = 'nfc_rotulado_progreso';   // formato v1, ya no se escribe
   const ROT_PROGRESO_V2_KEY = 'nfc_rotulado_progreso_v2';
@@ -1121,7 +1125,9 @@ document.addEventListener('DOMContentLoaded', () => {
       ? modulo.pasadas : base.pasadas;
     const extra = Number.isInteger(modulo.etiquetasExtra) && modulo.etiquetasExtra >= 0
       ? modulo.etiquetasExtra : base.extra;
-    return { pasadas, extra };
+    const fijas = Number.isInteger(modulo.etiquetasFijas) && modulo.etiquetasFijas >= 1
+      ? modulo.etiquetasFijas : base.fijas;
+    return { pasadas, extra, fijas };
   }
 
   /** Pasadas que exige este módulo: 2 en MNA/MDA, 1 en ASP. */
@@ -1129,9 +1135,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return reglaDe(modulo).pasadas;
   }
 
-  /** Etiquetas de UNA pasada. Sale del maestro vivo, nunca de lo guardado. */
+  /**
+   * Etiquetas de UNA pasada. Sale del maestro vivo, nunca de lo guardado.
+   *
+   * Con etiquetas fijas los ramales ni se miran: un ASP lleva sus seis tenga
+   * dos ramales u ocho.
+   */
   function totalPorPasada(modulo) {
-    return modulo.ramales + reglaDe(modulo).extra;
+    const { extra, fijas } = reglaDe(modulo);
+    return fijas === null || fijas === undefined ? modulo.ramales + extra : fijas;
   }
 
   function totalModulo(modulo) {
@@ -1249,16 +1261,18 @@ document.addEventListener('DOMContentLoaded', () => {
   function maestroValido(datos) {
     if (!datos || typeof datos !== 'object') return false;
     if (!Array.isArray(datos.modulos) || datos.modulos.length === 0) return false;
-    // `pasadas` y `etiquetasExtra` son opcionales: un maestro de antes de la
-    // aspersión no los trae y se deducen del código. Lo que no se acepta es que
-    // vengan con un valor imposible, porque de ellos sale cuántas etiquetas se
-    // graban.
+    // `pasadas`, `etiquetasExtra` y `etiquetasFijas` son opcionales: un maestro
+    // de antes de la aspersión no los trae y se deducen del código. Lo que no se
+    // acepta es que vengan con un valor imposible, porque de ellos sale cuántas
+    // etiquetas se graban.
     return datos.modulos.every((m) => m && typeof m.codigo === 'string' && m.codigo
       && Number.isInteger(m.ramales) && m.ramales >= 0
       && (m.pasadas === undefined
         || (Number.isInteger(m.pasadas) && m.pasadas >= 1 && m.pasadas <= MAX_PASADAS))
       && (m.etiquetasExtra === undefined
-        || (Number.isInteger(m.etiquetasExtra) && m.etiquetasExtra >= 0)));
+        || (Number.isInteger(m.etiquetasExtra) && m.etiquetasExtra >= 0))
+      && (m.etiquetasFijas === undefined || m.etiquetasFijas === null
+        || (Number.isInteger(m.etiquetasFijas) && m.etiquetasFijas >= 1)));
   }
 
   async function bajarMaestro() {
@@ -1580,8 +1594,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const modulo = rot.seleccion;
     if (!modulo) return;
 
-    const { pasadas, extra } = reglaDe(modulo);
+    const { pasadas, extra, fijas } = reglaDe(modulo);
     const unaSola = pasadas === 1;
+    // De dónde sale el número, dicho como lo diría alguien en el campo: por
+    // ramal en mini y midi aspersión, una cantidad cerrada en aspersión.
+    const cuenta = (fijas === null || fijas === undefined)
+      ? `${modulo.ramales} ramales + ${extra}`
+      : `${fijas} etiquetas fijas`;
     const porPasada = totalPorPasada(modulo);
     const enPasada = hechasEnPasada(modulo.codigo, rot.pasada);
     const hechas = hechasDe(modulo.codigo);
@@ -1599,9 +1618,8 @@ document.addEventListener('DOMContentLoaded', () => {
       ? `Completo · ${hechas} de ${totalModulo(modulo)}`
       : unaSola ? `${enPasada} de ${porPasada}`
       : `Pasada ${rot.pasada} de ${pasadas} · ${enPasada} de ${porPasada}`;
-    DOM.rotProgressDetail.textContent = unaSola
-      ? `${modulo.ramales} ramales, un solo juego · ${modulo.finca}`
-      : `${modulo.ramales} ramales + ${extra}, dos juegos · ${modulo.finca}`;
+    DOM.rotProgressDetail.textContent =
+      `${cuenta}, ${unaSola ? 'un solo juego' : 'dos juegos'} · ${modulo.finca}`;
     DOM.rotProgressFill.style.width =
       `${totalModulo(modulo) ? (hechas / totalModulo(modulo)) * 100 : 0}%`;
 

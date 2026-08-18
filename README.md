@@ -27,22 +27,28 @@ dentro del propio código (`OOC-MNA-001`, `OOC-ASP-001`):
 | Tipo | Etiquetas por juego | Juegos |
 |---|---|---|
 | Mini y midi aspersión (MNA, MDA) | ramales + 4 | 2 |
-| Aspersión (ASP) | ramales | 1 |
+| Aspersión (ASP) | **6 fijas** | 1 |
+
+En aspersión los ramales **no entran en la cuenta**: un ASP lleva sus seis
+etiquetas tenga dos ramales u ocho. Por eso la regla no es solo un extra que se
+suma, sino un tercer valor (`etiquetasFijas`) que cuando está puesto sustituye
+la cuenta por ramales en vez de ampliarla.
 
 Un módulo cuenta como cumplido cuando terminaron **todos sus juegos**: los dos
 en mini y midi aspersión, el único en aspersión. La pantalla lo dice antes de
-empezar —«3 ramales + 4, dos juegos» o «2 ramales, un solo juego»— porque de
-ahí sale cuántas etiquetas hay que tener en la mano.
+empezar —«3 ramales + 4, dos juegos» o «6 etiquetas fijas, un solo juego»—
+porque de ahí sale cuántas etiquetas hay que tener en la mano.
 
 Al acabar la pasada 1 de un módulo de dos juegos la app **se detiene y no
 continúa sola**. El operador tiene en la mano la etiqueta recién grabada,
 todavía pegada al teléfono, y la pasada 2 empieza por el 001: seguir de largo la
 regrabaría.
 
-La regla viaja en el maestro (`pasadas`, `etiquetasExtra`), así que se corrige
-sin reinstalar el APK; si el maestro no la trae —el que va dentro del APK es
-anterior a la aspersión— la app la deduce del tipo del código. Nunca al revés:
-un ASP con la regla de MNA mandaría a grabar el doble de etiquetas.
+La regla viaja en el maestro (`pasadas`, `etiquetasExtra`, `etiquetasFijas`),
+así que se corrige sin reinstalar el APK; si el maestro no la trae —el que va
+dentro del APK es anterior a la aspersión— la app la deduce del tipo del código.
+Nunca al revés: un ASP con la regla de MNA mandaría a grabar el doble de
+etiquetas.
 
 El avance se comparte entre teléfonos (ver abajo) y se puede exportar a CSV.
 

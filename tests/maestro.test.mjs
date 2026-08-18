@@ -110,8 +110,13 @@ console.log('\n== que cuenta como maestro ==');
     assert.equal(maestroValido({ modulos: [{ codigo: 'A', ramales: 3, pasadas: 0 }] }), false);
     assert.equal(maestroValido({ modulos: [{ codigo: 'A', ramales: 3, pasadas: 9 }] }), false);
     assert.equal(maestroValido({ modulos: [{ codigo: 'A', ramales: 3, etiquetasExtra: -1 }] }), false,
-      'de esos dos campos sale cuantas etiquetas se graban');
+      'de esos campos sale cuantas etiquetas se graban');
+    assert.equal(maestroValido({ modulos: [{ codigo: 'A', ramales: 3, etiquetasFijas: 0 }] }), false,
+      'cero fijas daria el modulo por hecho sin grabar nada');
   });
+  await prueba('etiquetasFijas en null vale: significa contar por ramales', () =>
+    assert.equal(maestroValido({ modulos: [{ codigo: 'A', ramales: 3, etiquetasFijas: null }] }), true,
+      'asi es como el maestro dice "este no lleva cantidad fija"'));
 }
 
 console.log('\n== los tres niveles ==');
