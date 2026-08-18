@@ -1,6 +1,6 @@
 {
-  "generado": "2026-08-17",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-18T04:36Z)",
+  "generado": "2026-08-18",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-18T14:25Z)",
   "regla": "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0",
   "avisos": [
     {
@@ -9,13 +9,20 @@
     },
     {
       "tipo": "otroTipoDeRiego",
-      "registros": 32,
+      "registros": 35,
       "porTipo": {
         "AVF": 7,
         "CAR": 8,
-        "PVC": 13,
-        "GRA": 4
+        "PVC": 15,
+        "GRA": 4,
+        "APO": 1
       }
+    },
+    {
+      "codigo": "CEN-ASP-020",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
     },
     {
       "codigo": "CES-MNA-064",
@@ -57,6 +64,20 @@
     },
     {
       "codigo": "ORC-ASP-002",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORO-ASP-001",
+      "registros": 2,
+      "columnasDistintas": [
+        "NO_HIDRANTES"
+      ],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORO-ASP-006",
       "registros": 2,
       "columnasDistintas": [],
       "mismoNumeroDeRamales": true
@@ -118,6 +139,19 @@
       "duplicado": false
     },
     {
+      "codigo": "CEN-ASP-004",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "Velasquez",
+      "codigoFinca": "10",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "CEN-ASP-005",
       "region": "CENTRAL NORTE",
       "responsable": "Carlos Enrique Sucuc Perez",
@@ -170,6 +204,19 @@
       "duplicado": false
     },
     {
+      "codigo": "CEN-ASP-009",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "Velasquez",
+      "codigoFinca": "10",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "CEN-ASP-011",
       "region": "CENTRAL NORTE",
       "responsable": "Eddy Leonardo Orellana Serrano",
@@ -183,12 +230,116 @@
       "duplicado": false
     },
     {
+      "codigo": "CEN-ASP-012",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "Villa Laura",
+      "codigoFinca": "361",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "CEN-ASP-013",
       "region": "CENTRAL NORTE",
       "responsable": "Gerson David Macario Osoy",
       "finca": "El Rincon",
       "codigoFinca": "62",
       "ramales": 8,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-015",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "Santa Isabel",
+      "codigoFinca": "356",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-016",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "Santa Isabel",
+      "codigoFinca": "356",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-017",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "La Corona II",
+      "codigoFinca": "359",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-018",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "Villa Laura",
+      "codigoFinca": "361",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-019",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "Campamento II",
+      "codigoFinca": "784",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-020",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "La Corona II",
+      "codigoFinca": "359",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": true
+    },
+    {
+      "codigo": "CEN-ASP-023",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Luceros",
+      "codigoFinca": "372",
+      "ramales": 6,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "tipoRiego": "Aspersion",
@@ -4211,6 +4362,71 @@
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
+    },
+    {
+      "codigo": "ORO-ASP-001",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "Cartago",
+      "codigoFinca": "260",
+      "ramales": 4,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORO-ASP-002",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "Los Angeles",
+      "codigoFinca": "333",
+      "ramales": 4,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-ASP-003",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "Arizona",
+      "codigoFinca": "301",
+      "ramales": 8,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-ASP-005",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "San Francisco La Blanca",
+      "codigoFinca": "300",
+      "ramales": 4,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-ASP-006",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "San Francisco La Blanca",
+      "codigoFinca": "300",
+      "ramales": 4,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
     },
     {
       "codigo": "ORO-MDA-001",
