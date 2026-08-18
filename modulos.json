@@ -1,6 +1,6 @@
 {
   "generado": "2026-08-17",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-17T14:45Z)",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-18T01:06Z)",
   "regla": "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0",
   "avisos": [
     {
@@ -9,12 +9,12 @@
     },
     {
       "tipo": "otroTipoDeRiego",
-      "registros": 27,
+      "registros": 25,
       "porTipo": {
-        "ASP": 7,
         "AVF": 7,
-        "PVC": 8,
-        "CAR": 4
+        "PVC": 13,
+        "CAR": 4,
+        "GRA": 1
       }
     },
     {
@@ -30,12 +30,35 @@
       "mismoNumeroDeRamales": true
     },
     {
+      "codigo": "OCR-MNA-038",
+      "registros": 2,
+      "columnasDistintas": [
+        "AREA_MODULO",
+        "FUENTE_AGUA",
+        "NO_HIDRANTES",
+        "NO_RAMALES"
+      ],
+      "mismoNumeroDeRamales": false
+    },
+    {
+      "codigo": "OOC-ASP-005",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
       "codigo": "OOC-MNA-048",
       "registros": 2,
       "columnasDistintas": [
         "AREA_MODULO",
         "NO_HIDRANTES"
       ],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORC-ASP-002",
+      "registros": 2,
+      "columnasDistintas": [],
       "mismoNumeroDeRamales": true
     },
     {
@@ -56,12 +79,40 @@
   ],
   "modulos": [
     {
+      "codigo": "CEN-ASP-008",
+      "region": "CENTRAL NORTE",
+      "responsable": "Carlos Enrique Sucuc Perez",
+      "finca": "La Bombita",
+      "codigoFinca": "350",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-011",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Elisa",
+      "codigoFinca": "352",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
       "codigo": "CEN-MDA-001",
       "region": "CENTRAL NORTE",
       "responsable": "Eddy Leonardo Orellana Serrano",
       "finca": "Anaité",
       "codigoFinca": "905",
       "ramales": 4,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -73,6 +124,8 @@
       "finca": "Anaité",
       "codigoFinca": "905",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -84,6 +137,8 @@
       "finca": "Reynosa",
       "codigoFinca": "15",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -95,6 +150,8 @@
       "finca": "Reynosa",
       "codigoFinca": "15",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -106,6 +163,8 @@
       "finca": "Velasquez",
       "codigoFinca": "10",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -117,6 +176,8 @@
       "finca": "Velasquez",
       "codigoFinca": "10",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -128,6 +189,8 @@
       "finca": "Reynosa",
       "codigoFinca": "15",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -139,6 +202,8 @@
       "finca": "Reynosa",
       "codigoFinca": "15",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -150,6 +215,8 @@
       "finca": "Santa Monica",
       "codigoFinca": "13",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -161,6 +228,8 @@
       "finca": "Anaité",
       "codigoFinca": "905",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -172,6 +241,8 @@
       "finca": "Santa Rita",
       "codigoFinca": "12",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -183,6 +254,8 @@
       "finca": "Santa Rita",
       "codigoFinca": "12",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -194,6 +267,8 @@
       "finca": "Las Ilusiones",
       "codigoFinca": "354",
       "ramales": 22,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -205,6 +280,8 @@
       "finca": "Santa Cristina",
       "codigoFinca": "355",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -216,6 +293,8 @@
       "finca": "Santa Cristina",
       "codigoFinca": "355",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Miniaspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -227,6 +306,8 @@
       "finca": "San Patricio",
       "codigoFinca": "351",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -238,6 +319,8 @@
       "finca": "San Patricio",
       "codigoFinca": "351",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -249,6 +332,8 @@
       "finca": "San Patricio",
       "codigoFinca": "351",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -260,6 +345,8 @@
       "finca": "Santa Elisa",
       "codigoFinca": "352",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -271,6 +358,8 @@
       "finca": "San Patricio",
       "codigoFinca": "351",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -282,6 +371,8 @@
       "finca": "San Patricio",
       "codigoFinca": "351",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -293,6 +384,8 @@
       "finca": "Las Ilusiones",
       "codigoFinca": "354",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -304,6 +397,8 @@
       "finca": "Santa Rita",
       "codigoFinca": "12",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -315,6 +410,8 @@
       "finca": "San Carlos Arzu",
       "codigoFinca": "83",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -326,6 +423,8 @@
       "finca": "Santa Elisa",
       "codigoFinca": "352",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -337,6 +436,8 @@
       "finca": "San Patricio",
       "codigoFinca": "351",
       "ramales": 5,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -348,6 +449,8 @@
       "finca": "Santa Elisa",
       "codigoFinca": "352",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -359,6 +462,8 @@
       "finca": "Santa Cristina",
       "codigoFinca": "355",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -370,6 +475,8 @@
       "finca": "Santa Monica",
       "codigoFinca": "13",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -381,6 +488,8 @@
       "finca": "Buganvilia",
       "codigoFinca": "11",
       "ramales": 26,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -392,6 +501,8 @@
       "finca": "Asuncion",
       "codigoFinca": "353",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Miniaspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -403,6 +514,8 @@
       "finca": "La Reynita",
       "codigoFinca": "360",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -414,6 +527,8 @@
       "finca": "Buganvilia",
       "codigoFinca": "11",
       "ramales": 27,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -425,6 +540,8 @@
       "finca": "La Quijada",
       "codigoFinca": "42",
       "ramales": 25,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -436,6 +553,8 @@
       "finca": "Buganvilia",
       "codigoFinca": "11",
       "ramales": 18,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -447,6 +566,8 @@
       "finca": "Buganvilia",
       "codigoFinca": "11",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -458,6 +579,8 @@
       "finca": "Polonia",
       "codigoFinca": "377",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -469,6 +592,8 @@
       "finca": "Luceros",
       "codigoFinca": "372",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -480,6 +605,8 @@
       "finca": "Luceros",
       "codigoFinca": "372",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -491,6 +618,8 @@
       "finca": "Luceros",
       "codigoFinca": "372",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -502,6 +631,8 @@
       "finca": "Polonia",
       "codigoFinca": "377",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -513,6 +644,8 @@
       "finca": "Luceros",
       "codigoFinca": "372",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -524,6 +657,8 @@
       "finca": "Luceros",
       "codigoFinca": "372",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -535,6 +670,8 @@
       "finca": "Luceros",
       "codigoFinca": "372",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -546,6 +683,8 @@
       "finca": "Granada",
       "codigoFinca": "364",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -557,6 +696,8 @@
       "finca": "Morenas Fernandez",
       "codigoFinca": "373",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -568,6 +709,8 @@
       "finca": "Morenas Fernandez",
       "codigoFinca": "373",
       "ramales": 7,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -579,6 +722,8 @@
       "finca": "Morenas Fernandez",
       "codigoFinca": "373",
       "ramales": 7,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -590,6 +735,8 @@
       "finca": "Morenas Fernandez",
       "codigoFinca": "373",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -601,6 +748,8 @@
       "finca": "Santa Maria",
       "codigoFinca": "27",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -612,6 +761,8 @@
       "finca": "Santa Maria",
       "codigoFinca": "27",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -623,6 +774,8 @@
       "finca": "San Antonio",
       "codigoFinca": "28",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -634,6 +787,8 @@
       "finca": "San Fernando",
       "codigoFinca": "30",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -645,6 +800,8 @@
       "finca": "San Fernando",
       "codigoFinca": "30",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -656,6 +813,8 @@
       "finca": "San Fernando",
       "codigoFinca": "30",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -667,6 +826,8 @@
       "finca": "San Fernando",
       "codigoFinca": "30",
       "ramales": 19,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -678,6 +839,8 @@
       "finca": "San Antonio La Paz",
       "codigoFinca": "228",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -689,6 +852,8 @@
       "finca": "San Antonio La Paz",
       "codigoFinca": "228",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -700,6 +865,8 @@
       "finca": "San Antonio La Paz",
       "codigoFinca": "228",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -711,6 +878,8 @@
       "finca": "La Paz",
       "codigoFinca": "246",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -722,6 +891,8 @@
       "finca": "La Paz",
       "codigoFinca": "246",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -733,6 +904,8 @@
       "finca": "La Paz",
       "codigoFinca": "246",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -744,6 +917,8 @@
       "finca": "La Paz",
       "codigoFinca": "246",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -755,6 +930,8 @@
       "finca": "Santa Elena Tikal",
       "codigoFinca": "290",
       "ramales": 19,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -766,6 +943,8 @@
       "finca": "Santa Elena Tikal",
       "codigoFinca": "290",
       "ramales": 20,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -777,6 +956,8 @@
       "finca": "Los Almendros",
       "codigoFinca": "422",
       "ramales": 4,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -788,6 +969,8 @@
       "finca": "Remanzo II",
       "codigoFinca": "555",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -799,6 +982,8 @@
       "finca": "Oro Blanco I",
       "codigoFinca": "816",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -810,6 +995,8 @@
       "finca": "Oro Blanco I",
       "codigoFinca": "816",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -821,6 +1008,8 @@
       "finca": "Oro Blanco I",
       "codigoFinca": "816",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -832,6 +1021,8 @@
       "finca": "Oro Blanco I",
       "codigoFinca": "816",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -843,6 +1034,8 @@
       "finca": "Margaritas",
       "codigoFinca": "26",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -854,6 +1047,8 @@
       "finca": "San Francisco Murcielago",
       "codigoFinca": "34",
       "ramales": 24,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -865,6 +1060,8 @@
       "finca": "La Zeta",
       "codigoFinca": "78",
       "ramales": 5,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -876,6 +1073,8 @@
       "finca": "Montevideo",
       "codigoFinca": "133",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -887,6 +1086,8 @@
       "finca": "El Chino",
       "codigoFinca": "134",
       "ramales": 3,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -898,6 +1099,8 @@
       "finca": "Retazo",
       "codigoFinca": "206",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -909,6 +1112,8 @@
       "finca": "Manantial",
       "codigoFinca": "208",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -920,6 +1125,8 @@
       "finca": "Manantial",
       "codigoFinca": "208",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -931,6 +1138,8 @@
       "finca": "Malta",
       "codigoFinca": "227",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -942,6 +1151,8 @@
       "finca": "Malta",
       "codigoFinca": "227",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -953,6 +1164,8 @@
       "finca": "Montana",
       "codigoFinca": "233",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -964,6 +1177,8 @@
       "finca": "Montana",
       "codigoFinca": "233",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -975,6 +1190,8 @@
       "finca": "Cerritos",
       "codigoFinca": "284",
       "ramales": 5,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -986,6 +1203,8 @@
       "finca": "Cerritos",
       "codigoFinca": "284",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -997,6 +1216,8 @@
       "finca": "Tierra Nueva Rodriguez I",
       "codigoFinca": "785",
       "ramales": 4,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -1008,6 +1229,8 @@
       "finca": "Texas",
       "codigoFinca": "904",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1019,6 +1242,8 @@
       "finca": "Texas",
       "codigoFinca": "904",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1030,6 +1255,8 @@
       "finca": "Caulote",
       "codigoFinca": "933",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1041,6 +1268,8 @@
       "finca": "Kenya",
       "codigoFinca": "37",
       "ramales": 27,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1052,6 +1281,8 @@
       "finca": "Kenya",
       "codigoFinca": "37",
       "ramales": 26,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1063,6 +1294,8 @@
       "finca": "Manglares/Pijuy",
       "codigoFinca": "48",
       "ramales": 19,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1074,6 +1307,8 @@
       "finca": "Manglares/Pijuy",
       "codigoFinca": "48",
       "ramales": 21,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1085,6 +1320,8 @@
       "finca": "Manglares/Pijuy",
       "codigoFinca": "48",
       "ramales": 21,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1096,6 +1333,8 @@
       "finca": "Manglares/Pijuy",
       "codigoFinca": "48",
       "ramales": 5,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1107,6 +1346,8 @@
       "finca": "Manglares/Pijuy",
       "codigoFinca": "48",
       "ramales": 31,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1118,6 +1359,8 @@
       "finca": "Nvo. San Carlos",
       "codigoFinca": "67",
       "ramales": 5,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1129,6 +1372,8 @@
       "finca": "Nvo. San Carlos",
       "codigoFinca": "67",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1140,6 +1385,8 @@
       "finca": "Nvo. San Carlos",
       "codigoFinca": "67",
       "ramales": 20,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1151,6 +1398,8 @@
       "finca": "Nvo. San Carlos",
       "codigoFinca": "67",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1162,6 +1411,8 @@
       "finca": "Las Cuevas",
       "codigoFinca": "99",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1173,6 +1424,8 @@
       "finca": "Las Cuevas",
       "codigoFinca": "99",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1184,6 +1437,8 @@
       "finca": "Las Delicias G",
       "codigoFinca": "127",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1195,6 +1450,8 @@
       "finca": "Las Delicias G",
       "codigoFinca": "127",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1206,6 +1463,8 @@
       "finca": "Ojo De Agua G",
       "codigoFinca": "159",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1217,6 +1476,8 @@
       "finca": "Ojo De Agua G",
       "codigoFinca": "159",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1228,6 +1489,8 @@
       "finca": "Ojo De Agua G",
       "codigoFinca": "159",
       "ramales": 3,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1239,6 +1502,8 @@
       "finca": "Ojo De Agua G",
       "codigoFinca": "159",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1250,6 +1515,8 @@
       "finca": "Ojo De Agua G",
       "codigoFinca": "159",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1261,6 +1528,8 @@
       "finca": "Santa Cecilia",
       "codigoFinca": "230",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1272,6 +1541,8 @@
       "finca": "El Congo",
       "codigoFinca": "368",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": true
@@ -1283,6 +1554,8 @@
       "finca": "Agropecuaria El Congo",
       "codigoFinca": "374",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1294,6 +1567,8 @@
       "finca": "Agropecuaria El Congo",
       "codigoFinca": "374",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": true
@@ -1305,6 +1580,8 @@
       "finca": "Agropecuaria El Congo",
       "codigoFinca": "374",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1316,6 +1593,8 @@
       "finca": "Monterrey",
       "codigoFinca": "375",
       "ramales": 5,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1327,6 +1606,8 @@
       "finca": "Monterrey",
       "codigoFinca": "375",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1338,6 +1619,8 @@
       "finca": "Holanda",
       "codigoFinca": "380",
       "ramales": 24,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1349,6 +1632,8 @@
       "finca": "Holanda",
       "codigoFinca": "380",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1360,6 +1645,8 @@
       "finca": "Ojo De Agua Cuschin II",
       "codigoFinca": "476",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1371,6 +1658,8 @@
       "finca": "Ojo De Agua Cuschin II",
       "codigoFinca": "476",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1382,6 +1671,8 @@
       "finca": "Ojo De Agua Cuschin II",
       "codigoFinca": "476",
       "ramales": 7,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1393,6 +1684,8 @@
       "finca": "Ojo De Agua Cuschin II",
       "codigoFinca": "476",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1404,6 +1697,8 @@
       "finca": "Ojo De Agua Cuschin II",
       "codigoFinca": "476",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1415,6 +1710,8 @@
       "finca": "Ojo De Agua Cuschin II",
       "codigoFinca": "476",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1426,6 +1723,8 @@
       "finca": "Agropecuaria El Congo II",
       "codigoFinca": "518",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1437,6 +1736,8 @@
       "finca": "Granada",
       "codigoFinca": "364",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1448,6 +1749,8 @@
       "finca": "California",
       "codigoFinca": "376",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1459,6 +1762,8 @@
       "finca": "Santa Julia",
       "codigoFinca": "563",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1470,6 +1775,8 @@
       "finca": "Santa Julia",
       "codigoFinca": "563",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1481,6 +1788,8 @@
       "finca": "La Loma",
       "codigoFinca": "578",
       "ramales": 20,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1492,6 +1801,8 @@
       "finca": "El Piñon",
       "codigoFinca": "1011",
       "ramales": 20,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1503,6 +1814,8 @@
       "finca": "La Cebera",
       "codigoFinca": "577",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1514,6 +1827,8 @@
       "finca": "Colombita",
       "codigoFinca": "600",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1525,6 +1840,8 @@
       "finca": "La Cebera",
       "codigoFinca": "577",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1536,6 +1853,8 @@
       "finca": "Colombita",
       "codigoFinca": "600",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1547,6 +1866,8 @@
       "finca": "Santa Julia",
       "codigoFinca": "563",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1558,6 +1879,8 @@
       "finca": "Colombita",
       "codigoFinca": "600",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1569,6 +1892,8 @@
       "finca": "El Piñon",
       "codigoFinca": "1011",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1580,6 +1905,8 @@
       "finca": "La Cebera",
       "codigoFinca": "577",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1591,6 +1918,8 @@
       "finca": "Santa Julia II",
       "codigoFinca": "937",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1602,6 +1931,8 @@
       "finca": "Santa Julia II",
       "codigoFinca": "937",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1613,6 +1944,8 @@
       "finca": "La Cebera",
       "codigoFinca": "577",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1624,6 +1957,8 @@
       "finca": "El Tigre",
       "codigoFinca": "968",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -1635,6 +1970,8 @@
       "finca": "El Tigre",
       "codigoFinca": "968",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -1646,6 +1983,8 @@
       "finca": "Colombita",
       "codigoFinca": "600",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1657,6 +1996,8 @@
       "finca": "El Piñon",
       "codigoFinca": "1011",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1668,6 +2009,8 @@
       "finca": "El Piñon",
       "codigoFinca": "1011",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1679,6 +2022,8 @@
       "finca": "Colombita",
       "codigoFinca": "600",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1690,8 +2035,36 @@
       "finca": "La Loma",
       "codigoFinca": "578",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-023",
+      "region": "OCCIDENTE",
+      "responsable": "Miguel Angel Romeo Garcia Vasquez",
+      "finca": "Sanjon Xoluta",
+      "codigoFinca": "408",
+      "ramales": 4,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-MNA-024",
+      "region": "OCCIDENTE",
+      "responsable": "Miguel Angel Romeo Garcia Vasquez",
+      "finca": "Sanjon Xoluta",
+      "codigoFinca": "408",
+      "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
       "duplicado": false
     },
     {
@@ -1701,6 +2074,8 @@
       "finca": "Maria Del Carmen II",
       "codigoFinca": "619",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1712,6 +2087,8 @@
       "finca": "Sanjon Xoluta",
       "codigoFinca": "408",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1723,6 +2100,8 @@
       "finca": "San Mauricio",
       "codigoFinca": "599",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1734,6 +2113,8 @@
       "finca": "Belgica",
       "codigoFinca": "1010",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1745,6 +2126,8 @@
       "finca": "Maria Del Carmen II",
       "codigoFinca": "619",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1756,6 +2139,8 @@
       "finca": "Sanjon Xoluta",
       "codigoFinca": "408",
       "ramales": 7,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1767,6 +2152,8 @@
       "finca": "Belgica",
       "codigoFinca": "1010",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1778,6 +2165,8 @@
       "finca": "Sanjon Xoluta",
       "codigoFinca": "408",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1789,6 +2178,8 @@
       "finca": "San Mauricio",
       "codigoFinca": "599",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1800,6 +2191,8 @@
       "finca": "Sanjon Xoluta",
       "codigoFinca": "408",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1811,6 +2204,8 @@
       "finca": "Maria Del Carmen II",
       "codigoFinca": "619",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1822,6 +2217,8 @@
       "finca": "Belgica",
       "codigoFinca": "1010",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1833,6 +2230,8 @@
       "finca": "Sanjon Xoluta",
       "codigoFinca": "408",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1844,9 +2243,11 @@
       "finca": "San Mauricio",
       "codigoFinca": "599",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
-      "duplicado": false
+      "duplicado": true
     },
     {
       "codigo": "OCR-MNA-039",
@@ -1855,6 +2256,8 @@
       "finca": "Sanjon Xoluta",
       "codigoFinca": "408",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1866,6 +2269,8 @@
       "finca": "San Mauricio",
       "codigoFinca": "599",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -1877,6 +2282,8 @@
       "finca": "San Mauricio",
       "codigoFinca": "599",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -1888,6 +2295,8 @@
       "finca": "Belgica",
       "codigoFinca": "1010",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1899,6 +2308,8 @@
       "finca": "Santa Sofia Rodas",
       "codigoFinca": "989",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1910,6 +2321,8 @@
       "finca": "Sanjon Xoluta",
       "codigoFinca": "408",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1921,6 +2334,8 @@
       "finca": "Campo Libre Reu IV",
       "codigoFinca": "618",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1932,6 +2347,8 @@
       "finca": "San Eduardo",
       "codigoFinca": "678",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1943,6 +2360,8 @@
       "finca": "San Eduardo",
       "codigoFinca": "678",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1954,6 +2373,8 @@
       "finca": "Providencia Reu II",
       "codigoFinca": "620",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1965,6 +2386,8 @@
       "finca": "San Eduardo",
       "codigoFinca": "678",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1976,6 +2399,8 @@
       "finca": "San Eduardo",
       "codigoFinca": "678",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1987,6 +2412,8 @@
       "finca": "Providencia Reu II",
       "codigoFinca": "620",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -1998,6 +2425,8 @@
       "finca": "Providencia Reu II",
       "codigoFinca": "620",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2009,6 +2438,8 @@
       "finca": "Providencia Reu II",
       "codigoFinca": "620",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2020,6 +2451,8 @@
       "finca": "Mangrullo",
       "codigoFinca": "512",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2031,6 +2464,8 @@
       "finca": "Rosario Fernandez",
       "codigoFinca": "1000",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2042,6 +2477,8 @@
       "finca": "Providencia Reu II",
       "codigoFinca": "620",
       "ramales": 19,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2053,6 +2490,8 @@
       "finca": "Carmen Alejos",
       "codigoFinca": "1001",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2064,6 +2503,8 @@
       "finca": "Carmen Alejos",
       "codigoFinca": "1001",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2075,6 +2516,8 @@
       "finca": "Rosario Fernandez",
       "codigoFinca": "1000",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2086,6 +2529,8 @@
       "finca": "La Cuchilla B",
       "codigoFinca": "1002",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2097,6 +2542,8 @@
       "finca": "La Cuchilla B",
       "codigoFinca": "1002",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2108,8 +2555,88 @@
       "finca": "La Cuchilla B",
       "codigoFinca": "1002",
       "ramales": 18,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OOC-ASP-001",
+      "region": "OCCIDENTE CENTRO",
+      "responsable": "Eddy Rolando Payes Barrientos",
+      "finca": "La Gloria",
+      "codigoFinca": "281",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "OOC-ASP-002",
+      "region": "OCCIDENTE CENTRO",
+      "responsable": "Eddy Rolando Payes Barrientos",
+      "finca": "La Cuchilla",
+      "codigoFinca": "338",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "OOC-ASP-003",
+      "region": "OCCIDENTE CENTRO",
+      "responsable": "Eddy Rolando Payes Barrientos",
+      "finca": "La Gloria",
+      "codigoFinca": "281",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "OOC-ASP-004",
+      "region": "OCCIDENTE CENTRO",
+      "responsable": "Eddy Rolando Payes Barrientos",
+      "finca": "Recreo",
+      "codigoFinca": "267",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "OOC-ASP-005",
+      "region": "OCCIDENTE CENTRO",
+      "responsable": "Eddy Rolando Payes Barrientos",
+      "finca": "Recreo",
+      "codigoFinca": "267",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "OOC-ASP-006",
+      "region": "OCCIDENTE CENTRO",
+      "responsable": "Eddy Rolando Payes Barrientos",
+      "finca": "Madre Vieja",
+      "codigoFinca": "349",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
       "duplicado": false
     },
     {
@@ -2119,6 +2646,8 @@
       "finca": "Marias Mapan",
       "codigoFinca": "145",
       "ramales": 18,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2130,6 +2659,8 @@
       "finca": "Tierra Linda IV",
       "codigoFinca": "948",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2141,6 +2672,8 @@
       "finca": "Tierra Linda IV",
       "codigoFinca": "948",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2152,6 +2685,8 @@
       "finca": "La Cuchilla",
       "codigoFinca": "338",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2163,6 +2698,8 @@
       "finca": "Puyumate",
       "codigoFinca": "219",
       "ramales": 18,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2174,6 +2711,8 @@
       "finca": "Marias Mapan",
       "codigoFinca": "145",
       "ramales": 18,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2185,6 +2724,8 @@
       "finca": "Puyumate",
       "codigoFinca": "219",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2196,6 +2737,8 @@
       "finca": "El Tempisque",
       "codigoFinca": "601",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2207,6 +2750,8 @@
       "finca": "San Nicolas",
       "codigoFinca": "552",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2218,6 +2763,8 @@
       "finca": "Panama",
       "codigoFinca": "605",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2229,6 +2776,8 @@
       "finca": "San Nicolas",
       "codigoFinca": "552",
       "ramales": 23,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2240,6 +2789,8 @@
       "finca": "Alamos",
       "codigoFinca": "648",
       "ramales": 19,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2251,6 +2802,8 @@
       "finca": "San Nicolas",
       "codigoFinca": "552",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2262,6 +2815,8 @@
       "finca": "Panama",
       "codigoFinca": "605",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2273,6 +2828,8 @@
       "finca": "El Tempisque",
       "codigoFinca": "601",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2284,6 +2841,8 @@
       "finca": "San Nicolas",
       "codigoFinca": "552",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2295,6 +2854,8 @@
       "finca": "Las Rosas",
       "codigoFinca": "553",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2306,6 +2867,8 @@
       "finca": "San Nicolas",
       "codigoFinca": "552",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2317,6 +2880,8 @@
       "finca": "Las Rosas",
       "codigoFinca": "553",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2328,6 +2893,8 @@
       "finca": "Panama",
       "codigoFinca": "605",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2339,6 +2906,8 @@
       "finca": "Las Rosas",
       "codigoFinca": "553",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2350,6 +2919,8 @@
       "finca": "Las Rosas",
       "codigoFinca": "553",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2361,6 +2932,8 @@
       "finca": "Panama",
       "codigoFinca": "605",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2372,6 +2945,8 @@
       "finca": "San Nicolas",
       "codigoFinca": "552",
       "ramales": 24,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2383,6 +2958,8 @@
       "finca": "Alamos",
       "codigoFinca": "648",
       "ramales": 19,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2394,6 +2971,8 @@
       "finca": "El Tempisque",
       "codigoFinca": "601",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2405,6 +2984,8 @@
       "finca": "Los Encuentros III",
       "codigoFinca": "651",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2416,6 +2997,8 @@
       "finca": "Las Lagunas II",
       "codigoFinca": "576",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2427,6 +3010,8 @@
       "finca": "La Virgen",
       "codigoFinca": "896",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2438,6 +3023,8 @@
       "finca": "Palmeras II",
       "codigoFinca": "617",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2449,6 +3036,8 @@
       "finca": "Las Lagunas II",
       "codigoFinca": "576",
       "ramales": 21,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2460,6 +3049,8 @@
       "finca": "Buenos Aires III",
       "codigoFinca": "616",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2471,6 +3062,8 @@
       "finca": "Buenos Aires III",
       "codigoFinca": "616",
       "ramales": 18,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2482,6 +3075,8 @@
       "finca": "Las Lagunas II",
       "codigoFinca": "576",
       "ramales": 18,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2493,6 +3088,8 @@
       "finca": "Las Lagunas II",
       "codigoFinca": "576",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2504,6 +3101,8 @@
       "finca": "Las Lagunas II",
       "codigoFinca": "576",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2515,6 +3114,8 @@
       "finca": "La Virgen",
       "codigoFinca": "896",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2526,6 +3127,8 @@
       "finca": "Las Lagunas II",
       "codigoFinca": "576",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2537,6 +3140,8 @@
       "finca": "La Esperancita",
       "codigoFinca": "328",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2548,6 +3153,8 @@
       "finca": "Los Encuentros",
       "codigoFinca": "643",
       "ramales": 22,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2559,6 +3166,8 @@
       "finca": "Los Encuentros",
       "codigoFinca": "643",
       "ramales": 24,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2570,6 +3179,8 @@
       "finca": "La Esperancita",
       "codigoFinca": "328",
       "ramales": 18,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2581,6 +3192,8 @@
       "finca": "Los Encuentros",
       "codigoFinca": "643",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2592,6 +3205,8 @@
       "finca": "La Virgen",
       "codigoFinca": "896",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2603,6 +3218,8 @@
       "finca": "Los Encuentros III",
       "codigoFinca": "651",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2614,6 +3231,8 @@
       "finca": "Santa Isabel III",
       "codigoFinca": "257",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2625,6 +3244,8 @@
       "finca": "Santa Isabel III",
       "codigoFinca": "257",
       "ramales": 5,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2636,6 +3257,8 @@
       "finca": "Santa Isabel III",
       "codigoFinca": "257",
       "ramales": 2,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": true
@@ -2647,6 +3270,8 @@
       "finca": "Santa Isabel III",
       "codigoFinca": "257",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2658,6 +3283,8 @@
       "finca": "Los Patos",
       "codigoFinca": "666",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2669,6 +3296,8 @@
       "finca": "Monte Maria",
       "codigoFinca": "554",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2680,6 +3309,8 @@
       "finca": "Monte Maria",
       "codigoFinca": "554",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2691,6 +3322,8 @@
       "finca": "Monte Maria",
       "codigoFinca": "554",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2702,6 +3335,8 @@
       "finca": "Monte Maria",
       "codigoFinca": "554",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2713,6 +3348,8 @@
       "finca": "Los Patos",
       "codigoFinca": "666",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2724,6 +3361,8 @@
       "finca": "Los Patos",
       "codigoFinca": "666",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2735,6 +3374,8 @@
       "finca": "Los Patos",
       "codigoFinca": "666",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2746,6 +3387,8 @@
       "finca": "El Retiro",
       "codigoFinca": "404",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2757,6 +3400,8 @@
       "finca": "Los Patos",
       "codigoFinca": "666",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2768,6 +3413,8 @@
       "finca": "Santa Isabel III",
       "codigoFinca": "257",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2779,6 +3426,8 @@
       "finca": "Santa Isabel III",
       "codigoFinca": "257",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2790,6 +3439,8 @@
       "finca": "Los Patos",
       "codigoFinca": "666",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2801,8 +3452,62 @@
       "finca": "Monte Maria",
       "codigoFinca": "554",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-ASP-002",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "El Chamarro",
+      "codigoFinca": "434",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORC-ASP-003",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "El Chamarro",
+      "codigoFinca": "434",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-ASP-004",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "La Llave",
+      "codigoFinca": "482",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-ASP-006",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "La Llave",
+      "codigoFinca": "482",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
       "duplicado": false
     },
     {
@@ -2812,6 +3517,8 @@
       "finca": "Villa Alegre",
       "codigoFinca": "286",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2823,6 +3530,8 @@
       "finca": "El Apipal",
       "codigoFinca": "523",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2834,6 +3543,8 @@
       "finca": "Santa Gregoria",
       "codigoFinca": "484",
       "ramales": 24,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2845,6 +3556,8 @@
       "finca": "La Llave",
       "codigoFinca": "482",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2856,6 +3569,8 @@
       "finca": "Punian",
       "codigoFinca": "916",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2867,6 +3582,8 @@
       "finca": "El Apipal",
       "codigoFinca": "523",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2878,6 +3595,8 @@
       "finca": "Maria Linda Rios",
       "codigoFinca": "560",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2889,6 +3608,8 @@
       "finca": "El Apipal",
       "codigoFinca": "523",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2900,6 +3621,8 @@
       "finca": "Maria Linda Rios",
       "codigoFinca": "560",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2911,6 +3634,8 @@
       "finca": "La Llave",
       "codigoFinca": "482",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2922,6 +3647,8 @@
       "finca": "Santa Gregoria",
       "codigoFinca": "484",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2933,6 +3660,8 @@
       "finca": "El Chamarro",
       "codigoFinca": "434",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2944,6 +3673,8 @@
       "finca": "Maria Linda",
       "codigoFinca": "481",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2955,6 +3686,8 @@
       "finca": "Maria Linda",
       "codigoFinca": "481",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -2966,6 +3699,8 @@
       "finca": "El Tesoro II",
       "codigoFinca": "245",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -2977,6 +3712,8 @@
       "finca": "Josefina II",
       "codigoFinca": "202",
       "ramales": 3,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -2988,6 +3725,8 @@
       "finca": "Virginia",
       "codigoFinca": "411",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -2999,6 +3738,8 @@
       "finca": "Candelaria",
       "codigoFinca": "177",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3010,6 +3751,8 @@
       "finca": "Anabella",
       "codigoFinca": "169",
       "ramales": 3,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo Artesanal",
       "duplicado": false
@@ -3021,6 +3764,8 @@
       "finca": "Cadiz",
       "codigoFinca": "615",
       "ramales": 19,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3032,6 +3777,8 @@
       "finca": "Libano",
       "codigoFinca": "33",
       "ramales": 7,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3043,6 +3790,8 @@
       "finca": "Cadiz",
       "codigoFinca": "615",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3054,6 +3803,8 @@
       "finca": "Cadiz",
       "codigoFinca": "615",
       "ramales": 7,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3065,6 +3816,8 @@
       "finca": "Oasis",
       "codigoFinca": "32",
       "ramales": 15,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3076,6 +3829,8 @@
       "finca": "Libano",
       "codigoFinca": "33",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3087,6 +3842,8 @@
       "finca": "Cobano",
       "codigoFinca": "25",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3098,6 +3855,8 @@
       "finca": "Oasis",
       "codigoFinca": "32",
       "ramales": 23,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3109,6 +3868,8 @@
       "finca": "Candelaria",
       "codigoFinca": "177",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3120,6 +3881,8 @@
       "finca": "La Frontera",
       "codigoFinca": "339",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -3131,6 +3894,8 @@
       "finca": "Cadiz",
       "codigoFinca": "615",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3142,6 +3907,8 @@
       "finca": "Chaparral",
       "codigoFinca": "313",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3153,6 +3920,8 @@
       "finca": "Elycar",
       "codigoFinca": "314",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3164,6 +3933,8 @@
       "finca": "Santa Luisa",
       "codigoFinca": "178",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3175,6 +3946,8 @@
       "finca": "Chaparral",
       "codigoFinca": "313",
       "ramales": 25,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3186,6 +3959,8 @@
       "finca": "El Rosario",
       "codigoFinca": "235",
       "ramales": 24,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3197,6 +3972,8 @@
       "finca": "El Horizonte Estrada",
       "codigoFinca": "147",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3208,6 +3985,8 @@
       "finca": "Montaña Larga",
       "codigoFinca": "136",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3219,6 +3998,8 @@
       "finca": "Montaña Larga",
       "codigoFinca": "136",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3230,6 +4011,8 @@
       "finca": "Conquista",
       "codigoFinca": "212",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -3241,6 +4024,8 @@
       "finca": "El Rosario",
       "codigoFinca": "235",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3252,6 +4037,8 @@
       "finca": "El Rosario",
       "codigoFinca": "235",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3263,6 +4050,8 @@
       "finca": "El Rosario",
       "codigoFinca": "235",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -3274,6 +4063,8 @@
       "finca": "Santa Luisa",
       "codigoFinca": "178",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3285,6 +4076,8 @@
       "finca": "El Chamarro",
       "codigoFinca": "434",
       "ramales": 17,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3296,6 +4089,8 @@
       "finca": "Santa Luisa II",
       "codigoFinca": "310",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3307,6 +4102,8 @@
       "finca": "Rosita",
       "codigoFinca": "268",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -3318,6 +4115,8 @@
       "finca": "Cadiz",
       "codigoFinca": "615",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3329,6 +4128,8 @@
       "finca": "Victorias Davila",
       "codigoFinca": "940",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3340,6 +4141,8 @@
       "finca": "Cartago",
       "codigoFinca": "260",
       "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3351,6 +4154,8 @@
       "finca": "Cartago",
       "codigoFinca": "260",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3362,6 +4167,8 @@
       "finca": "Arizona",
       "codigoFinca": "301",
       "ramales": 13,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3373,6 +4180,8 @@
       "finca": "Eslovaquia II",
       "codigoFinca": "660",
       "ramales": 25,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": true
@@ -3384,6 +4193,8 @@
       "finca": "Eslovaquia II",
       "codigoFinca": "660",
       "ramales": 18,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3395,6 +4206,8 @@
       "finca": "Victorias II",
       "codigoFinca": "699",
       "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": true
@@ -3406,6 +4219,8 @@
       "finca": "San Bartolo",
       "codigoFinca": "299",
       "ramales": 5,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3417,6 +4232,8 @@
       "finca": "Victorias Davila",
       "codigoFinca": "940",
       "ramales": 4,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3428,6 +4245,8 @@
       "finca": "Victorias Davila",
       "codigoFinca": "940",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3439,6 +4258,8 @@
       "finca": "Cartago",
       "codigoFinca": "260",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3450,6 +4271,8 @@
       "finca": "Capullo",
       "codigoFinca": "635",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3461,6 +4284,8 @@
       "finca": "La Palma Mejia",
       "codigoFinca": "673",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3472,6 +4297,8 @@
       "finca": "Capullo",
       "codigoFinca": "635",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3483,6 +4310,8 @@
       "finca": "Flor Del Sitio",
       "codigoFinca": "415",
       "ramales": 24,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3494,6 +4323,8 @@
       "finca": "Cartago",
       "codigoFinca": "260",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3505,6 +4336,8 @@
       "finca": "Eslovaquia II",
       "codigoFinca": "660",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3516,6 +4349,8 @@
       "finca": "Arizona",
       "codigoFinca": "301",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3527,6 +4362,8 @@
       "finca": "Corocito",
       "codigoFinca": "347",
       "ramales": 7,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -3538,6 +4375,8 @@
       "finca": "Las Palmas Hernandez",
       "codigoFinca": "547",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3549,6 +4388,8 @@
       "finca": "Morelia",
       "codigoFinca": "329",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
@@ -3560,6 +4401,8 @@
       "finca": "Canada",
       "codigoFinca": "332",
       "ramales": 24,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3571,6 +4414,8 @@
       "finca": "La Trinidad",
       "codigoFinca": "302",
       "ramales": 10,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -3582,6 +4427,8 @@
       "finca": "Costa Rica II",
       "codigoFinca": "589",
       "ramales": 14,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3593,6 +4440,8 @@
       "finca": "Berta Carbonelli",
       "codigoFinca": "680",
       "ramales": 12,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false
@@ -3604,6 +4453,8 @@
       "finca": "La Palma Juarez",
       "codigoFinca": "591",
       "ramales": 7,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3615,6 +4466,8 @@
       "finca": "La Trinidad",
       "codigoFinca": "302",
       "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3626,6 +4479,8 @@
       "finca": "La Rubia",
       "codigoFinca": "723",
       "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
       "duplicado": false
@@ -3637,6 +4492,8 @@
       "finca": "El Cedro",
       "codigoFinca": "401",
       "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": false

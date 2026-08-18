@@ -21,13 +21,28 @@ sobre `NfcA`, que solo existen en Android nativo.
 
 ### Rotulado
 
-Cada módulo lleva **ramales + 4** etiquetas, y el juego completo se graba **dos
-veces sobre dos juegos de etiquetas distintos**. Un módulo solo cuenta como
-cumplido cuando las dos pasadas terminaron.
+Cuántas etiquetas lleva un módulo depende de su tipo de riego, y el tipo va
+dentro del propio código (`OOC-MNA-001`, `OOC-ASP-001`):
 
-Al acabar la pasada 1 la app **se detiene y no continúa sola**. El operador
-tiene en la mano la etiqueta recién grabada, todavía pegada al teléfono, y la
-pasada 2 empieza por el 001: seguir de largo la regrabaría.
+| Tipo | Etiquetas por juego | Juegos |
+|---|---|---|
+| Mini y midi aspersión (MNA, MDA) | ramales + 4 | 2 |
+| Aspersión (ASP) | ramales | 1 |
+
+Un módulo cuenta como cumplido cuando terminaron **todos sus juegos**: los dos
+en mini y midi aspersión, el único en aspersión. La pantalla lo dice antes de
+empezar —«3 ramales + 4, dos juegos» o «2 ramales, un solo juego»— porque de
+ahí sale cuántas etiquetas hay que tener en la mano.
+
+Al acabar la pasada 1 de un módulo de dos juegos la app **se detiene y no
+continúa sola**. El operador tiene en la mano la etiqueta recién grabada,
+todavía pegada al teléfono, y la pasada 2 empieza por el 001: seguir de largo la
+regrabaría.
+
+La regla viaja en el maestro (`pasadas`, `etiquetasExtra`), así que se corrige
+sin reinstalar el APK; si el maestro no la trae —el que va dentro del APK es
+anterior a la aspersión— la app la deduce del tipo del código. Nunca al revés:
+un ASP con la regla de MNA mandaría a grabar el doble de etiquetas.
 
 El avance se comparte entre teléfonos (ver abajo) y se puede exportar a CSV.
 
@@ -76,13 +91,18 @@ python tools/actualizar-maestro.py              # enseña el diff y pregunta
 ```
 
 Nunca escribe sin mostrar antes qué entra, qué sale y qué cambia, y avisa en
-rojo si a un módulo **ya rotulado** le cambia el número de ramales: eso deja
-etiquetas físicas que dicen 001..N frente a un maestro que espera otra cantidad,
-y no se arregla con un `git revert`.
+rojo si a un módulo **ya rotulado** le cambia el número de etiquetas —ramales,
+pasadas o extras—: eso deja etiquetas físicas que dicen 001..N frente a un
+maestro que espera otra cantidad, y no se arregla con un `git revert`.
 
 No hay tarea programada porque GitHub Actions no alcanza la IP interna de
 Oracle: esto se corre desde dentro de la red. El `git push` sí dispara Vercel y
 la recompilación del APK, que es lo único que necesita estar en la nube.
+
+Cuántas etiquetas lleva cada tipo de riego lo dice
+[tools/reglas_rotulado.py](tools/reglas_rotulado.py), y de ahí lo leen tanto el
+generador del maestro como los reportes de Excel. Es la misma regla que aplica
+`app.js`: en dos sitios porque son dos lenguajes, no dos criterios.
 
 ## Seguridad de las etiquetas
 
@@ -99,7 +119,8 @@ npm test                          # las tres suites de JS, como en la CI
 python tools/prueba_normalizar.py # unificación de nombres (no corre en la CI)
 ```
 
-- `tests/rotulado.test.mjs` — doble pasada, migración del avance, identificadores
+- `tests/rotulado.test.mjs` — la regla de cada tipo de riego, doble pasada,
+  migración del avance, identificadores
 - `tests/backend.test.mjs` — validación y proyección del log
 - `tests/sync.test.mjs` — que **cliente y servidor fusionen igual**; si se
   separan, un teléfono muestra una cosa y la base otra

@@ -36,6 +36,7 @@ const FUNCIONES = ['fusionarEventos', 'registroParaFusion', 'tapadoPorReinicio']
 
 const preludio = `
   const PASADAS = 2;
+  const MAX_PASADAS = 2;
   const rot = { progreso: {}, modulos: [], seleccion: null };
   const window = { NfcSync: { alias: (d) => String(d) } };
   const console = { log() {}, warn() {}, error() {} };

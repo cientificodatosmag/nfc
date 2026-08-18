@@ -35,6 +35,7 @@ const FUNCIONES = [
 
 const preludio = `
   const PASADAS = 2;
+  const MAX_PASADAS = 2;
   const MAESTRO_CACHE_KEY = 'nfc_maestro_cache';
   const MAESTRO_TIMEOUT_MS = 8000;
   const rot = { modulos: [], progreso: {}, maestro: null, seleccion: null };
@@ -102,6 +103,15 @@ console.log('\n== que cuenta como maestro ==');
       'de ahi sale el numero de etiquetas: si no es entero, nada cuadra'));
   await prueba('un modulo sin codigo invalida el lote', () =>
     assert.equal(maestroValido({ modulos: [{ codigo: 'A', ramales: 3 }, { ramales: 2 }] }), false));
+  await prueba('sin pasadas ni extras vale: se deducen del codigo', () =>
+    assert.equal(maestroValido({ modulos: [{ codigo: 'OOC-ASP-001', ramales: 2 }] }), true,
+      'el maestro que viaja en el APK es de antes de que existieran esos campos'));
+  await prueba('pasadas o extras imposibles invalidan el lote', () => {
+    assert.equal(maestroValido({ modulos: [{ codigo: 'A', ramales: 3, pasadas: 0 }] }), false);
+    assert.equal(maestroValido({ modulos: [{ codigo: 'A', ramales: 3, pasadas: 9 }] }), false);
+    assert.equal(maestroValido({ modulos: [{ codigo: 'A', ramales: 3, etiquetasExtra: -1 }] }), false,
+      'de esos dos campos sale cuantas etiquetas se graban');
+  });
 }
 
 console.log('\n== los tres niveles ==');

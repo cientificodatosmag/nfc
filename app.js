@@ -847,11 +847,27 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // ROTULADO POR MÓDULO
   // ==========================================
-  // Cada módulo se rotula con tantas etiquetas como ramales tenga, más cuatro,
-  // y el juego completo se graba DOS veces sobre dos juegos de etiquetas
-  // distintos. Un módulo solo está cumplido cuando las dos pasadas terminaron.
+  // Mini y midi aspersión (MNA, MDA) se rotulan con tantas etiquetas como
+  // ramales tenga el módulo, más cuatro, y el juego completo se graba DOS veces
+  // sobre dos juegos de etiquetas distintos: solo está cumplido cuando las dos
+  // pasadas terminaron.
+  //
+  // Los de aspersión (ASP) NO. Llevan una etiqueta por ramal, sin extras, y una
+  // sola pasada. Es otro procedimiento de campo, no una variante del mismo.
   const ETIQUETAS_EXTRA = 4;
   const PASADAS = 2;
+
+  // Tope del formato guardado: `progreso[codigo].pasadas` nunca tuvo más de dos
+  // claves. Recorrer lo YA grabado va hasta aquí, no hasta las pasadas que la
+  // regla pida hoy; si a un módulo le bajaran las pasadas de 2 a 1, sus
+  // etiquetas de la pasada 2 siguen existiendo en el campo y hay que verlas.
+  const MAX_PASADAS = 2;
+
+  // La regla por tipo de riego. El tipo viaja en el código del módulo:
+  // OOC-MNA-001 es mini aspersión, OOC-ASP-001 es aspersión.
+  const REGLA_POR_DEFECTO = { pasadas: PASADAS, extra: ETIQUETAS_EXTRA };
+  const REGLA_POR_TIPO = { ASP: { pasadas: 1, extra: 0 } };
+  const CODIGO_MODULO = /^[A-Z]{3}-([A-Z]{3})-\d+$/;
   const ROT_PROGRESO_KEY = 'nfc_rotulado_progreso';   // formato v1, ya no se escribe
   const ROT_PROGRESO_V2_KEY = 'nfc_rotulado_progreso_v2';
   const ROT_MIGRACION_KEY = 'nfc_rotulado_migracion_v2';
@@ -1088,13 +1104,38 @@ document.addEventListener('DOMContentLoaded', () => {
   // estas funciones y ninguno vuelve a recalcular la regla.
   // ------------------------------------------------------------------
 
+  /**
+   * Cuántas pasadas y cuántas etiquetas extra lleva este módulo.
+   *
+   * Manda el maestro cuando lo dice —así se corrige sin reinstalar la app, igual
+   * que los ramales—, y si no lo dice se deduce del tipo de riego que lleva el
+   * propio código. Esa deducción no es adorno: un maestro viejo, el del APK o
+   * una copia guardada de antes de este cambio, no traen los campos, y un ASP
+   * tratado con la regla de MNA mandaría a grabar el doble de etiquetas.
+   */
+  function reglaDe(modulo) {
+    const tipo = CODIGO_MODULO.exec(String(modulo.codigo || '').toUpperCase());
+    const base = (tipo && REGLA_POR_TIPO[tipo[1]]) || REGLA_POR_DEFECTO;
+    const pasadas = Number.isInteger(modulo.pasadas)
+      && modulo.pasadas >= 1 && modulo.pasadas <= MAX_PASADAS
+      ? modulo.pasadas : base.pasadas;
+    const extra = Number.isInteger(modulo.etiquetasExtra) && modulo.etiquetasExtra >= 0
+      ? modulo.etiquetasExtra : base.extra;
+    return { pasadas, extra };
+  }
+
+  /** Pasadas que exige este módulo: 2 en MNA/MDA, 1 en ASP. */
+  function pasadasDe(modulo) {
+    return reglaDe(modulo).pasadas;
+  }
+
   /** Etiquetas de UNA pasada. Sale del maestro vivo, nunca de lo guardado. */
   function totalPorPasada(modulo) {
-    return modulo.ramales + ETIQUETAS_EXTRA;
+    return modulo.ramales + reglaDe(modulo).extra;
   }
 
   function totalModulo(modulo) {
-    return totalPorPasada(modulo) * PASADAS;
+    return totalPorPasada(modulo) * pasadasDe(modulo);
   }
 
   function textoEtiqueta(codigo, numero) {
@@ -1121,7 +1162,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function hechasDe(codigo) {
     let total = 0;
-    for (let p = 1; p <= PASADAS; p++) total += hechasEnPasada(codigo, p);
+    for (let p = 1; p <= MAX_PASADAS; p++) total += hechasEnPasada(codigo, p);
     return total;
   }
 
@@ -1130,7 +1171,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function moduloCompleto(modulo) {
-    for (let p = 1; p <= PASADAS; p++) {
+    for (let p = 1; p <= pasadasDe(modulo); p++) {
       if (!pasadaCompleta(modulo, p)) return false;
     }
     return true;
@@ -1148,10 +1189,10 @@ document.addEventListener('DOMContentLoaded', () => {
     return null;
   }
 
-  /** Dónde retomar: primero se termina la pasada 1, luego la 2. */
+  /** Dónde retomar: primero se termina la pasada 1, luego la 2 si la hay. */
   function siguienteObjetivo(modulo) {
     const total = totalPorPasada(modulo);
-    for (let p = 1; p <= PASADAS; p++) {
+    for (let p = 1; p <= pasadasDe(modulo); p++) {
       const numero = siguientePendiente(modulo.codigo, p, total, 1);
       if (numero !== null) return { pasada: p, numero };
     }
@@ -1167,7 +1208,7 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function duplicadosDe(codigo) {
     const fuera = [];
-    for (let p = 1; p <= PASADAS; p++) {
+    for (let p = 1; p <= MAX_PASADAS; p++) {
       const etiquetas = etiquetasDe(codigo, p);
       Object.keys(etiquetas)
         .filter((n) => etiquetas[n].duplicado)
@@ -1179,7 +1220,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /** ¿Este UID ya se usó en el módulo? Devuelve dónde, o null. */
   function uidYaUsado(codigo, uid) {
     if (!uid) return null;
-    for (let p = 1; p <= PASADAS; p++) {
+    for (let p = 1; p <= MAX_PASADAS; p++) {
       const etiquetas = etiquetasDe(codigo, p);
       const encontrado = Object.keys(etiquetas).find((n) => etiquetas[n].uid === uid);
       if (encontrado) return { pasada: p, numero: Number(encontrado) };
@@ -1208,8 +1249,16 @@ document.addEventListener('DOMContentLoaded', () => {
   function maestroValido(datos) {
     if (!datos || typeof datos !== 'object') return false;
     if (!Array.isArray(datos.modulos) || datos.modulos.length === 0) return false;
+    // `pasadas` y `etiquetasExtra` son opcionales: un maestro de antes de la
+    // aspersión no los trae y se deducen del código. Lo que no se acepta es que
+    // vengan con un valor imposible, porque de ellos sale cuántas etiquetas se
+    // graban.
     return datos.modulos.every((m) => m && typeof m.codigo === 'string' && m.codigo
-      && Number.isInteger(m.ramales) && m.ramales >= 0);
+      && Number.isInteger(m.ramales) && m.ramales >= 0
+      && (m.pasadas === undefined
+        || (Number.isInteger(m.pasadas) && m.pasadas >= 1 && m.pasadas <= MAX_PASADAS))
+      && (m.etiquetasExtra === undefined
+        || (Number.isInteger(m.etiquetasExtra) && m.etiquetasExtra >= 0)));
   }
 
   async function bajarMaestro() {
@@ -1454,8 +1503,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const porPasada = totalPorPasada(m);
       const p1 = hechasEnPasada(m.codigo, 1);
       const p2 = hechasEnPasada(m.codigo, 2);
+      const unaSola = pasadasDe(m) === 1;
       const estado = moduloCompleto(m) ? `completo (${totalModulo(m)})`
-        : (p1 + p2) === 0 ? `${porPasada} x2 etiquetas`
+        : (p1 + p2) === 0 ? (unaSola ? `${porPasada} etiquetas` : `${porPasada} x2 etiquetas`)
+        : unaSola ? `${p1}/${porPasada}`
         : `P1 ${p1}/${porPasada} · P2 ${p2}/${porPasada}`;
       return { valor: m.codigo, detalle: `${m.finca} · ${estado}` };
     }));
@@ -1512,7 +1563,7 @@ document.addEventListener('DOMContentLoaded', () => {
       rot.pasada = objetivo.pasada;
       rot.indice = objetivo.numero - 1;
     } else {
-      rot.pasada = PASADAS;
+      rot.pasada = pasadasDe(modulo);
       rot.indice = totalPorPasada(modulo) - 1;
     }
 
@@ -1529,29 +1580,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const modulo = rot.seleccion;
     if (!modulo) return;
 
+    const { pasadas, extra } = reglaDe(modulo);
+    const unaSola = pasadas === 1;
     const porPasada = totalPorPasada(modulo);
     const enPasada = hechasEnPasada(modulo.codigo, rot.pasada);
     const hechas = hechasDe(modulo.codigo);
     const completo = moduloCompleto(modulo);
-    const esperandoPasada2 = pasadaCompleta(modulo, 1) && !pasadaCompleta(modulo, 2)
-      && rot.pasada === 1;
+    const esperandoPasada2 = !unaSola && pasadaCompleta(modulo, 1)
+      && !pasadaCompleta(modulo, 2) && rot.pasada === 1;
 
     DOM.rotCurrentLabel.textContent = completo ? '✓' : etiquetaActual();
     DOM.rotCurrentLabel.classList.toggle('rot-modulo-completo', completo);
 
-    // La barra mide el módulo entero (las dos pasadas); el texto desglosa la
-    // pasada en curso, que es lo que el operador tiene entre manos.
+    // La barra mide el módulo entero (las dos pasadas cuando lleva dos); el
+    // texto desglosa la pasada en curso, que es lo que el operador tiene entre
+    // manos. Con una sola pasada no se nombra: no hay otra con la que confundirla.
     DOM.rotProgressText.textContent = completo
       ? `Completo · ${hechas} de ${totalModulo(modulo)}`
-      : `Pasada ${rot.pasada} de ${PASADAS} · ${enPasada} de ${porPasada}`;
-    DOM.rotProgressDetail.textContent =
-      `${modulo.ramales} ramales + ${ETIQUETAS_EXTRA}, dos juegos · ${modulo.finca}`;
+      : unaSola ? `${enPasada} de ${porPasada}`
+      : `Pasada ${rot.pasada} de ${pasadas} · ${enPasada} de ${porPasada}`;
+    DOM.rotProgressDetail.textContent = unaSola
+      ? `${modulo.ramales} ramales, un solo juego · ${modulo.finca}`
+      : `${modulo.ramales} ramales + ${extra}, dos juegos · ${modulo.finca}`;
     DOM.rotProgressFill.style.width =
       `${totalModulo(modulo) ? (hechas / totalModulo(modulo)) * 100 : 0}%`;
 
     DOM.rotScannerStatus.textContent = rot.activo
-      ? `Acerca la etiqueta ${etiquetaActual()} (pasada ${rot.pasada})`
-      : completo ? 'Módulo completo: las dos pasadas están grabadas'
+      ? (unaSola ? `Acerca la etiqueta ${etiquetaActual()}`
+        : `Acerca la etiqueta ${etiquetaActual()} (pasada ${rot.pasada})`)
+      : completo ? (unaSola ? 'Módulo completo: sus etiquetas están grabadas'
+        : 'Módulo completo: las dos pasadas están grabadas')
       : esperandoPasada2 ? 'Pasada 1 lista. Toma el segundo juego de etiquetas.'
       : 'Escáner inactivo';
 
@@ -1579,7 +1637,9 @@ document.addEventListener('DOMContentLoaded', () => {
       avisos.push(`El código ${modulo.codigo} aparece repetido en el maestro. Se graba un solo juego de etiquetas.`);
     }
     if (completo) {
-      avisos.push('Las dos pasadas de este módulo están grabadas.');
+      avisos.push(unaSola
+        ? 'Este módulo ya está grabado.'
+        : 'Las dos pasadas de este módulo están grabadas.');
     }
     DOM.rotWarning.classList.toggle('hidden', avisos.length === 0);
     DOM.rotWarningText.textContent = avisos.join(' ');
@@ -1612,7 +1672,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     if (moduloCompleto(rot.seleccion)) {
-      showToast('Las dos pasadas de este módulo ya están completas. Reinicia su avance si quieres regrabarlo.', 'info');
+      showToast(pasadasDe(rot.seleccion) === 1
+        ? 'Este módulo ya está completo. Reinicia su avance si quieres regrabarlo.'
+        : 'Las dos pasadas de este módulo ya están completas. Reinicia su avance si quieres regrabarlo.',
+      'info');
       return;
     }
     if (window.NfcBackend.kind !== 'native' && !state.simulatorActive) {
@@ -1707,7 +1770,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // refleja el acto físico de cambiar de bulto de etiquetas.
     detenerRotulado();
 
-    if (rot.pasada < PASADAS) {
+    const pasadas = pasadasDe(modulo);
+    if (rot.pasada < pasadas) {
       playSound('success');
       triggerHaptic([80, 60, 80, 60, 160]);
       showToast(`Pasada ${rot.pasada} completa: ${total} etiquetas. Cambia de juego.`, 'success');
@@ -1721,12 +1785,18 @@ document.addEventListener('DOMContentLoaded', () => {
       rot.pasada = pendiente.pasada;
       rot.indice = pendiente.numero - 1;
       actualizarUiRotulado();
-      showToast(`Faltan etiquetas de la pasada ${pendiente.pasada}. Retoma en la ${pendiente.numero}.`, 'info');
+      showToast(pasadas === 1
+        ? `Faltan etiquetas. Retoma en la ${pendiente.numero}.`
+        : `Faltan etiquetas de la pasada ${pendiente.pasada}. Retoma en la ${pendiente.numero}.`,
+      'info');
       return;
     }
 
     actualizarUiRotulado();
-    showToast(`Módulo ${modulo.codigo} completo: ${totalModulo(modulo)} etiquetas en ${PASADAS} pasadas.`, 'success');
+    showToast(pasadas === 1
+      ? `Módulo ${modulo.codigo} completo: ${totalModulo(modulo)} etiquetas.`
+      : `Módulo ${modulo.codigo} completo: ${totalModulo(modulo)} etiquetas en ${pasadas} pasadas.`,
+    'success');
   }
 
   // ------------------------------------------------------------------
@@ -1829,7 +1899,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!registro.reset[clave] || e.fecha > registro.reset[clave]) {
           registro.reset[clave] = e.fecha;
         }
-        for (let p = 1; p <= PASADAS; p++) {
+        for (let p = 1; p <= MAX_PASADAS; p++) {
           if (clave !== 'global' && String(p) !== clave) continue;
           const etiquetas = (registro.pasadas && registro.pasadas[p]) || {};
           Object.keys(etiquetas).forEach((n) => {
@@ -1985,11 +2055,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const p2 = hechasEnPasada(codigo, 2);
       const completo = modulo ? moduloCompleto(modulo) : false;
 
+      // Un módulo de una sola pasada no lleva insignia "P1": no hay segunda de
+      // la que distinguirla. La P2 aparece igual si hay etiquetas grabadas en
+      // ella, aunque hoy el módulo pida una sola pasada: están en el campo.
+      const unaSola = modulo ? pasadasDe(modulo) === 1 : false;
       const insignia = (pasada, hechas) => {
         const lleno = porPasada !== null && hechas >= porPasada;
+        const rotulo = unaSola && pasada === 1 ? '' : `P${pasada} `;
         return `<span class="badge-status ${lleno ? 'success' : 'danger'}">`
-          + `P${pasada} ${hechas}${porPasada === null ? '' : ` / ${porPasada}`}</span>`;
+          + `${rotulo}${hechas}${porPasada === null ? '' : ` / ${porPasada}`}</span>`;
       };
+      const insignias = unaSola && p2 === 0
+        ? insignia(1, p1)
+        : `${insignia(1, p1)} ${insignia(2, p2)}`;
 
       const ultimaDe = (pasada) => {
         const etiquetas = etiquetasDe(codigo, pasada);
@@ -2014,7 +2092,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td><code>${escaparHtml(codigo)}</code></td>
           <td>${escaparHtml(registro.finca || '')}</td>
           <td>${escaparHtml(registro.responsable || '')}</td>
-          <td>${insignia(1, p1)} ${insignia(2, p2)}${avisoDup}</td>
+          <td>${insignias}${avisoDup}</td>
           <td>${ultima ? `<code>${escaparHtml(ultima.texto)}</code>` : ''}</td>
         </tr>
       `;
@@ -2025,7 +2103,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function recorrerAvance(fn) {
     Object.keys(rot.progreso).sort().forEach((codigo) => {
       const registro = rot.progreso[codigo];
-      for (let pasada = 1; pasada <= PASADAS; pasada++) {
+      for (let pasada = 1; pasada <= MAX_PASADAS; pasada++) {
         const etiquetas = etiquetasDe(codigo, pasada);
         Object.keys(etiquetas).map(Number).sort((a, b) => a - b).forEach((numero) => {
           fn(codigo, registro, pasada, numero, etiquetas[numero]);
@@ -2115,7 +2193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const codigo = rot.seleccion ? rot.seleccion.codigo : null;
     const soloEste = codigo && rot.progreso[codigo];
     const mensaje = soloEste
-      ? `¿Borrar el avance de ${codigo}? Se perderá el registro de sus ${hechasDe(codigo)} etiquetas, de las dos pasadas.`
+      ? `¿Borrar el avance de ${codigo}? Se perderá el registro de sus ${hechasDe(codigo)} etiquetas.`
       : '¿Borrar el avance de TODOS los módulos?';
 
     // Se dice de frente: esto limpia la pantalla de este teléfono, no el

@@ -27,15 +27,33 @@ function extraer(nombre) {
 }
 
 const FUNCIONES = [
-  'totalPorPasada', 'totalModulo', 'textoEtiqueta', 'registroDe', 'etiquetasDe',
+  'reglaDe', 'pasadasDe', 'totalPorPasada', 'totalModulo', 'textoEtiqueta',
+  'registroDe', 'etiquetasDe',
   'hechasEnPasada', 'hechasDe', 'pasadaCompleta', 'moduloCompleto',
   'siguientePendiente', 'siguienteObjetivo', 'uidYaUsado', 'idEvento', 'migrarV1', 'leerJson',
 ];
 
+/**
+ * Saca una constante de app.js tal cual esta escrita.
+ *
+ * Copiarlas aqui a mano seria peor que inutil: la regla de cada tipo de riego
+ * -cuantas pasadas y cuantas etiquetas extra- es justo lo que hay que probar, y
+ * una copia se quedaria diciendo que todo va bien mientras la app cambia.
+ */
+function constante(nombre) {
+  const m = src.match(new RegExp(`\\n  const ${nombre} = [^\\n]+`));
+  assert.ok(m, `no se encontro la constante ${nombre} en app.js`);
+  return m[0];
+}
+
+const CONSTANTES = [
+  'ETIQUETAS_EXTRA', 'PASADAS', 'MAX_PASADAS', 'REGLA_POR_DEFECTO',
+  'REGLA_POR_TIPO', 'CODIGO_MODULO',
+];
+
 // Entorno minimo que esas funciones esperan.
 const preludio = `
-  const ETIQUETAS_EXTRA = 4;
-  const PASADAS = 2;
+  ${CONSTANTES.map(constante).join('\n')}
   const ROT_PROGRESO_KEY = 'nfc_rotulado_progreso';
   const ROT_PROGRESO_V2_KEY = 'nfc_rotulado_progreso_v2';
   const ROT_MIGRACION_KEY = 'nfc_rotulado_migracion_v2';
@@ -54,12 +72,14 @@ const preludio = `
 
 const cuerpo = preludio + FUNCIONES.map(extraer).join('\n');
 const api = new Function(`${cuerpo}
-  return { rot, almacen, totalPorPasada, totalModulo, textoEtiqueta, etiquetasDe,
+  return { rot, almacen, reglaDe, pasadasDe, totalPorPasada, totalModulo,
+           textoEtiqueta, etiquetasDe,
            hechasEnPasada, hechasDe, pasadaCompleta, moduloCompleto,
            siguientePendiente, siguienteObjetivo, uidYaUsado, idEvento, migrarV1 };`)();
 
 const {
-  rot, almacen, totalPorPasada, totalModulo, textoEtiqueta, hechasEnPasada, hechasDe,
+  rot, almacen, reglaDe, pasadasDe, totalPorPasada, totalModulo, textoEtiqueta,
+  hechasEnPasada, hechasDe,
   pasadaCompleta, moduloCompleto, siguientePendiente, siguienteObjetivo, uidYaUsado,
   idEvento, migrarV1,
 } = api;
@@ -80,16 +100,23 @@ function prueba(nombre, fn) {
 const MOD = { codigo: 'OOC-MNA-001', ramales: 3, finca: 'F', region: 'R', responsable: 'X' };
 // ramales 3 + 4 = 7 por pasada, 14 en total.
 
-function grabar(pasada, numeros, uidBase = 'U') {
-  rot.progreso[MOD.codigo] = rot.progreso[MOD.codigo] || { pasadas: {} };
-  const r = rot.progreso[MOD.codigo];
+// Aspersion: una etiqueta por ramal, sin extras, y una sola pasada.
+const ASP = { codigo: 'OOC-ASP-001', ramales: 2, finca: 'F', region: 'R', responsable: 'X' };
+
+function grabarEn(codigo, pasada, numeros, uidBase = 'U') {
+  rot.progreso[codigo] = rot.progreso[codigo] || { pasadas: {} };
+  const r = rot.progreso[codigo];
   r.pasadas[pasada] = r.pasadas[pasada] || {};
   numeros.forEach((n) => {
     r.pasadas[pasada][n] = {
-      texto: textoEtiqueta(MOD.codigo, n), uid: `${uidBase}${pasada}-${n}`,
+      texto: textoEtiqueta(codigo, n), uid: `${uidBase}${pasada}-${n}`,
       fecha: '2026-08-03T00:00:00Z', dispositivo: 'd-prueba',
     };
   });
+}
+
+function grabar(pasada, numeros, uidBase = 'U') {
+  grabarEn(MOD.codigo, pasada, numeros, uidBase);
 }
 function reset() { rot.progreso = {}; }
 
@@ -132,6 +159,54 @@ prueba('mas ramales en el maestro descompletan el modulo', () => {
   assert.equal(moduloCompleto(MOD), true);
   assert.equal(moduloCompleto({ ...MOD, ramales: 5 }), false,
     'el total sale del maestro vivo, no de lo guardado');
+});
+
+console.log('\n== aspersion: un juego, sin extras ==');
+prueba('ASP lleva una etiqueta por ramal y nada mas', () => {
+  assert.equal(totalPorPasada(ASP), 2, 'ramales 2, sin las cuatro extras');
+  assert.equal(pasadasDe(ASP), 1);
+  assert.equal(totalModulo(ASP), 2, 'un solo juego de etiquetas');
+});
+prueba('la regla sale del codigo si el maestro no la trae', () => {
+  // Es el caso del maestro dentro del APK, escrito antes de que ASP existiera:
+  // sin esta deduccion mandaria a grabar 6 etiquetas por juego y dos juegos.
+  assert.deepEqual(reglaDe({ codigo: 'OOC-ASP-009', ramales: 5 }), { pasadas: 1, extra: 0 });
+  assert.deepEqual(reglaDe({ codigo: 'OOC-MNA-009', ramales: 5 }), { pasadas: 2, extra: 4 });
+});
+prueba('el maestro manda sobre la deduccion', () => {
+  assert.deepEqual(reglaDe({ codigo: 'OOC-ASP-009', ramales: 5, pasadas: 2, etiquetasExtra: 4 }),
+    { pasadas: 2, extra: 4 }, 'para poder corregirlo sin reinstalar el APK');
+});
+prueba('un valor imposible del maestro NO se obedece', () => {
+  assert.deepEqual(reglaDe({ codigo: 'OOC-ASP-009', ramales: 5, pasadas: 0, etiquetasExtra: -1 }),
+    { pasadas: 1, extra: 0 });
+  assert.deepEqual(reglaDe({ codigo: 'OOC-ASP-009', ramales: 5, pasadas: 7 }),
+    { pasadas: 1, extra: 0 }, 'el formato guardado no tiene mas de dos pasadas');
+});
+prueba('un codigo sin forma cae en la regla de siempre', () => {
+  assert.deepEqual(reglaDe({ codigo: 'RARO', ramales: 3 }), { pasadas: 2, extra: 4 });
+});
+prueba('una sola pasada llena SI completa un ASP', () => {
+  reset();
+  grabarEn(ASP.codigo, 1, [1, 2]);
+  assert.equal(pasadaCompleta(ASP, 1), true);
+  assert.equal(moduloCompleto(ASP), true, 'no hay segunda pasada que esperar');
+  assert.equal(siguienteObjetivo(ASP), null, 'y no puede mandar a empezar una pasada 2');
+});
+prueba('un ASP a medias sigue pendiente', () => {
+  reset();
+  grabarEn(ASP.codigo, 1, [1]);
+  assert.equal(moduloCompleto(ASP), false);
+  assert.deepEqual(siguienteObjetivo(ASP), { pasada: 1, numero: 2 });
+});
+prueba('etiquetas de una pasada 2 vieja se siguen viendo', () => {
+  // Si a un modulo le bajaran las pasadas de 2 a 1, lo grabado en la 2 esta
+  // pegado en el campo: contarlo es lo unico honesto.
+  reset();
+  grabarEn(ASP.codigo, 1, [1, 2]);
+  grabarEn(ASP.codigo, 2, [1]);
+  assert.equal(hechasDe(ASP.codigo), 3);
+  assert.deepEqual(uidYaUsado(ASP.codigo, 'U2-1'), { pasada: 2, numero: 1 });
 });
 
 console.log('\n== donde retomar ==');
