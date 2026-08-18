@@ -1,6 +1,6 @@
 {
   "generado": "2026-08-18",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-18T14:25Z)",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-18T21:49Z)",
   "regla": "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0",
   "avisos": [
     {
@@ -9,12 +9,12 @@
     },
     {
       "tipo": "otroTipoDeRiego",
-      "registros": 35,
+      "registros": 40,
       "porTipo": {
-        "AVF": 7,
+        "AVF": 11,
         "CAR": 8,
         "PVC": 15,
-        "GRA": 4,
+        "GRA": 5,
         "APO": 1
       }
     },
@@ -69,6 +69,12 @@
       "mismoNumeroDeRamales": true
     },
     {
+      "codigo": "ORC-ASP-023",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
       "codigo": "ORO-ASP-001",
       "registros": 2,
       "columnasDistintas": [
@@ -77,7 +83,66 @@
       "mismoNumeroDeRamales": true
     },
     {
+      "codigo": "ORO-ASP-002",
+      "registros": 2,
+      "columnasDistintas": [
+        "NO_HIDRANTES"
+      ],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORO-ASP-003",
+      "registros": 2,
+      "columnasDistintas": [
+        "NO_HIDRANTES",
+        "NO_RAMALES"
+      ],
+      "mismoNumeroDeRamales": false
+    },
+    {
       "codigo": "ORO-ASP-006",
+      "registros": 2,
+      "columnasDistintas": [
+        "NO_HIDRANTES"
+      ],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORO-ASP-009",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORO-ASP-011",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORO-ASP-012",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORO-ASP-013",
+      "registros": 2,
+      "columnasDistintas": [
+        "FUENTE_AGUA"
+      ],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORO-ASP-014",
+      "registros": 2,
+      "columnasDistintas": [
+        "FUENTE_AGUA"
+      ],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORO-ASP-016",
       "registros": 2,
       "columnasDistintas": [],
       "mismoNumeroDeRamales": true
@@ -4034,6 +4099,48 @@
       "duplicado": false
     },
     {
+      "codigo": "ORC-ASP-009",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Varsovia II",
+      "codigoFinca": "174",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-ASP-019",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "Las Pilas",
+      "codigoFinca": "423",
+      "ramales": 5,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-ASP-023",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "Laguna Blanca",
+      "codigoFinca": "237",
+      "ramales": 4,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
       "codigo": "ORC-MDA-001",
       "region": "ORIENTE CENTRO",
       "responsable": "Gaspar Tiu Esteban",
@@ -4697,7 +4804,7 @@
       "responsable": "Glenda Xiomara Mendez Ruano",
       "finca": "Cartago",
       "codigoFinca": "260",
-      "ramales": 4,
+      "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
@@ -4711,13 +4818,13 @@
       "responsable": "Glenda Xiomara Mendez Ruano",
       "finca": "Los Angeles",
       "codigoFinca": "333",
-      "ramales": 4,
+      "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
-      "duplicado": false
+      "duplicado": true
     },
     {
       "codigo": "ORO-ASP-003",
@@ -4725,13 +4832,13 @@
       "responsable": "Glenda Xiomara Mendez Ruano",
       "finca": "Arizona",
       "codigoFinca": "301",
-      "ramales": 8,
+      "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
-      "duplicado": false
+      "duplicado": true
     },
     {
       "codigo": "ORO-ASP-005",
@@ -4739,7 +4846,7 @@
       "responsable": "Glenda Xiomara Mendez Ruano",
       "finca": "San Francisco La Blanca",
       "codigoFinca": "300",
-      "ramales": 4,
+      "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
@@ -4753,7 +4860,147 @@
       "responsable": "Glenda Xiomara Mendez Ruano",
       "finca": "San Francisco La Blanca",
       "codigoFinca": "300",
-      "ramales": 4,
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORO-ASP-007",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Trinidad",
+      "codigoFinca": "302",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-ASP-008",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Trinidad",
+      "codigoFinca": "302",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-ASP-009",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Trinidad",
+      "codigoFinca": "302",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORO-ASP-010",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Trinidad",
+      "codigoFinca": "302",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-ASP-011",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Trinidad",
+      "codigoFinca": "302",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORO-ASP-012",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Trinidad",
+      "codigoFinca": "302",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORO-ASP-013",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Trinidad",
+      "codigoFinca": "302",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORO-ASP-014",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Trinidad",
+      "codigoFinca": "302",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORO-ASP-015",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "La Trinidad",
+      "codigoFinca": "302",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-ASP-016",
+      "region": "ORIENTE",
+      "responsable": "Santos Felix Camajá Perez",
+      "finca": "Viñas",
+      "codigoFinca": "320",
+      "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
@@ -4997,6 +5244,20 @@
       "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORO-MNA-018",
+      "region": "ORIENTE",
+      "responsable": "Glenda Xiomara Mendez Ruano",
+      "finca": "Los Angeles",
+      "codigoFinca": "333",
+      "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
+      "etiquetasFijas": null,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
       "duplicado": false
     },
     {

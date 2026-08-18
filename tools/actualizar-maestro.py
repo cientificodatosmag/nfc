@@ -23,16 +23,36 @@ GitHub Actions no alcanza la IP interna de Oracle. Cualquier automatizacion
 tiene que correr desde dentro de la red. El push si dispara Vercel y la
 recompilacion del APK, que es lo unico que necesita estar en la nube.
 
+Que entra en la app
+-------------------
+Mini y midi aspersion (MNA, MDA) y aspersion (ASP). Pivote, avance frontal y
+carrete siguen fuera: se rotulan con otro procedimiento y la app no lo sabe
+hacer. El script los descarta y dice cuantos y de que tipo, para que se sepa que
+existen y que quedaron fuera a proposito.
+
+Cada modulo se lleva su regla escrita
+-------------------------------------
+MNA y MDA: ramales + 4 etiquetas, grabadas dos veces sobre dos juegos.
+ASP:       6 etiquetas fijas, una sola pasada. Los ramales no entran.
+
+Esa regla viaja en el JSON (`pasadas`, `etiquetasExtra`, `etiquetasFijas`) en
+vez de vivir solo dentro de la app, por lo mismo que los ramales: se corrige sin
+reinstalar el APK en cada telefono. La app tambien sabe deducirla del tipo que
+lleva el codigo, asi que un maestro viejo sin esos campos no manda a grabar de
+mas.
+
 Que exige "actualizado"
 -----------------------
 NO_RAMALES no nulo y mayor que cero. Se comprobo contra la realidad: exigir mas
 campos (responsable, finca, region, hidrantes, area) mueve el total de 121 a
-119 y no recupera ni descarta ninguno de los 59 que ya se rotulaban. Los
-ramales son ademas el unico dato del que depende cuantas etiquetas se graban.
+119 y no recupera ni descarta ninguno de los 59 que ya se rotulaban.
+
+Los ramales siguen siendo la regla de entrada aunque en aspersion ya no digan
+cuantas etiquetas se graban: un modulo sin ramales en Oracle es un modulo sin
+validar, y eso vale igual para ASP.
 """
 import argparse
 import json
-import os
 import subprocess
 import sys
 import urllib.error
@@ -47,11 +67,23 @@ from normalizar_nombres import (
     agrupar_por_parecido, clave, normalizar_finca, normalizar_responsable,
     normalizar_simple, pares_dudosos,
 )
+from reglas_rotulado import NOMBRES, REGLAS, regla, tipo_modulo
 
 RAIZ = Path(__file__).resolve().parent.parent
 DESTINO = RAIZ / 'modulos.json'
 
 REGLA_ACTUALIZADO = "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0"
+
+# Los unicos que la app sabe rotular, con su (pasadas, extras, fijas). El
+# codigo lleva el tipo de riego en el segundo bloque: ORC-MNA-001 es mini
+# aspersion, ORC-ASP-001 es aspersion. La regla vive en reglas_rotulado.py, que
+# es de donde la leen tambien los reportes.
+TIPOS_APP = REGLAS
+
+# Lo que queda fuera se graba con otro procedimiento, no con el de la app. Los
+# nombres salen del mismo catalogo que usan los reportes.
+TIPOS_FUERA = {t: n for t, n in NOMBRES.items() if t not in TIPOS_APP}
+
 
 QUERY = f"""
 SELECT
@@ -123,17 +155,35 @@ def construir(filas, cfg):
     avisos = []
     por_codigo = defaultdict(list)
     sin_codigo = 0
+    otros_tipos = defaultdict(list)
 
     for fila in filas:
         codigo = texto(fila['CODIGO_MODULO']).upper()
         if not codigo:
             sin_codigo += 1
             continue
+        tipo = tipo_modulo(codigo)
+        if tipo not in TIPOS_APP:
+            otros_tipos[tipo or '(codigo raro)'].append(codigo)
+            continue
         por_codigo[codigo].append(fila)
 
     if sin_codigo:
         avisos.append({'tipo': 'sinCodigo', 'registros': sin_codigo})
         print(f'  AVISO: {sin_codigo} fila(s) sin codigo de modulo, descartadas')
+
+    if otros_tipos:
+        cuantos = sum(len(v) for v in otros_tipos.values())
+        # Solo el conteo: modulos.json viaja dentro del APK y la lista entera
+        # de lo que no entra no le sirve de nada al telefono.
+        avisos.append({'tipo': 'otroTipoDeRiego',
+                       'registros': cuantos,
+                       'porTipo': {t: len(set(c)) for t, c in otros_tipos.items()}})
+        print(f'  {cuantos} fila(s) de otro tipo de riego, fuera de la app:')
+        for tipo in sorted(otros_tipos):
+            codigos = sorted(set(otros_tipos[tipo]))
+            print(f'    {tipo} ({TIPOS_FUERA.get(tipo, "?")}): {len(codigos)} '
+                  f'-> {", ".join(codigos[:6])}{" ..." if len(codigos) > 6 else ""}')
 
     # El parecido se aplica SOLO a responsables. En fincas seria destructivo:
     # "Providencia I" y "Providencia II" se parecen muchisimo y son dos fincas
@@ -179,6 +229,7 @@ def construir(filas, cfg):
                       f'{sorted(ramales_distintos)}; se usa {int(primera["NO_RAMALES"])}')
 
         responsable = normalizar_responsable(texto(primera['RESPONSABLE']))
+        pasadas, extra, fijas = TIPOS_APP[tipo_modulo(codigo)]
         modulos.append({
             'codigo': codigo,
             'region': texto(primera['REGION']),
@@ -186,6 +237,9 @@ def construir(filas, cfg):
             'finca': normalizar_finca(texto(primera['FINCA'])),
             'codigoFinca': texto(primera['C_FINCA']),
             'ramales': int(primera['NO_RAMALES']),
+            'pasadas': pasadas,
+            'etiquetasExtra': extra,
+            'etiquetasFijas': fijas,
             'tipoRiego': canon_riego.get(clave(texto(primera['TIPO_RIEGO'])), ''),
             'fuenteAgua': canon_agua.get(clave(texto(primera['FUENTE_AGUA'])), ''),
             'duplicado': len(repetidas) > 1,
@@ -207,9 +261,9 @@ def modulos_con_etiquetas():
     Aplica las mismas barreras de reinicio que el servidor: un modulo cuyo
     avance se reinicio no cuenta como rotulado.
     """
-    llave = os.environ.get('NFC_APP_KEY')
+    llave = _config.llave_backend('NFC_APP_KEY', 'app')
     if not llave:
-        return None, 'sin NFC_APP_KEY en el entorno'
+        return None, 'sin NFC_APP_KEY en el entorno ni en el llavero'
 
     base = ''
     cfg = RAIZ / 'config.js'
@@ -259,9 +313,55 @@ def modulos_con_etiquetas():
 
 # ---------------------------------------------------------------------- diff
 
+def con_regla(modulo):
+    """
+    El modulo con su regla escrita, aunque no la traiga.
+
+    Es lo que hace comparable el maestro anterior con el nuevo. Sin esto, la
+    primera corrida despues de que estos campos existieran marcaria los 326
+    modulos como "cambia el numero de etiquetas" -de None a 2 y de None a 4-
+    cuando ninguno cambia de verdad, y ese aviso, gritado 326 veces, deja de
+    significar nada el dia que uno cambie en serio.
+    """
+    pasadas, extra, _ = regla_de(modulo)
+    # `etiquetasFijas` NO se rellena con el valor del tipo, al reves que las
+    # otras dos. Un maestro escrito antes de que existiera el campo no queria
+    # decir "las fijas de su tipo": queria decir que no habia fijas, porque el
+    # concepto no existia. Rellenarlo aqui haria que el dia que a un tipo se le
+    # pongan etiquetas fijas, el diff dijera que no cambio nada -y ese es
+    # justamente el cambio que puede dejar rotulado huerfano.
+    return {**modulo, 'pasadas': pasadas, 'etiquetasExtra': extra,
+            'etiquetasFijas': modulo.get('etiquetasFijas')}
+
+
+def cuenta_por_pasada(modulo):
+    """
+    Etiquetas de una pasada segun lo que ESE json dice, sin suponer nada.
+
+    No usa reglas_rotulado.por_pasada a proposito: aquella rellena los huecos
+    con la regla del tipo, que es lo correcto para leer un maestro, y aqui hace
+    falta lo contrario -leer cada version tal como estaba escrita- para que el
+    diff no se coma un cambio real.
+    """
+    m = con_regla(modulo)
+    if m['etiquetasFijas'] is not None:
+        return m['etiquetasFijas']
+    return modulo['ramales'] + m['etiquetasExtra']
+
+
+def juego_de(modulo):
+    """(etiquetas por pasada, pasadas) del modulo. Es lo que se va a grabar."""
+    return cuenta_por_pasada(modulo), con_regla(modulo)['pasadas']
+
+
+def texto_juego(juego):
+    etiquetas, pasadas = juego
+    return f'{etiquetas} x{pasadas} = {etiquetas * pasadas}'
+
+
 def comparar(viejos, nuevos):
-    antes = {m['codigo']: m for m in viejos}
-    ahora = {m['codigo']: m for m in nuevos}
+    antes = {m['codigo']: con_regla(m) for m in viejos}
+    ahora = {m['codigo']: con_regla(m) for m in nuevos}
 
     entran = sorted(set(ahora) - set(antes))
     salen = sorted(set(antes) - set(ahora))
@@ -275,8 +375,26 @@ def comparar(viejos, nuevos):
     return entran, salen, cambios
 
 
+def regla_de(modulo):
+    """
+    (pasadas, extra, fijas) del modulo: lo que diga el JSON, y si no lo dice,
+    su tipo.
+
+    Ese respaldo por tipo es lo que hace comparable el maestro ANTERIOR, escrito
+    antes de que estos campos existieran: sin el, el diff mostraria un salto de
+    etiquetas que no ocurrio.
+    """
+    return regla(modulo['codigo'], modulo)
+
+
 def etiquetas(modulos):
-    return sum(m['ramales'] + 4 for m in modulos)
+    """Etiquetas de UNA pasada."""
+    return sum(cuenta_por_pasada(m) for m in modulos)
+
+
+def etiquetas_fisicas(modulos):
+    """Etiquetas de verdad: cada modulo por las pasadas que lleve."""
+    return sum(cuenta_por_pasada(m) * con_regla(m)['pasadas'] for m in modulos)
 
 
 def informar(viejos, nuevos, avisos, informe, dudosos, rotulados, motivo_sin_registro):
@@ -286,7 +404,8 @@ def informar(viejos, nuevos, avisos, informe, dudosos, rotulados, motivo_sin_reg
     print('=' * 70)
     print(f'  {len(viejos)} modulos -> {len(nuevos)}      '
           f'etiquetas por pasada: {etiquetas(viejos)} -> {etiquetas(nuevos)}')
-    print(f'  con dos pasadas: {etiquetas(nuevos) * 2} etiquetas fisicas')
+    print(f'  etiquetas fisicas (cada modulo por sus pasadas): '
+          f'{etiquetas_fisicas(viejos)} -> {etiquetas_fisicas(nuevos)}')
     print('=' * 70)
 
     if informe:
@@ -308,7 +427,15 @@ def informar(viejos, nuevos, avisos, informe, dudosos, rotulados, motivo_sin_reg
         print(f'\nENTRAN ({len(entran)})')
         for c in entran:
             m = next(x for x in nuevos if x['codigo'] == c)
-            print(f'  + {c}  {m["finca"]}  ramales {m["ramales"]}  ({m["responsable"]})')
+            pasadas, extra, fijas = regla_de(m)
+            if fijas is not None:
+                juego = f'{fijas} fijas x{pasadas}'
+            elif extra:
+                juego = f'{m["ramales"]}+{extra} x{pasadas}'
+            else:
+                juego = f'{m["ramales"]} x{pasadas}'
+            print(f'  + {c}  {m["finca"]}  ramales {m["ramales"]}  '
+                  f'({juego} etiquetas)  ({m["responsable"]})')
 
     if salen:
         print(f'\nSALEN ({len(salen)})')
@@ -319,15 +446,28 @@ def informar(viejos, nuevos, avisos, informe, dudosos, rotulados, motivo_sin_reg
 
     peligrosos = []
     if cambios:
+        por_codigo_antes = {m['codigo']: m for m in viejos}
+        por_codigo_ahora = {m['codigo']: m for m in nuevos}
         print(f'\nCAMBIAN ({len(cambios)})')
         for codigo, difs in cambios:
             grabadas = (rotulados or {}).get(codigo, 0)
+
+            # Lo peligroso no es que cambie un campo: es que cambie CUANTAS
+            # etiquetas pide el modulo. Desde que la aspersion lleva cantidad
+            # fija, a un ASP le pueden cambiar los ramales sin que eso mueva una
+            # sola etiqueta, y gritar ahi enseña a ignorar el aviso.
+            antes_cuenta = juego_de(por_codigo_antes[codigo])
+            ahora_cuenta = juego_de(por_codigo_ahora[codigo])
+            cambia_la_cuenta = antes_cuenta != ahora_cuenta
+
             for campo, (antes_v, ahora_v) in difs.items():
-                aviso = ''
-                if campo == 'ramales' and grabadas:
-                    aviso = f'   <-- YA TIENE {grabadas} ETIQUETAS GRABADAS'
-                    peligrosos.append((codigo, antes_v, ahora_v, grabadas))
-                print(f'  ~ {codigo}  {campo}: {antes_v!r} -> {ahora_v!r}{aviso}')
+                print(f'  ~ {codigo}  {campo}: {antes_v!r} -> {ahora_v!r}')
+            if cambia_la_cuenta:
+                marca = f'   <-- YA TIENE {grabadas} ETIQUETAS GRABADAS' if grabadas else ''
+                print(f'      etiquetas: {texto_juego(antes_cuenta)} -> '
+                      f'{texto_juego(ahora_cuenta)}{marca}')
+                if grabadas:
+                    peligrosos.append((codigo, antes_cuenta, ahora_cuenta, grabadas))
 
     for aviso in avisos:
         if 'codigo' in aviso:
@@ -339,16 +479,19 @@ def informar(viejos, nuevos, avisos, informe, dudosos, rotulados, motivo_sin_reg
         print('        No se puede saber que modulos ya tienen etiquetas grabadas,')
         print('        asi que un cambio de ramales peligroso pasaria sin aviso.')
         if 'NFC_APP_KEY' in motivo_sin_registro:
-            print('        Para comprobarlo: set NFC_APP_KEY=... antes de correr esto.')
+            print('        Para comprobarlo, deja puesta la llave:')
+            for linea in _config.como_guardar_llave('NFC_APP_KEY', 'app').splitlines():
+                print(f'        {linea}')
         else:
             print('        Si el diff toca ramales, vuelve a intentarlo antes de escribir.')
     elif peligrosos:
         print('\n' + '!' * 70)
-        print('  CAMBIA EL NUMERO DE RAMALES EN MODULOS YA ROTULADOS')
+        print('  CAMBIA EL NUMERO DE ETIQUETAS EN MODULOS YA ROTULADOS')
         print('  Las etiquetas fisicas dicen 001..N y el maestro va a esperar otra')
         print('  cantidad. Eso no se arregla con un git revert.')
-        for codigo, a, b, n in peligrosos:
-            print(f'    {codigo}: {a} -> {b} ramales, con {n} etiquetas ya grabadas')
+        for codigo, antes_j, ahora_j, n in peligrosos:
+            print(f'    {codigo}: {texto_juego(antes_j)} -> {texto_juego(ahora_j)}, '
+                  f'con {n} etiquetas ya grabadas')
         print('!' * 70)
 
     if not (entran or salen or cambios):
@@ -392,7 +535,7 @@ def main():
 
     if not args.si:
         if peligrosos:
-            print('\nHay modulos ya rotulados a los que les cambia el numero de ramales.')
+            print('\nHay modulos ya rotulados a los que les cambia el numero de etiquetas.')
         respuesta = input('\n¿Escribir modulos.json con estos cambios? [s/N] ').strip().lower()
         if respuesta not in ('s', 'si', 'sí'):
             print('No se escribio nada.')
@@ -416,7 +559,8 @@ def main():
     # maestro al abrir o al sincronizar a mano) y recompila el APK.
     mensaje = (f'Actualizar el maestro desde Oracle: {len(nuevos)} modulos\n\n'
                f'Regla: {REGLA_ACTUALIZADO}\n'
-               f'{etiquetas(nuevos)} etiquetas por pasada, {etiquetas(nuevos) * 2} con las dos.\n')
+               f'{etiquetas(nuevos)} etiquetas por pasada, '
+               f'{etiquetas_fisicas(nuevos)} fisicas.\n')
     subprocess.run(['git', 'add', 'modulos.json'], cwd=RAIZ, check=True)
     subprocess.run(['git', 'commit', '-m', mensaje], cwd=RAIZ, check=True)
     subprocess.run(['git', 'push'], cwd=RAIZ, check=True)
