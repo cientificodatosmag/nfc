@@ -41,9 +41,19 @@ const FUNCIONES = [
  * una copia se quedaria diciendo que todo va bien mientras la app cambia.
  */
 function constante(nombre) {
-  const m = src.match(new RegExp(`\\n  const ${nombre} = [^\\n]+`));
+  const m = src.match(new RegExp(`\\n  const ${nombre} = `));
   assert.ok(m, `no se encontro la constante ${nombre} en app.js`);
-  return m[0];
+  // Hasta el punto y coma que cierra la declaracion, contando llaves: la tabla
+  // de reglas por tipo ya no cabe en una linea y no va a encoger. Leer solo la
+  // primera linea dejaria aqui media constante y un error de sintaxis, que es
+  // peor que un fallo de prueba porque no dice cual es el problema.
+  let nivel = 0;
+  for (let j = m.index + m[0].length; j < src.length; j++) {
+    if (src[j] === '{') nivel++;
+    else if (src[j] === '}') nivel--;
+    else if (src[j] === ';' && nivel === 0) return src.slice(m.index, j + 1);
+  }
+  throw new Error(`no se pudo cerrar la constante ${nombre}`);
 }
 
 const CONSTANTES = [
@@ -229,6 +239,46 @@ prueba('subir las etiquetas fijas descompleta un ASP ya lleno', () => {
   assert.equal(moduloCompleto(ASP), true);
   assert.equal(moduloCompleto({ ...ASP, etiquetasFijas: 8 }), false);
   assert.deepEqual(siguienteObjetivo({ ...ASP, etiquetasFijas: 8 }), { pasada: 1, numero: 7 });
+});
+
+console.log('\n== avance frontal y pivote: un juego, dos fijas ==');
+// La maquina es una sola: dos etiquetas y una pasada. Los de prueba llevan
+// ramales 0 a proposito, que es como entran muchos desde Oracle -nadie termino
+// de llenarles el dato- y es justo el caso en el que la cuenta por ramales los
+// habria dejado sin una sola etiqueta.
+const AVF = { codigo: 'OOC-AVF-001', ramales: 0, finca: 'F', region: 'R', responsable: 'X' };
+const PVC = { codigo: 'OOC-PVC-001', ramales: 0, finca: 'F', region: 'R', responsable: 'X' };
+
+prueba('AVF y PVC llevan dos etiquetas en un solo juego', () => {
+  for (const m of [AVF, PVC]) {
+    assert.equal(totalPorPasada(m), 2, `${m.codigo}: dos fijas`);
+    assert.equal(pasadasDe(m), 1, `${m.codigo}: una sola pasada`);
+    assert.equal(totalModulo(m), 2, `${m.codigo}: dos etiquetas fisicas y ya`);
+  }
+});
+prueba('sin ramales llenos siguen llevando sus dos', () => {
+  assert.equal(totalPorPasada(AVF), 2, 'con ramales 0 la cuenta por ramales daria 4 de puro extra');
+  assert.equal(totalPorPasada({ ...PVC, ramales: 12 }), 2, 'ni doce por sus doce');
+});
+prueba('la regla de AVF y PVC sale del codigo si el maestro no la trae', () => {
+  // El maestro que viaja en el APK es anterior a estos dos tipos. Sin la
+  // deduccion, un pivote tratado como MNA mandaria a grabar 4 x2 = 8 etiquetas.
+  assert.deepEqual(reglaDe({ codigo: 'OOC-AVF-007', ramales: 0 }),
+    { pasadas: 1, extra: 0, fijas: 2 });
+  assert.deepEqual(reglaDe({ codigo: 'OOC-PVC-007', ramales: 0 }),
+    { pasadas: 1, extra: 0, fijas: 2 });
+});
+prueba('las dos etiquetas completan un AVF', () => {
+  reset();
+  grabarEn(AVF.codigo, 1, [1, 2]);
+  assert.equal(moduloCompleto(AVF), true, 'no hay segunda pasada que esperar');
+  assert.equal(siguienteObjetivo(AVF), null);
+});
+prueba('un PVC con una sola etiqueta sigue pendiente', () => {
+  reset();
+  grabarEn(PVC.codigo, 1, [1]);
+  assert.equal(moduloCompleto(PVC), false);
+  assert.deepEqual(siguienteObjetivo(PVC), { pasada: 1, numero: 2 });
 });
 
 console.log('\n== donde retomar ==');

@@ -25,15 +25,16 @@ recompilacion del APK, que es lo unico que necesita estar en la nube.
 
 Que entra en la app
 -------------------
-Mini y midi aspersion (MNA, MDA) y aspersion (ASP). Pivote, avance frontal y
-carrete siguen fuera: se rotulan con otro procedimiento y la app no lo sabe
-hacer. El script los descarta y dice cuantos y de que tipo, para que se sepa que
-existen y que quedaron fuera a proposito.
+Mini y midi aspersion (MNA, MDA), aspersion (ASP), avance frontal (AVF) y
+pivote central (PVC). Solo el carrete (CAR) sigue fuera: se rotula con otro
+procedimiento y la app no lo sabe hacer. El script lo descarta y dice cuantos y
+de que tipo, para que se sepa que existen y que quedaron fuera a proposito.
 
 Cada modulo se lleva su regla escrita
 -------------------------------------
 MNA y MDA: ramales + 4 etiquetas, grabadas dos veces sobre dos juegos.
 ASP:       6 etiquetas fijas, una sola pasada. Los ramales no entran.
+AVF y PVC: 2 etiquetas fijas, una sola pasada. Tampoco entran.
 
 Esa regla viaja en el JSON (`pasadas`, `etiquetasExtra`, `etiquetasFijas`) en
 vez de vivir solo dentro de la app, por lo mismo que los ramales: se corrige sin
@@ -50,10 +51,12 @@ de los 59 que ya se rotulaban.
 
 La excepcion no es un capricho. Esa regla existe porque los ramales eran el
 unico dato del que dependia cuantas etiquetas se graban: sin ellos no se sabia
-que mandar a rotular. En aspersion ya no dependen -son 6 fijas-, asi que
-exigirlos solo dejaba fuera modulos que se pueden rotular perfectamente. Un ASP
-sin ramales entra con `ramales: 0` y sus 6 etiquetas, y el dia que Oracle le
-ponga los ramales no cambiara ni una.
+que mandar a rotular. En aspersion ya no dependen -son 6 fijas-, ni en avance
+frontal y pivote -2-, asi que exigirlos solo dejaba fuera modulos que se pueden
+rotular perfectamente. Uno de esos tipos sin ramales entra con `ramales: 0` y su
+cantidad fija, y el dia que Oracle le ponga los ramales no cambiara ni una. Es
+lo que permite que entren TODOS los AVF y PVC que Oracle conoce, incluidos los
+que nadie termino de llenar.
 """
 import argparse
 import json

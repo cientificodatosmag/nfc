@@ -855,6 +855,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Los de aspersión (ASP) NO. Llevan SEIS etiquetas fijas —los ramales no
   // entran en la cuenta— y una sola pasada. Es otro procedimiento de campo, no
   // una variante del mismo.
+  //
+  // El avance frontal (AVF) y el pivote central (PVC) tampoco: son una máquina
+  // sola, llevan DOS etiquetas fijas y una sola pasada.
   const ETIQUETAS_EXTRA = 4;
   const PASADAS = 2;
 
@@ -869,8 +872,16 @@ document.addEventListener('DOMContentLoaded', () => {
   //
   // `fijas` en null significa "cuenta los ramales y súmales el extra". Con un
   // número, ese número es el total y los ramales no entran en la cuenta.
+  //
+  // Esta tabla es la misma que REGLAS en tools/reglas_rotulado.py, del lado del
+  // teléfono. Cuando cambie una, cambia la otra: de ahí sale tanto lo que la
+  // app manda a grabar como lo que la oficina manda a imprimir.
   const REGLA_POR_DEFECTO = { pasadas: PASADAS, extra: ETIQUETAS_EXTRA, fijas: null };
-  const REGLA_POR_TIPO = { ASP: { pasadas: 1, extra: 0, fijas: 6 } };
+  const REGLA_POR_TIPO = {
+    ASP: { pasadas: 1, extra: 0, fijas: 6 },
+    AVF: { pasadas: 1, extra: 0, fijas: 2 },
+    PVC: { pasadas: 1, extra: 0, fijas: 2 }
+  };
   const CODIGO_MODULO = /^[A-Z]{3}-([A-Z]{3})-\d+$/;
   const ROT_PROGRESO_KEY = 'nfc_rotulado_progreso';   // formato v1, ya no se escribe
   const ROT_PROGRESO_V2_KEY = 'nfc_rotulado_progreso_v2';
@@ -1130,7 +1141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return { pasadas, extra, fijas };
   }
 
-  /** Pasadas que exige este módulo: 2 en MNA/MDA, 1 en ASP. */
+  /** Pasadas que exige este módulo: 2 en MNA/MDA, 1 en ASP, AVF y PVC. */
   function pasadasDe(modulo) {
     return reglaDe(modulo).pasadas;
   }
@@ -1139,7 +1150,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * Etiquetas de UNA pasada. Sale del maestro vivo, nunca de lo guardado.
    *
    * Con etiquetas fijas los ramales ni se miran: un ASP lleva sus seis tenga
-   * dos ramales u ocho.
+   * dos ramales u ocho, y un AVF o un PVC sus dos aunque vengan sin ramales.
    */
   function totalPorPasada(modulo) {
     const { extra, fijas } = reglaDe(modulo);
@@ -1597,7 +1608,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const { pasadas, extra, fijas } = reglaDe(modulo);
     const unaSola = pasadas === 1;
     // De dónde sale el número, dicho como lo diría alguien en el campo: por
-    // ramal en mini y midi aspersión, una cantidad cerrada en aspersión.
+    // ramal en mini y midi aspersión, una cantidad cerrada en los demás.
     const cuenta = (fijas === null || fijas === undefined)
       ? `${modulo.ramales} ramales + ${extra}`
       : `${fijas} etiquetas fijas`;

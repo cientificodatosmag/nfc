@@ -28,15 +28,21 @@ dentro del propio código (`OOC-MNA-001`, `OOC-ASP-001`):
 |---|---|---|
 | Mini y midi aspersión (MNA, MDA) | ramales + 4 | 2 |
 | Aspersión (ASP) | **6 fijas** | 1 |
+| Avance frontal (AVF) y pivote central (PVC) | **2 fijas** | 1 |
 
-En aspersión los ramales **no entran en la cuenta**: un ASP lleva sus seis
-etiquetas tenga dos ramales u ocho. Por eso la regla no es solo un extra que se
-suma, sino un tercer valor (`etiquetasFijas`) que cuando está puesto sustituye
-la cuenta por ramales en vez de ampliarla.
+Solo el carrete (CAR) queda fuera de la app: se rotula con otro procedimiento.
+
+En los tipos de cantidad fija los ramales **no entran en la cuenta**: un ASP
+lleva sus seis etiquetas tenga dos ramales u ocho, y un pivote sus dos. Por eso
+la regla no es solo un extra que se suma, sino un tercer valor
+(`etiquetasFijas`) que cuando está puesto sustituye la cuenta por ramales en vez
+de ampliarla. Eso es también lo que permite que entren **todos** los módulos de
+avance frontal y pivote que existen en Oracle, incluidos los que nadie terminó
+de llenar: sin ramales no se quedan sin rotular.
 
 Un módulo cuenta como cumplido cuando terminaron **todos sus juegos**: los dos
-en mini y midi aspersión, el único en aspersión. La pantalla lo dice antes de
-empezar —«3 ramales + 4, dos juegos» o «6 etiquetas fijas, un solo juego»—
+en mini y midi aspersión, el único en los demás. La pantalla lo dice antes de
+empezar —«3 ramales + 4, dos juegos» o «2 etiquetas fijas, un solo juego»—
 porque de ahí sale cuántas etiquetas hay que tener en la mano.
 
 Al acabar la pasada 1 de un módulo de dos juegos la app **se detiene y no
@@ -48,7 +54,7 @@ La regla viaja en el maestro (`pasadas`, `etiquetasExtra`, `etiquetasFijas`),
 así que se corrige sin reinstalar el APK; si el maestro no la trae —el que va
 dentro del APK es anterior a la aspersión— la app la deduce del tipo del código.
 Nunca al revés: un ASP con la regla de MNA mandaría a grabar el doble de
-etiquetas.
+etiquetas, y un pivote, seis veces las suyas.
 
 El avance se comparte entre teléfonos (ver abajo) y se puede exportar a CSV.
 

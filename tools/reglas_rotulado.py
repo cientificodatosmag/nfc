@@ -10,10 +10,12 @@ mandar a imprimir el doble de rotulos o dar por terminado un modulo a medias.
 
     MNA, MDA : ramales + 4 etiquetas, dos juegos.
     ASP      : 6 etiquetas fijas, un solo juego. No dependen de los ramales.
+    AVF, PVC : 2 etiquetas fijas, un solo juego. Tampoco dependen.
 
-Los ASP no se cuentan por ramal: llevan 6 y punto, tenga el modulo 2 ramales u
-8. Por eso la regla no es solo un "extra" que se suma: hay un tercer valor,
-`fijas`, que cuando esta puesto manda sobre los ramales en vez de sumarse.
+Ninguno de los de cantidad fija se cuenta por ramal: un ASP lleva 6 y punto,
+tenga el modulo 2 ramales u 8, y un pivote lleva 2. Por eso la regla no es solo
+un "extra" que se suma: hay un tercer valor, `fijas`, que cuando esta puesto
+manda sobre los ramales en vez de sumarse.
 
 La regla se deduce del tipo de riego que lleva el propio codigo -OOC-ASP-001 es
 aspersion, OOC-MNA-001 mini aspersion-, pero manda modulos.json cuando lo dice:
@@ -31,12 +33,20 @@ REGLAS = {
     'MDA': (2, 4, None),
     'MNA': (2, 4, None),
     'ASP': (1, 0, 6),
+    # Avance frontal y pivote central no son un juego de ramales que rotular uno
+    # por uno: es una maquina sola, y lleva dos etiquetas en una pasada. Los
+    # ramales no entran, que es justo lo que permite alcanzarlos a todos: buena
+    # parte no los tiene llenos en Oracle y con la cuenta por ramales habrian
+    # quedado fuera del maestro sin que nadie lo notara.
+    'AVF': (1, 0, 2),
+    'PVC': (1, 0, 2),
 }
 POR_DEFECTO = (2, 4, None)
 
-# Como se llama cada tipo cuando hay que enseñarselo a alguien. Incluye los que
-# la app NO rotula: aparecen igual en los reportes de Oracle, y un reporte que
-# los deja en blanco obliga a adivinar si es un tipo raro o un dato faltante.
+# Como se llama cada tipo cuando hay que enseñarselo a alguien. Incluye el que
+# la app NO rotula -el carrete-: aparece igual en los reportes de Oracle, y un
+# reporte que lo deja en blanco obliga a adivinar si es un tipo raro o un dato
+# faltante.
 NOMBRES = {
     'MNA': 'Mini aspersion',
     'MDA': 'Midi aspersion',
