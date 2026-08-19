@@ -1,7 +1,7 @@
 {
-  "generado": "2026-08-18",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-18T21:49Z)",
-  "regla": "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0",
+  "generado": "2026-08-19",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-19T15:59Z)",
+  "regla": "((M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0) OR (REGEXP_LIKE(M.CODIGO_MODULO, '^[A-Z]{3}-(ASP)-[0-9]+$')))",
   "avisos": [
     {
       "tipo": "sinCodigo",
@@ -17,6 +17,22 @@
         "GRA": 5,
         "APO": 1
       }
+    },
+    {
+      "codigo": "CEN-ASP-001",
+      "registros": 2,
+      "columnasDistintas": [
+        "NO_RAMALES"
+      ],
+      "mismoNumeroDeRamales": false
+    },
+    {
+      "codigo": "CEN-ASP-013",
+      "registros": 2,
+      "columnasDistintas": [
+        "NO_RAMALES"
+      ],
+      "mismoNumeroDeRamales": false
     },
     {
       "codigo": "CEN-ASP-020",
@@ -63,7 +79,108 @@
       "mismoNumeroDeRamales": true
     },
     {
+      "codigo": "ORC-ASP-001",
+      "registros": 2,
+      "columnasDistintas": [
+        "NO_HIDRANTES",
+        "NO_RAMALES"
+      ],
+      "mismoNumeroDeRamales": false
+    },
+    {
       "codigo": "ORC-ASP-002",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORC-ASP-003",
+      "registros": 2,
+      "columnasDistintas": [
+        "NO_HIDRANTES"
+      ],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORC-ASP-004",
+      "registros": 2,
+      "columnasDistintas": [
+        "NO_HIDRANTES"
+      ],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORC-ASP-005",
+      "registros": 2,
+      "columnasDistintas": [
+        "NO_HIDRANTES",
+        "NO_RAMALES"
+      ],
+      "mismoNumeroDeRamales": false
+    },
+    {
+      "codigo": "ORC-ASP-006",
+      "registros": 2,
+      "columnasDistintas": [
+        "NO_HIDRANTES",
+        "NO_RAMALES"
+      ],
+      "mismoNumeroDeRamales": false
+    },
+    {
+      "codigo": "ORC-ASP-007",
+      "registros": 2,
+      "columnasDistintas": [
+        "FUENTE_AGUA"
+      ],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORC-ASP-008",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORC-ASP-009",
+      "registros": 2,
+      "columnasDistintas": [
+        "NO_RAMALES"
+      ],
+      "mismoNumeroDeRamales": false
+    },
+    {
+      "codigo": "ORC-ASP-010",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORC-ASP-012",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORC-ASP-013",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORC-ASP-014",
+      "registros": 2,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORC-ASP-015",
+      "registros": 3,
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "ORC-ASP-016",
       "registros": 2,
       "columnasDistintas": [],
       "mismoNumeroDeRamales": true
@@ -176,7 +293,7 @@
       "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
-      "duplicado": false
+      "duplicado": true
     },
     {
       "codigo": "CEN-ASP-002",
@@ -291,12 +408,26 @@
       "duplicado": false
     },
     {
+      "codigo": "CEN-ASP-010",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Rita",
+      "codigoFinca": "12",
+      "ramales": 5,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "CEN-ASP-011",
       "region": "CENTRAL NORTE",
       "responsable": "Eddy Leonardo Orellana Serrano",
       "finca": "Santa Elisa",
       "codigoFinca": "352",
-      "ramales": 2,
+      "ramales": 5,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
@@ -325,6 +456,20 @@
       "finca": "El Rincon",
       "codigoFinca": "62",
       "ramales": 8,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "CEN-ASP-014",
+      "region": "CENTRAL NORTE",
+      "responsable": "Gerson David Macario Osoy",
+      "finca": "El Campamento",
+      "codigoFinca": "692",
+      "ramales": 0,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
@@ -415,6 +560,20 @@
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Noria",
       "duplicado": true
+    },
+    {
+      "codigo": "CEN-ASP-021",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Polonia",
+      "codigoFinca": "377",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
     },
     {
       "codigo": "CEN-ASP-023",
@@ -837,6 +996,20 @@
       "duplicado": false
     },
     {
+      "codigo": "CEN-MNA-031",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Monica",
+      "codigoFinca": "13",
+      "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
+      "etiquetasFijas": null,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "CEN-MNA-032",
       "region": "CENTRAL NORTE",
       "responsable": "Gerson David Macario Osoy",
@@ -1044,6 +1217,20 @@
       "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-ASP-001",
+      "region": "CENTRAL SUR",
+      "responsable": "Hector Armando Sigarroa Suriano",
+      "finca": "La Felicidad",
+      "codigoFinca": "369",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
       "duplicado": false
     },
     {
@@ -3161,6 +3348,20 @@
       "duplicado": false
     },
     {
+      "codigo": "OOC-ASP-007",
+      "region": "OCCIDENTE CENTRO",
+      "responsable": "Eddy Rolando Payes Barrientos",
+      "finca": "Barranquilla",
+      "codigoFinca": "220",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
       "codigo": "OOC-MNA-001",
       "region": "OCCIDENTE CENTRO",
       "responsable": "Eddy Rolando Payes Barrientos",
@@ -4043,6 +4244,20 @@
       "duplicado": false
     },
     {
+      "codigo": "ORC-ASP-001",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "Cojonal I",
+      "codigoFinca": "295",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
       "codigo": "ORC-ASP-002",
       "region": "ORIENTE CENTRO",
       "responsable": "Aldrin Picado",
@@ -4068,7 +4283,7 @@
       "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
-      "duplicado": false
+      "duplicado": true
     },
     {
       "codigo": "ORC-ASP-004",
@@ -4082,7 +4297,21 @@
       "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
-      "duplicado": false
+      "duplicado": true
+    },
+    {
+      "codigo": "ORC-ASP-005",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Aldrin Picado",
+      "finca": "La Llave",
+      "codigoFinca": "482",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
     },
     {
       "codigo": "ORC-ASP-006",
@@ -4096,7 +4325,35 @@
       "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
-      "duplicado": false
+      "duplicado": true
+    },
+    {
+      "codigo": "ORC-ASP-007",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Tierra Linda III",
+      "codigoFinca": "550",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORC-ASP-008",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Acacias",
+      "codigoFinca": "152",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
     },
     {
       "codigo": "ORC-ASP-009",
@@ -4105,6 +4362,132 @@
       "finca": "Varsovia II",
       "codigoFinca": "174",
       "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORC-ASP-010",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Josefina II",
+      "codigoFinca": "202",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORC-ASP-011",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Tierra Linda I",
+      "codigoFinca": "811",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-ASP-012",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Rancho Maria",
+      "codigoFinca": "614",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORC-ASP-013",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Rancho Maria",
+      "codigoFinca": "614",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORC-ASP-014",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Cadiz",
+      "codigoFinca": "615",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORC-ASP-015",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Cobano",
+      "codigoFinca": "25",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORC-ASP-016",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "La Ceibita",
+      "codigoFinca": "613",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": true
+    },
+    {
+      "codigo": "ORC-ASP-017",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Cadiz",
+      "codigoFinca": "615",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-ASP-018",
+      "region": "ORIENTE CENTRO",
+      "responsable": "Gaspar Tiu Esteban",
+      "finca": "Cadiz",
+      "codigoFinca": "615",
+      "ramales": 0,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
@@ -4119,6 +4502,48 @@
       "finca": "Las Pilas",
       "codigoFinca": "423",
       "ramales": 5,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-ASP-020",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "Laguna Blanca",
+      "codigoFinca": "237",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-ASP-021",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "El Porvenir II",
+      "codigoFinca": "687",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-ASP-022",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "El Horizonte Estrada",
+      "codigoFinca": "147",
+      "ramales": 0,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,

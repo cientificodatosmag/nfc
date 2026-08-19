@@ -20,10 +20,30 @@ que se compartia a mano. La regla acordada con Ingenio Magdalena es "que tenga
 los datos llenos, en especial el numero de ramales", y se comprobo que capturar
 NO_RAMALES > 0 recupera los 59 modulos que traia aquel Excel sin perder ninguno.
 
+Los tipos de cantidad fija de etiquetas -hoy la aspersion- entran igual sin
+ramales. La regla pedia ramales porque de ellos salia cuantos rotulos grabar; en
+aspersion son 6 fijas, asi que exigirlos solo dejaba fuera modulos que se pueden
+rotular hoy mismo.
+
 La consulta va dirigida por el MODULO, no por el empleado: asi aparecen tambien
 los modulos que cumplen la regla pero todavia no tienen a nadie asignado, que
 es justo lo que hay que ver para repartir telefonos. Los colaboradores que no
 cuelgan de ningun modulo vigente no se pierden: van en su propia hoja.
+
+CANTIDAD_PERSONAL
+-----------------
+Columna nueva del maestro: la plantilla que el modulo DEBE tener, incluidas las
+plazas todavia sin contratar. No es la plantilla real y no sustituye al join:
+solo esta llena en 124 de los 226 modulos (Occidente Centro entera la tiene
+vacia), y donde hay gente coincide exactamente con los asignados. Por eso el
+reporte la combina con un maximo en vez de creerle a ciegas.
+
+MODULO_ACTIVO_CANICULA
+----------------------
+Otra columna nueva: SI / No / vacio, 32 / 111 / 84 modulos. Viaja al reporte
+como dato para filtrar, no como prioridad. No mide lo mismo que el informe de
+equipos: 17 modulos que regaron en los ultimos 7 dias estan marcados 'No', asi
+que cambiar una cosa por la otra degradaria modulos que estan operando.
 """
 import sys
 
@@ -32,10 +52,20 @@ from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
 
 import _config
+from reglas_rotulado import REGLAS
 
 # Regla de "modulo actualizado". Se deja aparte porque es el parametro que hay
 # que tocar si algun dia se decide exigir mas campos.
 REGLA_ACTUALIZADO = "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0"
+
+# Los tipos de cantidad fija de etiquetas entran sin ramales: en ellos ese dato
+# no dice cuantos rotulos se graban, asi que exigirlo solo deja fuera modulos
+# que se pueden rotular. Misma regla y mismo motivo que en actualizar-maestro.py.
+TIPOS_SIN_RAMALES = sorted(t for t, (_, _, fijas) in REGLAS.items() if fijas is not None)
+REGLA_CANTIDAD_FIJA = (
+    "REGEXP_LIKE(M.CODIGO_MODULO, '^[A-Z]{3}-(" + '|'.join(TIPOS_SIN_RAMALES) + ")-[0-9]+$')"
+)
+REGLA_ENTRADA = f"(({REGLA_ACTUALIZADO}) OR ({REGLA_CANTIDAD_FIJA}))"
 
 COLUMNAS_MODULO = """
     M.ADMIN,
@@ -61,6 +91,8 @@ COLUMNAS_MODULO = """
     M.NO_POSICIONES,
     M.CAUDAL_REQUERIDO,
     M.AREA_MODULO,
+    M.CANTIDAD_PERSONAL,
+    M.MODULO_ACTIVO_CANICULA,
     M.CREATED_USER,
     M.CREATED_DATE,
     M.LAST_EDITED_USER,
@@ -79,7 +111,7 @@ LEFT OUTER JOIN
 ON
     M.GLOBALID = D.ID_COD_EMP
 WHERE
-    {REGLA_ACTUALIZADO}
+    {REGLA_ENTRADA}
 ORDER BY
     M.REGION, M.RESPONSABLE, M.CODIGO_MODULO, D.NOM_EMPLEADO
 """
@@ -97,7 +129,7 @@ SELECT
     M2.NO_RAMALES,
     CASE WHEN M2.CODIGO_MODULO IS NULL
          THEN 'Sin modulo en el maestro'
-         ELSE 'El modulo no cumple la regla (ramales vacios)'
+         ELSE 'El modulo no cumple la regla (ramales vacios y no es de cantidad fija)'
     END AS MOTIVO
 FROM
     SDEUSR.GRH_EMPLEADOS_MODULOS_RIEGOS D
@@ -108,7 +140,7 @@ ON
 WHERE
     D.ID_COD_EMP NOT IN (
         SELECT M.GLOBALID FROM SDEUSR.MAESTRO_MODULOS_RIEGO M
-        WHERE {REGLA_ACTUALIZADO} AND M.GLOBALID IS NOT NULL
+        WHERE {REGLA_ENTRADA} AND M.GLOBALID IS NOT NULL
     )
 ORDER BY
     D.NOM_EMPLEADO

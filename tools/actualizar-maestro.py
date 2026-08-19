@@ -43,13 +43,17 @@ mas.
 
 Que exige "actualizado"
 -----------------------
-NO_RAMALES no nulo y mayor que cero. Se comprobo contra la realidad: exigir mas
-campos (responsable, finca, region, hidrantes, area) mueve el total de 121 a
-119 y no recupera ni descarta ninguno de los 59 que ya se rotulaban.
+NO_RAMALES no nulo y mayor que cero, SALVO en los tipos de cantidad fija. Se
+comprobo contra la realidad: exigir mas campos (responsable, finca, region,
+hidrantes, area) mueve el total de 121 a 119 y no recupera ni descarta ninguno
+de los 59 que ya se rotulaban.
 
-Los ramales siguen siendo la regla de entrada aunque en aspersion ya no digan
-cuantas etiquetas se graban: un modulo sin ramales en Oracle es un modulo sin
-validar, y eso vale igual para ASP.
+La excepcion no es un capricho. Esa regla existe porque los ramales eran el
+unico dato del que dependia cuantas etiquetas se graban: sin ellos no se sabia
+que mandar a rotular. En aspersion ya no dependen -son 6 fijas-, asi que
+exigirlos solo dejaba fuera modulos que se pueden rotular perfectamente. Un ASP
+sin ramales entra con `ramales: 0` y sus 6 etiquetas, y el dia que Oracle le
+ponga los ramales no cambiara ni una.
 """
 import argparse
 import json
@@ -73,6 +77,15 @@ RAIZ = Path(__file__).resolve().parent.parent
 DESTINO = RAIZ / 'modulos.json'
 
 REGLA_ACTUALIZADO = "M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0"
+
+# Los tipos que llevan una cantidad fija de etiquetas no necesitan ramales para
+# entrar: sus rotulos no salen de ahi. La lista se deduce de las reglas, asi que
+# el dia que otro tipo pase a cantidad fija entra solo, sin tocar esta consulta.
+TIPOS_SIN_RAMALES = sorted(t for t, (_, _, fijas) in REGLAS.items() if fijas is not None)
+REGLA_CANTIDAD_FIJA = (
+    "REGEXP_LIKE(M.CODIGO_MODULO, '^[A-Z]{3}-(" + '|'.join(TIPOS_SIN_RAMALES) + ")-[0-9]+$')"
+)
+REGLA_ENTRADA = f"(({REGLA_ACTUALIZADO}) OR ({REGLA_CANTIDAD_FIJA}))"
 
 # Los unicos que la app sabe rotular, con su (pasadas, extras, fijas). El
 # codigo lleva el tipo de riego en el segundo bloque: ORC-MNA-001 es mini
@@ -100,7 +113,7 @@ SELECT
 FROM
     SDEUSR.MAESTRO_MODULOS_RIEGO M
 WHERE
-    {REGLA_ACTUALIZADO}
+    {REGLA_ENTRADA}
 ORDER BY
     M.CODIGO_MODULO
 """
@@ -215,7 +228,7 @@ def construir(filas, cfg):
         primera = fila_representante(repetidas)
 
         if len(repetidas) > 1:
-            ramales_distintos = {int(r['NO_RAMALES']) for r in repetidas}
+            ramales_distintos = {int(r['NO_RAMALES'] or 0) for r in repetidas}
             difieren = sorted(c for c in primera
                               if len({texto(r[c]) for r in repetidas}) > 1)
             avisos.append({
@@ -226,7 +239,7 @@ def construir(filas, cfg):
             })
             if len(ramales_distintos) > 1:
                 print(f'  AVISO: {codigo} repetido CON ramales distintos '
-                      f'{sorted(ramales_distintos)}; se usa {int(primera["NO_RAMALES"])}')
+                      f'{sorted(ramales_distintos)}; se usa {int(primera["NO_RAMALES"] or 0)}')
 
         responsable = normalizar_responsable(texto(primera['RESPONSABLE']))
         pasadas, extra, fijas = TIPOS_APP[tipo_modulo(codigo)]
@@ -236,7 +249,7 @@ def construir(filas, cfg):
             'responsable': mapa_resp.get(responsable, responsable),
             'finca': normalizar_finca(texto(primera['FINCA'])),
             'codigoFinca': texto(primera['C_FINCA']),
-            'ramales': int(primera['NO_RAMALES']),
+            'ramales': int(primera['NO_RAMALES'] or 0),
             'pasadas': pasadas,
             'etiquetasExtra': extra,
             'etiquetasFijas': fijas,
@@ -514,7 +527,7 @@ def main():
 
     print('Consultando Oracle...')
     filas = leer_oracle()
-    print(f'  {len(filas)} filas cumplen la regla ({REGLA_ACTUALIZADO})')
+    print(f'  {len(filas)} filas cumplen la regla ({REGLA_ENTRADA})')
 
     nuevos, avisos, informe, dudosos = construir(filas, cfg)
 
@@ -544,7 +557,7 @@ def main():
     salida = {
         'generado': date.today().isoformat(),
         'fuente': f'Oracle SDEUSR.MAESTRO_MODULOS_RIEGO ({datetime.now(timezone.utc):%Y-%m-%dT%H:%MZ})',
-        'regla': REGLA_ACTUALIZADO,
+        'regla': REGLA_ENTRADA,
         'avisos': avisos,
         'modulos': nuevos,
     }
@@ -558,7 +571,7 @@ def main():
     # El push es lo que publica: redespliega Vercel (los telefonos toman el
     # maestro al abrir o al sincronizar a mano) y recompila el APK.
     mensaje = (f'Actualizar el maestro desde Oracle: {len(nuevos)} modulos\n\n'
-               f'Regla: {REGLA_ACTUALIZADO}\n'
+               f'Regla: {REGLA_ENTRADA}\n'
                f'{etiquetas(nuevos)} etiquetas por pasada, '
                f'{etiquetas_fisicas(nuevos)} fisicas.\n')
     subprocess.run(['git', 'add', 'modulos.json'], cwd=RAIZ, check=True)
