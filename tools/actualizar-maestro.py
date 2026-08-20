@@ -42,6 +42,18 @@ reinstalar el APK en cada telefono. La app tambien sabe deducirla del tipo que
 lleva el codigo, asi que un maestro viejo sin esos campos no manda a grabar de
 mas.
 
+Modulos que Oracle pierde de vista
+----------------------------------
+Perderle el codigo a un modulo no es darlo de baja. Cuando una fila aparece con
+el CODIGO_MODULO vacio -pasa cuando se esta recodificando una finca- el modulo
+se cae de la consulta y, si nadie lo evita, del maestro. Los rotulos que ya
+estan pegados en el campo no se caen con el: el operador se queda con un modulo
+a medio rotular que la app ya no sabe abrir.
+
+La lista CONSERVADOS dice cuales se quedan de todas formas, copiados del maestro
+anterior y con el motivo escrito al lado. Cada corrida los enumera, y el dia que
+Oracle devuelva el codigo avisa de que la linea ya sobra.
+
 Que exige "actualizado"
 -----------------------
 NO_RAMALES no nulo y mayor que cero, SALVO en los tipos de cantidad fija. Se
@@ -99,6 +111,73 @@ TIPOS_APP = REGLAS
 # Lo que queda fuera se graba con otro procedimiento, no con el de la app. Los
 # nombres salen del mismo catalogo que usan los reportes.
 TIPOS_FUERA = {t: n for t, n in NOMBRES.items() if t not in TIPOS_APP}
+
+# Modulos que se quedan en el maestro aunque Oracle ya no los tenga.
+#
+# No es lo mismo dar de baja un modulo que perderle el codigo. El 2026-08-20
+# aparecieron en la tabla siete filas a las que alguien les vacio el
+# CODIGO_MODULO -Oro Blanco I y Polonia se estan recodificando- y cinco de esos
+# modulos tienen etiquetas pegadas en el campo. Sacarlos del maestro no borra
+# esos rotulos: solo deja al operador sin poder abrir el modulo que tiene
+# delante a medio rotular.
+#
+# Por eso se conservan tal como estaban en el maestro anterior, con el motivo
+# escrito al lado. Es un parche a la vista y con fecha, no un dato inventado: el
+# dia que Oracle devuelva el codigo, el modulo vuelve por la via normal y el
+# script avisa de que la linea ya sobra.
+CONSERVADOS = {
+    'CEN-MNA-040': 'Oracle le vacio el codigo el 2026-08-20 (Luceros); 32 etiquetas grabadas',
+    'CEN-PVC-001': 'Oracle le vacio el codigo el 2026-08-20 (Polonia, recodificacion)',
+    'CEN-PVC-002': 'Oracle le vacio el codigo el 2026-08-20 (Polonia, recodificacion)',
+    'CES-MNA-019': 'Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 26 etiquetas grabadas',
+    'CES-MNA-020': 'Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 37 etiquetas grabadas',
+    'CES-MNA-022': 'Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 34 etiquetas grabadas',
+    'CES-MNA-023': 'Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 32 etiquetas grabadas',
+}
+
+
+def conservar_los_que_oracle_perdio(nuevos, viejos):
+    """
+    Devuelve al maestro los modulos de CONSERVADOS que Oracle ya no trae.
+
+    Se copian del maestro ANTERIOR, no se inventan: sus ramales y su regla son
+    los que ya tenian, que son los que describen las etiquetas que estan
+    pegadas en el campo.
+    """
+    presentes = {m['codigo'] for m in nuevos}
+    anteriores = {m['codigo']: m for m in viejos}
+    recuperados, devueltos, perdidos = [], [], []
+
+    for codigo, motivo in sorted(CONSERVADOS.items()):
+        if codigo in presentes:
+            devueltos.append(codigo)
+            continue
+        anterior = anteriores.get(codigo)
+        if anterior is None:
+            perdidos.append(codigo)
+            continue
+        nuevos.append({**anterior, 'conservado': motivo})
+        recuperados.append(codigo)
+
+    nuevos.sort(key=lambda m: m['codigo'])
+
+    if recuperados:
+        print(f'  {len(recuperados)} modulo(s) conservados del maestro anterior '
+              f'porque Oracle ya no los trae:')
+        for codigo in recuperados:
+            print(f'    {codigo}: {CONSERVADOS[codigo]}')
+    if devueltos:
+        print(f'  {len(devueltos)} modulo(s) de CONSERVADOS volvieron a Oracle. '
+              f'Ya se pueden quitar de la lista:')
+        for codigo in devueltos:
+            print(f'    {codigo}')
+    for codigo in perdidos:
+        # Ni Oracle ni el maestro anterior: no hay de donde copiarlo. Decirlo es
+        # lo unico honesto; inventarle ramales seria mandar a grabar a ciegas.
+        print(f'  AVISO: {codigo} esta en CONSERVADOS y no esta ni en Oracle ni '
+              f'en el maestro anterior. No se puede conservar.')
+
+    return recuperados
 
 
 QUERY = f"""
@@ -536,6 +615,8 @@ def main():
 
     viejo = json.loads(DESTINO.read_text(encoding='utf-8')) if DESTINO.exists() else {'modulos': []}
     viejos = viejo.get('modulos', [])
+
+    conservar_los_que_oracle_perdio(nuevos, viejos)
 
     print('Consultando el registro compartido...')
     rotulados, motivo = modulos_con_etiquetas()

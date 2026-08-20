@@ -1,11 +1,11 @@
 {
-  "generado": "2026-08-19",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-19T21:16Z)",
+  "generado": "2026-08-20",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-20T16:48Z)",
   "regla": "((M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0) OR (REGEXP_LIKE(M.CODIGO_MODULO, '^[A-Z]{3}-(ASP|AVF|PVC)-[0-9]+$')))",
   "avisos": [
     {
       "tipo": "sinCodigo",
-      "registros": 13
+      "registros": 21
     },
     {
       "tipo": "otroTipoDeRiego",
@@ -27,10 +27,8 @@
     {
       "codigo": "CEN-ASP-013",
       "registros": 2,
-      "columnasDistintas": [
-        "NO_RAMALES"
-      ],
-      "mismoNumeroDeRamales": false
+      "columnasDistintas": [],
+      "mismoNumeroDeRamales": true
     },
     {
       "codigo": "CEN-ASP-020",
@@ -453,7 +451,7 @@
       "responsable": "Gerson David Macario Osoy",
       "finca": "El Rincon",
       "codigoFinca": "62",
-      "ramales": 8,
+      "ramales": 6,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
@@ -840,6 +838,20 @@
       "duplicado": false
     },
     {
+      "codigo": "CEN-MNA-013",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Rita",
+      "codigoFinca": "12",
+      "ramales": 22,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
+      "etiquetasFijas": null,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "CEN-MNA-014",
       "region": "CENTRAL NORTE",
       "responsable": "Eddy Leonardo Orellana Serrano",
@@ -1201,7 +1213,8 @@
       "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
-      "duplicado": false
+      "duplicado": false,
+      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Luceros); 32 etiquetas grabadas"
     },
     {
       "codigo": "CEN-MNA-041",
@@ -1299,7 +1312,8 @@
       "etiquetasFijas": 2,
       "tipoRiego": "Pivote Central",
       "fuenteAgua": "Rio",
-      "duplicado": false
+      "duplicado": false,
+      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Polonia, recodificacion)"
     },
     {
       "codigo": "CEN-PVC-002",
@@ -1313,7 +1327,8 @@
       "etiquetasFijas": 2,
       "tipoRiego": "Pivote Central",
       "fuenteAgua": "Rio",
-      "duplicado": false
+      "duplicado": false,
+      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Polonia, recodificacion)"
     },
     {
       "codigo": "CES-ASP-001",
@@ -1761,7 +1776,8 @@
       "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
-      "duplicado": false
+      "duplicado": false,
+      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 26 etiquetas grabadas"
     },
     {
       "codigo": "CES-MNA-020",
@@ -1775,7 +1791,8 @@
       "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
-      "duplicado": false
+      "duplicado": false,
+      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 37 etiquetas grabadas"
     },
     {
       "codigo": "CES-MNA-022",
@@ -1789,7 +1806,8 @@
       "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
-      "duplicado": false
+      "duplicado": false,
+      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 34 etiquetas grabadas"
     },
     {
       "codigo": "CES-MNA-023",
@@ -1803,7 +1821,8 @@
       "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
-      "duplicado": false
+      "duplicado": false,
+      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 32 etiquetas grabadas"
     },
     {
       "codigo": "CES-MNA-025",
