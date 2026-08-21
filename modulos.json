@@ -1,11 +1,11 @@
 {
   "generado": "2026-08-20",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-20T16:48Z)",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-21T00:32Z)",
   "regla": "((M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0) OR (REGEXP_LIKE(M.CODIGO_MODULO, '^[A-Z]{3}-(ASP|AVF|PVC)-[0-9]+$')))",
   "avisos": [
     {
       "tipo": "sinCodigo",
-      "registros": 21
+      "registros": 28
     },
     {
       "tipo": "otroTipoDeRiego",
@@ -443,7 +443,8 @@
       "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
-      "duplicado": false
+      "duplicado": false,
+      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Villa Laura, la pasan a MNA); 6 etiquetas grabadas"
     },
     {
       "codigo": "CEN-ASP-013",
@@ -527,7 +528,8 @@
       "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
-      "duplicado": false
+      "duplicado": false,
+      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Villa Laura, la pasan a MNA); 6 etiquetas grabadas"
     },
     {
       "codigo": "CEN-ASP-019",
@@ -563,7 +565,7 @@
       "responsable": "Mario Robelio Miliam Miliam",
       "finca": "Polonia",
       "codigoFinca": "377",
-      "ramales": 0,
+      "ramales": 6,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,

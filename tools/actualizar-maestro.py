@@ -126,6 +126,12 @@ TIPOS_FUERA = {t: n for t, n in NOMBRES.items() if t not in TIPOS_APP}
 # dia que Oracle devuelva el codigo, el modulo vuelve por la via normal y el
 # script avisa de que la linea ya sobra.
 CONSERVADOS = {
+    # Villa Laura se quedo sin un solo codigo: sus tres filas estan en blanco y
+    # ademas pasaron de Aspersion a Mini Aspersion. Ojo el dia que se los
+    # devuelvan: como MNA la cuenta deja de ser 6 fijas y pasa a ramales + 4 en
+    # dos pasadas, y los rotulos 001..006 que ya estan puestos no cuadrarian.
+    'CEN-ASP-012': 'Oracle le vacio el codigo el 2026-08-20 (Villa Laura, la pasan a MNA); 6 etiquetas grabadas',
+    'CEN-ASP-018': 'Oracle le vacio el codigo el 2026-08-20 (Villa Laura, la pasan a MNA); 6 etiquetas grabadas',
     'CEN-MNA-040': 'Oracle le vacio el codigo el 2026-08-20 (Luceros); 32 etiquetas grabadas',
     'CEN-PVC-001': 'Oracle le vacio el codigo el 2026-08-20 (Polonia, recodificacion)',
     'CEN-PVC-002': 'Oracle le vacio el codigo el 2026-08-20 (Polonia, recodificacion)',
