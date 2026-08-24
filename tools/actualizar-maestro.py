@@ -25,14 +25,17 @@ recompilacion del APK, que es lo unico que necesita estar en la nube.
 
 Que entra en la app
 -------------------
-Mini y midi aspersion (MNA, MDA), aspersion (ASP), avance frontal (AVF) y
-pivote central (PVC). Solo el carrete (CAR) sigue fuera: se rotula con otro
-procedimiento y la app no lo sabe hacer. El script lo descarta y dice cuantos y
-de que tipo, para que se sepa que existen y que quedaron fuera a proposito.
+Mini y midi aspersion (MNA, MDA), carrete (CAR), aspersion (ASP), avance
+frontal (AVF) y pivote central (PVC). El carrete entro el 2026-08-24: se rotula
+con el mismo recorrido por ramal que la mini aspersion, asi que ya no hay razon
+para dejarlo fuera. Lo que quede de otro tipo -Oracle trae APO y GRA- el script
+lo descarta y dice cuantos y de que tipo, para que se sepa que existen y que
+quedaron fuera a proposito.
 
 Cada modulo se lleva su regla escrita
 -------------------------------------
 MNA y MDA: ramales + 4 etiquetas, grabadas dos veces sobre dos juegos.
+CAR:       un rotulo por ramal, grabado dos veces. Sin las 4 de repuesto.
 ASP:       6 etiquetas fijas, una sola pasada. Los ramales no entran.
 AVF y PVC: 2 etiquetas fijas, una sola pasada. Tampoco entran.
 

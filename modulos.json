@@ -1,17 +1,16 @@
 {
-  "generado": "2026-08-20",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-21T00:32Z)",
+  "generado": "2026-08-24",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-24T14:36Z)",
   "regla": "((M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0) OR (REGEXP_LIKE(M.CODIGO_MODULO, '^[A-Z]{3}-(ASP|AVF|PVC)-[0-9]+$')))",
   "avisos": [
     {
       "tipo": "sinCodigo",
-      "registros": 28
+      "registros": 21
     },
     {
       "tipo": "otroTipoDeRiego",
-      "registros": 14,
+      "registros": 6,
       "porTipo": {
-        "CAR": 8,
         "GRA": 5,
         "APO": 1
       }
@@ -35,6 +34,18 @@
       "registros": 2,
       "columnasDistintas": [],
       "mismoNumeroDeRamales": true
+    },
+    {
+      "codigo": "CEN-PVC-003",
+      "registros": 2,
+      "columnasDistintas": [
+        "C_FINCA",
+        "FINCA",
+        "NO_HIDRANTES",
+        "NO_RAMALES",
+        "REGION"
+      ],
+      "mismoNumeroDeRamales": false
     },
     {
       "codigo": "CES-MNA-064",
@@ -588,6 +599,48 @@
       "duplicado": false
     },
     {
+      "codigo": "CEN-ASP-024",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Luceros",
+      "codigoFinca": "372",
+      "ramales": 6,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-025",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Polonia",
+      "codigoFinca": "377",
+      "ramales": 6,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-026",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Luceros",
+      "codigoFinca": "372",
+      "ramales": 6,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
       "codigo": "CEN-AVF-001",
       "region": "CENTRAL NORTE",
       "responsable": "Eddy Leonardo Orellana Serrano",
@@ -655,6 +708,62 @@
       "etiquetasFijas": 2,
       "tipoRiego": "Avance Frontal",
       "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-CAR-001",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Polonia",
+      "codigoFinca": "377",
+      "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": null,
+      "tipoRiego": "Carrete",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-CAR-002",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Polonia",
+      "codigoFinca": "377",
+      "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": null,
+      "tipoRiego": "Carrete",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-CAR-003",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Polonia",
+      "codigoFinca": "377",
+      "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": null,
+      "tipoRiego": "Carrete",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-CAR-004",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Polonia",
+      "codigoFinca": "377",
+      "ramales": 8,
+      "pasadas": 2,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": null,
+      "tipoRiego": "Carrete",
+      "fuenteAgua": "Rio",
       "duplicado": false
     },
     {
@@ -1333,6 +1442,34 @@
       "conservado": "Oracle le vacio el codigo el 2026-08-20 (Polonia, recodificacion)"
     },
     {
+      "codigo": "CEN-PVC-003",
+      "region": "CENTRAL SUR",
+      "responsable": "",
+      "finca": "Oro Blanco I",
+      "codigoFinca": "816",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "Pivote",
+      "fuenteAgua": "",
+      "duplicado": true
+    },
+    {
+      "codigo": "CEN-PVC-004",
+      "region": "CENTRAL NORTE",
+      "responsable": "",
+      "finca": "Polonia",
+      "codigoFinca": "377",
+      "ramales": 1,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "Pivote",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
       "codigo": "CES-ASP-001",
       "region": "CENTRAL SUR",
       "responsable": "Hector Armando Sigarroa Suriano",
@@ -1428,6 +1565,20 @@
       "etiquetasFijas": 2,
       "tipoRiego": "Avance Frontal",
       "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-AVF-007",
+      "region": "CENTRAL SUR",
+      "responsable": "Enzo Gonzalo Oscal Ortiz",
+      "finca": "Tierra Nueva Rodriguez",
+      "codigoFinca": "785",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "Avance Frontal",
+      "fuenteAgua": "",
       "duplicado": false
     },
     {
@@ -2639,6 +2790,34 @@
       "duplicado": false
     },
     {
+      "codigo": "OCR-CAR-001",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Nueva Colombita",
+      "codigoFinca": "999",
+      "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": null,
+      "tipoRiego": "Carrete",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-CAR-002",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "Nueva Colombita",
+      "codigoFinca": "999",
+      "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": null,
+      "tipoRiego": "Carrete",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-MNA-001",
       "region": "OCCIDENTE",
       "responsable": "Juan Pablo Porres Esquina",
@@ -3798,6 +3977,34 @@
       "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "OOC-CAR-001",
+      "region": "OCCIDENTE CENTRO",
+      "responsable": "Mario Rene De Leon Belteton",
+      "finca": "La Esperancita",
+      "codigoFinca": "328",
+      "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": null,
+      "tipoRiego": "Carrete",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "OOC-CAR-002",
+      "region": "OCCIDENTE CENTRO",
+      "responsable": "Mario Rene De Leon Belteton",
+      "finca": "La Esperancita",
+      "codigoFinca": "328",
+      "ramales": 9,
+      "pasadas": 2,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": null,
+      "tipoRiego": "Carrete",
+      "fuenteAgua": "Pozo",
       "duplicado": false
     },
     {

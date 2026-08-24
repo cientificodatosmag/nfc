@@ -27,10 +27,15 @@ dentro del propio código (`OOC-MNA-001`, `OOC-ASP-001`):
 | Tipo | Etiquetas por juego | Juegos |
 |---|---|---|
 | Mini y midi aspersión (MNA, MDA) | ramales + 4 | 2 |
+| Carrete (CAR) | **ramales**, sin las 4 de repuesto | 2 |
 | Aspersión (ASP) | **6 fijas** | 1 |
 | Avance frontal (AVF) y pivote central (PVC) | **2 fijas** | 1 |
 
-Solo el carrete (CAR) queda fuera de la app: se rotula con otro procedimiento.
+El carrete se recorre ramal por ramal como la mini aspersión y también se graba
+dos veces, pero sus juegos son **pares exactos**: un rótulo por ramal y ninguno
+de repuesto. Es el único tipo que se separa de MNA solo en el extra, y por eso
+tiene que estar escrito en la tabla de reglas en vez de caer en el valor por
+defecto, que le sumaría cuatro.
 
 En los tipos de cantidad fija los ramales **no entran en la cuenta**: un ASP
 lleva sus seis etiquetas tenga dos ramales u ocho, y un pivote sus dos. Por eso

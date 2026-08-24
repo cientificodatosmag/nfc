@@ -281,6 +281,50 @@ prueba('un PVC con una sola etiqueta sigue pendiente', () => {
   assert.deepEqual(siguienteObjetivo(PVC), { pasada: 1, numero: 2 });
 });
 
+console.log('\n== carrete: dos juegos, pares exactos ==');
+// El carrete se recorre ramal por ramal como la mini aspersion y tambien se
+// graba dos veces, pero sin las cuatro de repuesto: un rotulo por ramal en cada
+// juego. 6 ramales -> 6 por pasada, 12 fisicas.
+const CAR = { codigo: 'OCR-CAR-001', ramales: 6, finca: 'F', region: 'R', responsable: 'X' };
+
+prueba('CAR lleva un rotulo por ramal, sin las cuatro de repuesto', () => {
+  assert.equal(totalPorPasada(CAR), 6, 'seis ramales, seis etiquetas: 10 seria MNA');
+  assert.equal(pasadasDe(CAR), 2, 'dos juegos, igual que la mini aspersion');
+  assert.equal(totalModulo(CAR), 12, 'seis por cada uno de los dos juegos');
+});
+prueba('la cuenta sigue a los ramales y no es fija', () => {
+  // La diferencia con ASP, AVF y PVC: aqui los ramales SI mandan. Un carrete de
+  // nueve ramales lleva nueve, no un numero pactado de antemano.
+  assert.equal(totalPorPasada({ ...CAR, ramales: 9 }), 9);
+  assert.equal(totalModulo({ ...CAR, ramales: 9 }), 18);
+});
+prueba('la regla de CAR sale del codigo si el maestro no la trae', () => {
+  // Este es el caso que obliga a escribir CAR en la tabla en vez de dejarlo caer
+  // en la regla por defecto: el maestro que viaja dentro del APK es anterior al
+  // carrete y llega sin `etiquetasExtra`. Con el valor por defecto se le
+  // sumarian las cuatro de MNA y el telefono pediria diez etiquetas para un
+  // modulo de seis ramales.
+  assert.deepEqual(reglaDe({ codigo: 'CEN-CAR-004', ramales: 8 }),
+    { pasadas: 2, extra: 0, fijas: null });
+  assert.equal(totalPorPasada({ codigo: 'CEN-CAR-004', ramales: 8 }), 8,
+    'no 12: el carrete no hereda el extra de la mini aspersion');
+});
+prueba('la pasada 1 llena NO completa un carrete', () => {
+  reset();
+  grabarEn(CAR.codigo, 1, [1, 2, 3, 4, 5, 6]);
+  assert.equal(pasadaCompleta(CAR, 1), true);
+  assert.equal(moduloCompleto(CAR), false, 'falta el segundo juego');
+  assert.deepEqual(siguienteObjetivo(CAR), { pasada: 2, numero: 1 },
+    'y la 2 empieza por el 001, no sigue de largo');
+});
+prueba('los dos juegos llenos si lo completan', () => {
+  reset();
+  grabarEn(CAR.codigo, 1, [1, 2, 3, 4, 5, 6]);
+  grabarEn(CAR.codigo, 2, [1, 2, 3, 4, 5, 6]);
+  assert.equal(moduloCompleto(CAR), true);
+  assert.equal(siguienteObjetivo(CAR), null);
+});
+
 console.log('\n== donde retomar ==');
 prueba('modulo nuevo arranca en pasada 1 etiqueta 1', () => {
   reset();

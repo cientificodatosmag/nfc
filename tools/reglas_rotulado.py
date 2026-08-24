@@ -9,6 +9,7 @@ cinco archivos son cuatro sitios donde equivocarse, y equivocarse aqui significa
 mandar a imprimir el doble de rotulos o dar por terminado un modulo a medias.
 
     MNA, MDA : ramales + 4 etiquetas, dos juegos.
+    CAR      : un rotulo por ramal, dos juegos. Sin las 4 de repuesto.
     ASP      : 6 etiquetas fijas, un solo juego. No dependen de los ramales.
     AVF, PVC : 2 etiquetas fijas, un solo juego. Tampoco dependen.
 
@@ -32,6 +33,13 @@ import re
 REGLAS = {
     'MDA': (2, 4, None),
     'MNA': (2, 4, None),
+    # El carrete se recorre ramal por ramal y se graba dos veces, igual que la
+    # mini aspersion, pero SIN las cuatro de repuesto: son pares exactos, un
+    # rotulo por ramal en cada juego. Por eso comparte el `fijas` en None y se
+    # separa de MNA solo en el extra. Ojo: con extra 0 la cuenta es los ramales
+    # pelados, asi que un carrete al que Oracle le vacie los ramales se queda en
+    # cero y no entra al maestro. Es a proposito: sin ramales no hay que grabar.
+    'CAR': (2, 0, None),
     'ASP': (1, 0, 6),
     # Avance frontal y pivote central no son un juego de ramales que rotular uno
     # por uno: es una maquina sola, y lleva dos etiquetas en una pasada. Los
@@ -43,10 +51,10 @@ REGLAS = {
 }
 POR_DEFECTO = (2, 4, None)
 
-# Como se llama cada tipo cuando hay que enseñarselo a alguien. Incluye el que
-# la app NO rotula -el carrete-: aparece igual en los reportes de Oracle, y un
-# reporte que lo deja en blanco obliga a adivinar si es un tipo raro o un dato
-# faltante.
+# Como se llama cada tipo cuando hay que enseñarselo a alguien. Hoy son los
+# mismos seis que la app rotula, pero las dos tablas siguen aparte a proposito:
+# Oracle trae tipos que no estan en ninguna -APO, GRA- y un reporte que los deja
+# en blanco obliga a adivinar si es un tipo raro o un dato faltante.
 NOMBRES = {
     'MNA': 'Mini aspersion',
     'MDA': 'Midi aspersion',

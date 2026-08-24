@@ -858,6 +858,11 @@ document.addEventListener('DOMContentLoaded', () => {
   //
   // El avance frontal (AVF) y el pivote central (PVC) tampoco: son una máquina
   // sola, llevan DOS etiquetas fijas y una sola pasada.
+  //
+  // El carrete (CAR) sí se recorre ramal por ramal y también se graba dos
+  // veces, pero SIN las cuatro de repuesto: son pares exactos, un rótulo por
+  // ramal en cada juego. Tiene que estar escrito aquí abajo justo por eso: si
+  // se dejara caer en la regla por defecto se le sumarían las cuatro de MNA.
   const ETIQUETAS_EXTRA = 4;
   const PASADAS = 2;
 
@@ -878,6 +883,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // app manda a grabar como lo que la oficina manda a imprimir.
   const REGLA_POR_DEFECTO = { pasadas: PASADAS, extra: ETIQUETAS_EXTRA, fijas: null };
   const REGLA_POR_TIPO = {
+    CAR: { pasadas: 2, extra: 0, fijas: null },
     ASP: { pasadas: 1, extra: 0, fijas: 6 },
     AVF: { pasadas: 1, extra: 0, fijas: 2 },
     PVC: { pasadas: 1, extra: 0, fijas: 2 }
