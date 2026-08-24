@@ -1,11 +1,27 @@
 {
   "generado": "2026-08-24",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-24T14:36Z)",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-24T16:53Z)",
   "regla": "((M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0) OR (REGEXP_LIKE(M.CODIGO_MODULO, '^[A-Z]{3}-(ASP|AVF|PVC)-[0-9]+$')))",
   "avisos": [
     {
+      "tipo": "pendienteEnOracle",
+      "codigos": [
+        "CES-ASP-002",
+        "CES-ASP-003",
+        "CES-MDA-006",
+        "CES-MNA-081",
+        "CES-MNA-082",
+        "CES-MNA-083",
+        "CES-PVC-010",
+        "OCR-CAR-003",
+        "OCR-PVC-018",
+        "OCR-PVC-019",
+        "ORC-MNA-066"
+      ]
+    },
+    {
       "tipo": "sinCodigo",
-      "registros": 21
+      "registros": 10
     },
     {
       "tipo": "otroTipoDeRiego",
@@ -19,20 +35,25 @@
       "codigo": "CEN-ASP-001",
       "registros": 2,
       "columnasDistintas": [
-        "NO_RAMALES"
+        "NO_RAMALES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": false
     },
     {
       "codigo": "CEN-ASP-013",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "CEN-ASP-020",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
@@ -43,6 +64,7 @@
         "FINCA",
         "NO_HIDRANTES",
         "NO_RAMALES",
+        "OBJECTID",
         "REGION"
       ],
       "mismoNumeroDeRamales": false
@@ -50,13 +72,17 @@
     {
       "codigo": "CES-MNA-064",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "CES-MNA-066",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
@@ -66,14 +92,17 @@
         "AREA_MODULO",
         "FUENTE_AGUA",
         "NO_HIDRANTES",
-        "NO_RAMALES"
+        "NO_RAMALES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": false
     },
     {
       "codigo": "OOC-ASP-005",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
@@ -81,7 +110,8 @@
       "registros": 2,
       "columnasDistintas": [
         "AREA_MODULO",
-        "NO_HIDRANTES"
+        "NO_HIDRANTES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": true
     },
@@ -90,21 +120,25 @@
       "registros": 2,
       "columnasDistintas": [
         "NO_HIDRANTES",
-        "NO_RAMALES"
+        "NO_RAMALES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": false
     },
     {
       "codigo": "ORC-ASP-002",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORC-ASP-003",
       "registros": 2,
       "columnasDistintas": [
-        "NO_HIDRANTES"
+        "NO_HIDRANTES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": true
     },
@@ -112,7 +146,8 @@
       "codigo": "ORC-ASP-004",
       "registros": 2,
       "columnasDistintas": [
-        "NO_HIDRANTES"
+        "NO_HIDRANTES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": true
     },
@@ -121,7 +156,8 @@
       "registros": 2,
       "columnasDistintas": [
         "NO_HIDRANTES",
-        "NO_RAMALES"
+        "NO_RAMALES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": false
     },
@@ -130,7 +166,8 @@
       "registros": 2,
       "columnasDistintas": [
         "NO_HIDRANTES",
-        "NO_RAMALES"
+        "NO_RAMALES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": false
     },
@@ -138,71 +175,90 @@
       "codigo": "ORC-ASP-007",
       "registros": 2,
       "columnasDistintas": [
-        "FUENTE_AGUA"
+        "FUENTE_AGUA",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORC-ASP-008",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORC-ASP-009",
       "registros": 2,
       "columnasDistintas": [
-        "NO_RAMALES"
+        "NO_RAMALES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": false
     },
     {
       "codigo": "ORC-ASP-010",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORC-ASP-012",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORC-ASP-013",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORC-ASP-014",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORC-ASP-015",
       "registros": 3,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORC-ASP-016",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORC-ASP-023",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORO-ASP-001",
       "registros": 2,
       "columnasDistintas": [
-        "NO_HIDRANTES"
+        "NO_HIDRANTES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": true
     },
@@ -210,7 +266,8 @@
       "codigo": "ORO-ASP-002",
       "registros": 2,
       "columnasDistintas": [
-        "NO_HIDRANTES"
+        "NO_HIDRANTES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": true
     },
@@ -219,7 +276,8 @@
       "registros": 2,
       "columnasDistintas": [
         "NO_HIDRANTES",
-        "NO_RAMALES"
+        "NO_RAMALES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": false
     },
@@ -227,33 +285,41 @@
       "codigo": "ORO-ASP-006",
       "registros": 2,
       "columnasDistintas": [
-        "NO_HIDRANTES"
+        "NO_HIDRANTES",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORO-ASP-009",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORO-ASP-011",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORO-ASP-012",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORO-ASP-013",
       "registros": 2,
       "columnasDistintas": [
-        "FUENTE_AGUA"
+        "FUENTE_AGUA",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": true
     },
@@ -261,20 +327,25 @@
       "codigo": "ORO-ASP-014",
       "registros": 2,
       "columnasDistintas": [
-        "FUENTE_AGUA"
+        "FUENTE_AGUA",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORO-ASP-016",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
       "codigo": "ORO-MNA-005",
       "registros": 2,
-      "columnasDistintas": [],
+      "columnasDistintas": [
+        "OBJECTID"
+      ],
       "mismoNumeroDeRamales": true
     },
     {
@@ -282,7 +353,8 @@
       "registros": 2,
       "columnasDistintas": [
         "AREA_MODULO",
-        "FUENTE_AGUA"
+        "FUENTE_AGUA",
+        "OBJECTID"
       ],
       "mismoNumeroDeRamales": true
     }
@@ -1484,6 +1556,34 @@
       "duplicado": false
     },
     {
+      "codigo": "CES-ASP-002",
+      "region": "CENTRAL SUR",
+      "responsable": "Hector Armando Sigarroa Suriano",
+      "finca": "Morenas Fernandez",
+      "codigoFinca": "373",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-ASP-003",
+      "region": "CENTRAL SUR",
+      "responsable": "Hector Armando Sigarroa Suriano",
+      "finca": "Morenas Fernandez",
+      "codigoFinca": "373",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
       "codigo": "CES-AVF-001",
       "region": "CENTRAL SUR",
       "responsable": "Byron Estuardo Garcia Mendoza",
@@ -1663,6 +1763,20 @@
       "etiquetasFijas": null,
       "tipoRiego": "Midi Aspersion",
       "fuenteAgua": "Noria",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MDA-006",
+      "region": "CENTRAL SUR",
+      "responsable": "",
+      "finca": "La Felicidad",
+      "codigoFinca": "369",
+      "ramales": 2,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
+      "etiquetasFijas": null,
+      "tipoRiego": "",
+      "fuenteAgua": "",
       "duplicado": false
     },
     {
@@ -2762,6 +2876,48 @@
       "duplicado": false
     },
     {
+      "codigo": "CES-MNA-081",
+      "region": "CENTRAL SUR",
+      "responsable": "Byron Estuardo Garcia Mendoza",
+      "finca": "El Rosario II",
+      "codigoFinca": "575",
+      "ramales": 11,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
+      "etiquetasFijas": null,
+      "tipoRiego": "",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-082",
+      "region": "CENTRAL SUR",
+      "responsable": "",
+      "finca": "La Felicidad",
+      "codigoFinca": "369",
+      "ramales": 2,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
+      "etiquetasFijas": null,
+      "tipoRiego": "",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-MNA-083",
+      "region": "CENTRAL SUR",
+      "responsable": "Hector Armando Sigarroa Suriano",
+      "finca": "Morenas Fernandez",
+      "codigoFinca": "373",
+      "ramales": 2,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
+      "etiquetasFijas": null,
+      "tipoRiego": "",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
       "codigo": "CES-PVC-007",
       "region": "CENTRAL SUR",
       "responsable": "Otto Rene Portillo Sandoval",
@@ -2790,6 +2946,20 @@
       "duplicado": false
     },
     {
+      "codigo": "CES-PVC-010",
+      "region": "CENTRAL SUR",
+      "responsable": "Hector Armando Sigarroa Suriano",
+      "finca": "Morenas Fernandez",
+      "codigoFinca": "373",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-CAR-001",
       "region": "OCCIDENTE",
       "responsable": "Walter Alexander Paiz Aroche",
@@ -2814,6 +2984,20 @@
       "etiquetasExtra": 0,
       "etiquetasFijas": null,
       "tipoRiego": "Carrete",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-CAR-003",
+      "region": "OCCIDENTE",
+      "responsable": "Manuel Enrique Fuentes Garcia",
+      "finca": "Rastunya II",
+      "codigoFinca": "5012",
+      "ramales": 6,
+      "pasadas": 2,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": null,
+      "tipoRiego": "",
       "fuenteAgua": "Pozo",
       "duplicado": false
     },
@@ -3878,6 +4062,34 @@
       "etiquetasExtra": 0,
       "etiquetasFijas": 2,
       "tipoRiego": "Pivote Central",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-PVC-018",
+      "region": "OCCIDENTE",
+      "responsable": "",
+      "finca": "Hacienda Magdalena",
+      "codigoFinca": "5020",
+      "ramales": 8,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "OCR-PVC-019",
+      "region": "OCCIDENTE",
+      "responsable": "Manuel Enrique Fuentes Garcia",
+      "finca": "Rastunya II",
+      "codigoFinca": "5012",
+      "ramales": 9,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "",
       "fuenteAgua": "Pozo",
       "duplicado": false
     },
@@ -5937,6 +6149,20 @@
       "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "ORC-MNA-066",
+      "region": "ORIENTE CENTRO",
+      "responsable": "René Aguilar",
+      "finca": "Chaparral",
+      "codigoFinca": "313",
+      "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
+      "etiquetasFijas": null,
+      "tipoRiego": "",
+      "fuenteAgua": "",
       "duplicado": false
     },
     {

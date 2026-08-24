@@ -79,7 +79,7 @@ import subprocess
 import sys
 import urllib.error
 import urllib.request
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import date, datetime, timezone
 from decimal import Decimal
 from pathlib import Path
@@ -189,8 +189,97 @@ def conservar_los_que_oracle_perdio(nuevos, viejos):
     return recuperados
 
 
+# Modulos que existen en Oracle con todos sus datos pero SIN CODIGO_MODULO, y a
+# los que la oficina ya les asigno uno para poder rotularlos ya.
+#
+# La llave es el OBJECTID de la fila en SDEUSR.MAESTRO_MODULOS_RIEGO, no la
+# finca ni el motor: es lo unico que identifica la fila sin ambiguedad cuando
+# una misma finca tiene varias sin codigo. El codigo asignado se le pega a esa
+# fila antes de armar el maestro, asi que de ahi en adelante el modulo recorre
+# exactamente el mismo camino que cualquier otro -normalizacion de nombres,
+# deduplicado, regla de etiquetas, diff- y no hay una segunda via por donde se
+# pueda colar un modulo mal formado.
+#
+# Por que aqui y no escrito a mano en modulos.json: el maestro se regenera
+# entero desde Oracle en cada corrida, asi que un modulo escrito a mano
+# desaparece en la siguiente sin que nadie lo note. Aqui sobrevive, y sus datos
+# siguen saliendo de Oracle: lo unico que pone esta tabla es el codigo.
+#
+# Esto es un puente, no un destino. Cuando alguien capture el codigo en Oracle,
+# el script lo detecta y avisa de que ya se puede borrar de aqui.
+#
+# Los codigos salieron de tools/proponer_codigos_modulo.py y los reviso la
+# oficina en Codigos_Pendientes.xlsx el 2026-08-24. De los 20 propuestos se
+# dejaron estos 11: quedaron fuera los de Villa Laura (Oracle y el informe de
+# equipos no coinciden en el tipo, y la finca tiene huerfanos), el bombeo por
+# gravedad (BGR no es un tipo que la app rotule) y los cinco pivotes de Oro
+# Blanco I (finca a medio recodificar).
+PENDIENTES_EN_ORACLE = {
+    3635: 'CES-MNA-081',   # El Rosario I I, motor 0033-1540, 11 ramales
+    3587: 'CES-MDA-006',   # La Felicidad, motor 0033-0224, 2 ramales
+    3590: 'CES-MNA-082',   # La Felicidad, motor 0043-0097, 2 ramales
+    3601: 'CES-ASP-002',   # Morenas Fernandez, motor 0032-0066, 2 ramales
+    3591: 'CES-ASP-003',   # Morenas Fernandez, motor 0032-0067, 2 ramales
+    3602: 'CES-MNA-083',   # Morenas Fernandez, motor 0033-0531, 2 ramales
+    3592: 'CES-PVC-010',   # Morenas Fernandez, motor 0033-0532, 2 ramales
+    3570: 'OCR-PVC-018',   # Hacienda Magdalena, motor 0033-0833, 8 ramales
+    3572: 'OCR-PVC-019',   # Rastunya II, motor 0033-0804, 9 ramales
+    3571: 'OCR-CAR-003',   # Rastunya II, motor 0033-1615, 6 ramales
+    3629: 'ORC-MNA-066',   # Chaparral, motor 0033-1572, 16 ramales
+}
+
+
+def aplicar_pendientes(filas):
+    """
+    Le pega a cada fila pendiente el codigo que la oficina le asigno.
+
+    Devuelve la lista de avisos. Se comprueban las tres cosas que pueden salir
+    mal, porque las tres han pasado ya con datos de esta tabla:
+
+    - La fila ya no esta (Oracle la borro): no hay nada que codificar.
+    - La fila YA tiene codigo en Oracle: gana Oracle y la entrada sobra aqui.
+      No se pisa nunca un codigo puesto en Oracle, aunque no sea el asignado:
+      el maestro no es quien manda sobre el codigo de un modulo.
+    - Dos entradas apuntando al mismo codigo: se corta, porque duplicar un
+      codigo manda a dos modulos distintos a grabar el mismo rotulo.
+    """
+    avisos = []
+    repetidos = [c for c, n in Counter(PENDIENTES_EN_ORACLE.values()).items() if n > 1]
+    if repetidos:
+        sys.exit(f'PENDIENTES_EN_ORACLE repite codigo(s): {", ".join(sorted(repetidos))}')
+
+    por_objectid = {int(f['OBJECTID']): f for f in filas if f.get('OBJECTID') is not None}
+    aplicados, ya_en_oracle, no_estan = [], [], []
+
+    for objectid, codigo in sorted(PENDIENTES_EN_ORACLE.items(), key=lambda x: x[1]):
+        fila = por_objectid.get(objectid)
+        if fila is None:
+            no_estan.append((objectid, codigo))
+            continue
+        if texto(fila['CODIGO_MODULO']):
+            ya_en_oracle.append((codigo, texto(fila['CODIGO_MODULO'])))
+            continue
+        fila['CODIGO_MODULO'] = codigo
+        aplicados.append(codigo)
+
+    if aplicados:
+        print(f'  {len(aplicados)} modulo(s) pendientes de capturar en Oracle, '
+              f'con el codigo que les puso la oficina:')
+        print(f'    {", ".join(aplicados)}')
+        avisos.append({'tipo': 'pendienteEnOracle', 'codigos': aplicados})
+    for codigo, en_oracle in ya_en_oracle:
+        print(f'  {codigo}: Oracle ya trae esta fila con el codigo {en_oracle}. '
+              f'Manda Oracle; quitala de PENDIENTES_EN_ORACLE.')
+    for objectid, codigo in no_estan:
+        print(f'  AVISO: {codigo} apuntaba al OBJECTID {objectid}, que ya no esta '
+              f'en Oracle o no cumple la regla de entrada. No se codifico nada.')
+
+    return avisos
+
+
 QUERY = f"""
 SELECT
+    M.OBJECTID,
     M.CODIGO_MODULO,
     M.REGION,
     M.RESPONSABLE,
@@ -620,7 +709,12 @@ def main():
     filas = leer_oracle()
     print(f'  {len(filas)} filas cumplen la regla ({REGLA_ENTRADA})')
 
+    # Antes de construir nada: las filas sin codigo a las que la oficina ya les
+    # asigno uno lo reciben aqui, y de ahi en adelante son modulos normales.
+    avisos_pendientes = aplicar_pendientes(filas)
+
     nuevos, avisos, informe, dudosos = construir(filas, cfg)
+    avisos = avisos_pendientes + avisos
 
     viejo = json.loads(DESTINO.read_text(encoding='utf-8')) if DESTINO.exists() else {'modulos': []}
     viejos = viejo.get('modulos', [])
