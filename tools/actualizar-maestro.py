@@ -229,6 +229,99 @@ PENDIENTES_EN_ORACLE = {
 }
 
 
+# Filas a las que Oracle SI les puso codigo, pero uno que ya esta ocupado por
+# otro modulo. Aqui la oficina manda sobre Oracle, que es la excepcion a la
+# regla de esta herramienta, asi que va en su propia tabla y no mezclada con las
+# pendientes: son dos permisos distintos y conviene que se lean distinto.
+#
+# Un codigo repetido no es cosmetico. El maestro se queda con UNA de las dos
+# filas -la mas completa- asi que el otro modulo desaparece de la app, y su
+# gente ve en pantalla la finca del que gano. Renombrar al que sobra es lo que
+# hace que los dos existan.
+#
+# Solo se recodifica cuando el codigo viejo NO tiene una sola etiqueta grabada.
+# Con etiquetas pegadas en el campo un renombre las deja huerfanas: dicen
+# CEN-PVC-003 y el maestro ya no sabe que es eso. Eso se comprueba abajo y corta
+# la corrida si no se cumple.
+RECODIFICADOS = {
+    # El pivote de Polonia compartia CEN-PVC-003 con uno de Oro Blanco I. Polonia
+    # pasa al siguiente libre de la serie (001 y 002 estan retirados pero cuentan,
+    # 003 y 004 en uso). Serie CEN-PVC sin una sola etiqueta grabada al 2026-08-24,
+    # asi que el renombre no deja rotulado huerfano.
+    4056: ('CEN-PVC-005', 'CEN-PVC-003'),
+}
+
+
+def aplicar_recodificados(filas, rotulados):
+    """
+    Cambia el codigo de las filas que lo tienen repetido con otro modulo.
+
+    `rotulados` es {codigo: etiquetas grabadas} o None si no se pudo consultar el
+    registro. Sin esa consulta NO se recodifica nada: renombrar a ciegas es
+    justo la operacion que puede dejar etiquetas huerfanas, y preferimos no
+    tocar el maestro antes que tocarlo sin saber.
+    """
+    if not RECODIFICADOS:
+        return []
+
+    if rotulados is None:
+        sys.exit('Hay recodificaciones pendientes y no se pudo consultar el registro '
+                 'compartido. Sin saber que modulos tienen etiquetas grabadas no se '
+                 'renombra nada.')
+
+    por_objectid = {int(f['OBJECTID']): f for f in filas if f.get('OBJECTID') is not None}
+    ocupados = {texto(f['CODIGO_MODULO']).upper() for f in filas}
+    avisos = []
+
+    for objectid, (nuevo, esperado) in sorted(RECODIFICADOS.items()):
+        fila = por_objectid.get(objectid)
+        if fila is None:
+            print(f'  AVISO: la recodificacion a {nuevo} apuntaba al OBJECTID '
+                  f'{objectid}, que ya no esta en Oracle. No se hizo nada.')
+            continue
+
+        actual = texto(fila['CODIGO_MODULO']).upper()
+        if actual == nuevo:
+            print(f'  {nuevo}: Oracle ya lo tiene asi. Quitalo de RECODIFICADOS.')
+            continue
+        if actual != esperado.upper():
+            # Alguien ya lo movio a otra cosa: la premisa de la entrada dejo de
+            # ser cierta y seguir seria pisar una decision mas nueva que esta.
+            print(f'  AVISO: el OBJECTID {objectid} tenia {esperado} cuando se anoto '
+                  f'esta recodificacion y hoy Oracle dice {actual or "(vacio)"}. '
+                  f'No se recodifica; revisa la entrada.')
+            continue
+        if nuevo.upper() in ocupados:
+            sys.exit(f'No se puede recodificar a {nuevo}: ese codigo ya esta en Oracle. '
+                     f'Elige el siguiente libre de la serie.')
+        # El peligro no es que el codigo viejo tenga etiquetas: es que DESAPAREZCA
+        # teniendolas. En una recodificacion por codigo compartido casi siempre
+        # hay otra fila que se queda con el -es la razon de ser de la entrada- y
+        # entonces los rotulos pegados en el campo siguen apuntando a un modulo
+        # que existe y con la misma cuenta de etiquetas. Solo cuando esta fila era
+        # la ultima que lo llevaba el renombre deja las etiquetas sin dueno.
+        grabadas = rotulados.get(actual, 0)
+        otras = [f for f in filas if f is not fila
+                 and texto(f['CODIGO_MODULO']).upper() == actual]
+        if grabadas and not otras:
+            sys.exit(f'No se recodifica {actual} -> {nuevo}: {actual} tiene {grabadas} '
+                     f'etiqueta(s) grabadas y esta fila es la unica que lo lleva, asi '
+                     f'que el codigo desapareceria del maestro y esos rotulos '
+                     f'quedarian huerfanos en el campo.')
+
+        fila['CODIGO_MODULO'] = nuevo
+        ocupados.add(nuevo.upper())
+        detalle = (f'{grabadas} etiqueta(s) de {actual} se quedan con '
+                   f'{texto(otras[0]["FINCA"])}' if grabadas
+                   else '0 etiquetas grabadas')
+        print(f'  {esperado} -> {nuevo}: {texto(fila["FINCA"])} deja de compartir codigo '
+              f'({detalle}).')
+        avisos.append({'tipo': 'recodificado', 'de': esperado, 'a': nuevo,
+                       'finca': texto(fila['FINCA'])})
+
+    return avisos
+
+
 def aplicar_pendientes(filas):
     """
     Le pega a cada fila pendiente el codigo que la oficina le asigno.
@@ -713,18 +806,24 @@ def main():
     # asigno uno lo reciben aqui, y de ahi en adelante son modulos normales.
     avisos_pendientes = aplicar_pendientes(filas)
 
+    # El registro se consulta ANTES de construir, y no despues como antes, porque
+    # recodificar exige saber que modulos tienen etiquetas grabadas: un renombre
+    # con rotulos ya pegados los deja huerfanos. El resto del script lo sigue
+    # usando igual, mas abajo.
+    print('Consultando el registro compartido...')
+    rotulados, motivo = modulos_con_etiquetas()
+    if rotulados is not None:
+        print(f'  {len(rotulados)} modulos con etiquetas grabadas')
+
+    avisos_recodificados = aplicar_recodificados(filas, rotulados)
+
     nuevos, avisos, informe, dudosos = construir(filas, cfg)
-    avisos = avisos_pendientes + avisos
+    avisos = avisos_pendientes + avisos_recodificados + avisos
 
     viejo = json.loads(DESTINO.read_text(encoding='utf-8')) if DESTINO.exists() else {'modulos': []}
     viejos = viejo.get('modulos', [])
 
     conservar_los_que_oracle_perdio(nuevos, viejos)
-
-    print('Consultando el registro compartido...')
-    rotulados, motivo = modulos_con_etiquetas()
-    if rotulados is not None:
-        print(f'  {len(rotulados)} modulos con etiquetas grabadas')
 
     hay_cambios, peligrosos = informar(viejos, nuevos, avisos, informe, dudosos, rotulados, motivo)
 

@@ -1,23 +1,13 @@
 {
   "generado": "2026-08-24",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-24T16:53Z)",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-24T18:02Z)",
   "regla": "((M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0) OR (REGEXP_LIKE(M.CODIGO_MODULO, '^[A-Z]{3}-(ASP|AVF|PVC)-[0-9]+$')))",
   "avisos": [
     {
-      "tipo": "pendienteEnOracle",
-      "codigos": [
-        "CES-ASP-002",
-        "CES-ASP-003",
-        "CES-MDA-006",
-        "CES-MNA-081",
-        "CES-MNA-082",
-        "CES-MNA-083",
-        "CES-PVC-010",
-        "OCR-CAR-003",
-        "OCR-PVC-018",
-        "OCR-PVC-019",
-        "ORC-MNA-066"
-      ]
+      "tipo": "recodificado",
+      "de": "CEN-PVC-003",
+      "a": "CEN-PVC-005",
+      "finca": "Polonia"
     },
     {
       "tipo": "sinCodigo",
@@ -55,19 +45,6 @@
         "OBJECTID"
       ],
       "mismoNumeroDeRamales": true
-    },
-    {
-      "codigo": "CEN-PVC-003",
-      "registros": 2,
-      "columnasDistintas": [
-        "C_FINCA",
-        "FINCA",
-        "NO_HIDRANTES",
-        "NO_RAMALES",
-        "OBJECTID",
-        "REGION"
-      ],
-      "mismoNumeroDeRamales": false
     },
     {
       "codigo": "CES-MNA-064",
@@ -1525,10 +1502,24 @@
       "etiquetasFijas": 2,
       "tipoRiego": "Pivote",
       "fuenteAgua": "",
-      "duplicado": true
+      "duplicado": false
     },
     {
       "codigo": "CEN-PVC-004",
+      "region": "CENTRAL NORTE",
+      "responsable": "",
+      "finca": "Polonia",
+      "codigoFinca": "377",
+      "ramales": 1,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "Pivote",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-PVC-005",
       "region": "CENTRAL NORTE",
       "responsable": "",
       "finca": "Polonia",
