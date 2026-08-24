@@ -85,6 +85,7 @@ from decimal import Decimal
 from pathlib import Path
 
 import _config
+from codigos_asignados import PENDIENTES_EN_ORACLE, RECODIFICADOS
 from normalizar_nombres import (
     agrupar_por_parecido, clave, normalizar_finca, normalizar_responsable,
     normalizar_simple, pares_dudosos,
@@ -189,69 +190,6 @@ def conservar_los_que_oracle_perdio(nuevos, viejos):
     return recuperados
 
 
-# Modulos que existen en Oracle con todos sus datos pero SIN CODIGO_MODULO, y a
-# los que la oficina ya les asigno uno para poder rotularlos ya.
-#
-# La llave es el OBJECTID de la fila en SDEUSR.MAESTRO_MODULOS_RIEGO, no la
-# finca ni el motor: es lo unico que identifica la fila sin ambiguedad cuando
-# una misma finca tiene varias sin codigo. El codigo asignado se le pega a esa
-# fila antes de armar el maestro, asi que de ahi en adelante el modulo recorre
-# exactamente el mismo camino que cualquier otro -normalizacion de nombres,
-# deduplicado, regla de etiquetas, diff- y no hay una segunda via por donde se
-# pueda colar un modulo mal formado.
-#
-# Por que aqui y no escrito a mano en modulos.json: el maestro se regenera
-# entero desde Oracle en cada corrida, asi que un modulo escrito a mano
-# desaparece en la siguiente sin que nadie lo note. Aqui sobrevive, y sus datos
-# siguen saliendo de Oracle: lo unico que pone esta tabla es el codigo.
-#
-# Esto es un puente, no un destino. Cuando alguien capture el codigo en Oracle,
-# el script lo detecta y avisa de que ya se puede borrar de aqui.
-#
-# Los codigos salieron de tools/proponer_codigos_modulo.py y los reviso la
-# oficina en Codigos_Pendientes.xlsx el 2026-08-24. De los 20 propuestos se
-# dejaron estos 11: quedaron fuera los de Villa Laura (Oracle y el informe de
-# equipos no coinciden en el tipo, y la finca tiene huerfanos), el bombeo por
-# gravedad (BGR no es un tipo que la app rotule) y los cinco pivotes de Oro
-# Blanco I (finca a medio recodificar).
-PENDIENTES_EN_ORACLE = {
-    3635: 'CES-MNA-081',   # El Rosario I I, motor 0033-1540, 11 ramales
-    3587: 'CES-MDA-006',   # La Felicidad, motor 0033-0224, 2 ramales
-    3590: 'CES-MNA-082',   # La Felicidad, motor 0043-0097, 2 ramales
-    3601: 'CES-ASP-002',   # Morenas Fernandez, motor 0032-0066, 2 ramales
-    3591: 'CES-ASP-003',   # Morenas Fernandez, motor 0032-0067, 2 ramales
-    3602: 'CES-MNA-083',   # Morenas Fernandez, motor 0033-0531, 2 ramales
-    3592: 'CES-PVC-010',   # Morenas Fernandez, motor 0033-0532, 2 ramales
-    3570: 'OCR-PVC-018',   # Hacienda Magdalena, motor 0033-0833, 8 ramales
-    3572: 'OCR-PVC-019',   # Rastunya II, motor 0033-0804, 9 ramales
-    3571: 'OCR-CAR-003',   # Rastunya II, motor 0033-1615, 6 ramales
-    3629: 'ORC-MNA-066',   # Chaparral, motor 0033-1572, 16 ramales
-}
-
-
-# Filas a las que Oracle SI les puso codigo, pero uno que ya esta ocupado por
-# otro modulo. Aqui la oficina manda sobre Oracle, que es la excepcion a la
-# regla de esta herramienta, asi que va en su propia tabla y no mezclada con las
-# pendientes: son dos permisos distintos y conviene que se lean distinto.
-#
-# Un codigo repetido no es cosmetico. El maestro se queda con UNA de las dos
-# filas -la mas completa- asi que el otro modulo desaparece de la app, y su
-# gente ve en pantalla la finca del que gano. Renombrar al que sobra es lo que
-# hace que los dos existan.
-#
-# Solo se recodifica cuando el codigo viejo NO tiene una sola etiqueta grabada.
-# Con etiquetas pegadas en el campo un renombre las deja huerfanas: dicen
-# CEN-PVC-003 y el maestro ya no sabe que es eso. Eso se comprueba abajo y corta
-# la corrida si no se cumple.
-RECODIFICADOS = {
-    # El pivote de Polonia compartia CEN-PVC-003 con uno de Oro Blanco I. Polonia
-    # pasa al siguiente libre de la serie (001 y 002 estan retirados pero cuentan,
-    # 003 y 004 en uso). Serie CEN-PVC sin una sola etiqueta grabada al 2026-08-24,
-    # asi que el renombre no deja rotulado huerfano.
-    4056: ('CEN-PVC-005', 'CEN-PVC-003'),
-}
-
-
 def aplicar_recodificados(filas, rotulados):
     """
     Cambia el codigo de las filas que lo tienen repetido con otro modulo.
@@ -273,7 +211,7 @@ def aplicar_recodificados(filas, rotulados):
     ocupados = {texto(f['CODIGO_MODULO']).upper() for f in filas}
     avisos = []
 
-    for objectid, (nuevo, esperado) in sorted(RECODIFICADOS.items()):
+    for objectid, (nuevo, esperado, motivo_huerfanas) in sorted(RECODIFICADOS.items()):
         fila = por_objectid.get(objectid)
         if fila is None:
             print(f'  AVISO: la recodificacion a {nuevo} apuntaba al OBJECTID '
@@ -303,19 +241,29 @@ def aplicar_recodificados(filas, rotulados):
         grabadas = rotulados.get(actual, 0)
         otras = [f for f in filas if f is not fila
                  and texto(f['CODIGO_MODULO']).upper() == actual]
-        if grabadas and not otras:
+        if grabadas and not otras and not motivo_huerfanas:
             sys.exit(f'No se recodifica {actual} -> {nuevo}: {actual} tiene {grabadas} '
                      f'etiqueta(s) grabadas y esta fila es la unica que lo lleva, asi '
                      f'que el codigo desapareceria del maestro y esos rotulos '
-                     f'quedarian huerfanos en el campo.')
+                     f'quedarian huerfanos en el campo. Si se asume, escribe el '
+                     f'motivo en el tercer valor de la entrada.')
 
         fila['CODIGO_MODULO'] = nuevo
         ocupados.add(nuevo.upper())
-        detalle = (f'{grabadas} etiqueta(s) de {actual} se quedan con '
-                   f'{texto(otras[0]["FINCA"])}' if grabadas
-                   else '0 etiquetas grabadas')
-        print(f'  {esperado} -> {nuevo}: {texto(fila["FINCA"])} deja de compartir codigo '
-              f'({detalle}).')
+        if grabadas and not otras:
+            # Huerfanas asumidas: se grita, con el numero y el motivo. Que la
+            # decision este tomada no la hace invisible; alguien tiene que ir a
+            # regrabar ese modulo.
+            print(f'  {esperado} -> {nuevo}: {texto(fila["FINCA"])}. '
+                  f'ATENCION: {grabadas} etiqueta(s) grabadas como {esperado} quedan '
+                  f'HUERFANAS en el campo.')
+            print(f'      motivo anotado: {motivo_huerfanas}')
+        else:
+            detalle = (f'{grabadas} etiqueta(s) de {actual} se quedan con '
+                       f'{texto(otras[0]["FINCA"])}' if grabadas
+                       else '0 etiquetas grabadas')
+            print(f'  {esperado} -> {nuevo}: {texto(fila["FINCA"])} deja de compartir '
+                  f'codigo ({detalle}).')
         avisos.append({'tipo': 'recodificado', 'de': esperado, 'a': nuevo,
                        'finca': texto(fila['FINCA'])})
 

@@ -1,8 +1,14 @@
 {
   "generado": "2026-08-24",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-24T18:02Z)",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-24T20:58Z)",
   "regla": "((M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0) OR (REGEXP_LIKE(M.CODIGO_MODULO, '^[A-Z]{3}-(ASP|AVF|PVC)-[0-9]+$')))",
   "avisos": [
+    {
+      "tipo": "recodificado",
+      "de": "CES-MNA-083",
+      "a": "CES-ASP-004",
+      "finca": "Morenas Fernandez"
+    },
     {
       "tipo": "recodificado",
       "de": "CEN-PVC-003",
@@ -1575,6 +1581,20 @@
       "duplicado": false
     },
     {
+      "codigo": "CES-ASP-004",
+      "region": "CENTRAL SUR",
+      "responsable": "Hector Armando Sigarroa Suriano",
+      "finca": "Morenas Fernandez",
+      "codigoFinca": "373",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
       "codigo": "CES-AVF-001",
       "region": "CENTRAL SUR",
       "responsable": "Byron Estuardo Garcia Mendoza",
@@ -2886,20 +2906,6 @@
       "responsable": "",
       "finca": "La Felicidad",
       "codigoFinca": "369",
-      "ramales": 2,
-      "pasadas": 2,
-      "etiquetasExtra": 4,
-      "etiquetasFijas": null,
-      "tipoRiego": "",
-      "fuenteAgua": "",
-      "duplicado": false
-    },
-    {
-      "codigo": "CES-MNA-083",
-      "region": "CENTRAL SUR",
-      "responsable": "Hector Armando Sigarroa Suriano",
-      "finca": "Morenas Fernandez",
-      "codigoFinca": "373",
       "ramales": 2,
       "pasadas": 2,
       "etiquetasExtra": 4,
