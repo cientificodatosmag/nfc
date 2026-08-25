@@ -56,27 +56,21 @@ PENDIENTES_EN_ORACLE = {}
 # decide asumirlo -porque el modulo se va a rotular de nuevo- se escribe aqui el
 # motivo. Un texto y no un True: obliga a decir por que, y queda en el diff.
 RECODIFICADOS = {
-    # El pivote de Polonia compartia CEN-PVC-003 con uno de Oro Blanco I, asi que
-    # el maestro se quedaba con uno solo y la cuadrilla de Polonia veia en
-    # pantalla la finca del otro. Polonia pasa al siguiente libre de la serie:
-    # 001 y 002 estan retirados pero sus numeros no se reciclan, 003 y 004 estan
-    # en uso. Las 2 etiquetas de CEN-PVC-003 estan pegadas en Oro Blanco I
-    # -confirmado con la oficina el 2026-08-24- y ahi se quedan.
-    4056: ('CEN-PVC-005', 'CEN-PVC-003', ''),
+    # El pivote de Polonia (OBJECTID 4056) estuvo aqui del 2026-08-24 al
+    # 2026-08-25: compartia CEN-PVC-003 con uno de Oro Blanco I y paso a
+    # CEN-PVC-005. Oracle capturo el codigo nuevo, la corrida lo detecto y la
+    # entrada se retiro. Las 2 etiquetas de CEN-PVC-003 estaban pegadas en Oro
+    # Blanco I, que el 2026-08-25 renumero sus pivotes a la serie CES-PVC-001..006
+    # -su prefijo correcto, porque Oro Blanco I es CENTRAL SUR-, asi que esas 2
+    # hay que regrabarlas con el CES-PVC que le toque a ese pivote.
 
-    # Morenas Fernandez, motor 0033-0531: no es mini aspersion sino aspersion.
-    # Cuando se le asigno codigo el 2026-08-24, Oracle tenia TIPO_RIEGO vacio y
-    # el tipo se dedujo del informe de equipos, que dice "Miniaspersion" para
-    # ese motor. Oracle ya lo tiene como Aspersion, asi que manda Oracle y el
-    # codigo tiene que reflejarlo: CES-ASP-004, el siguiente libre de la serie.
-    #
-    # Cambia la cuenta: como MNA eran 2 ramales + 4, dos juegos = 12 etiquetas,
-    # y como ASP son 6 fijas en un solo juego. Las 12 que se grabaron el 24 de
-    # agosto dicen CES-MNA-083 y quedan huerfanas; el modulo se rotula de nuevo
-    # con sus 6. Decision de la oficina el 2026-08-24, con eso sabido.
-    3602: ('CES-ASP-004', 'CES-MNA-083',
-           '12 etiquetas grabadas el 2026-08-24 como CES-MNA-083; la oficina '
-           'asume regrabarlo con las 6 de aspersion'),
+    # Morenas Fernandez (motor 0033-0531, OBJECTID 3602) estuvo aqui el
+    # 2026-08-24: era CES-MNA-083 y pasaba a CES-ASP-004 porque no es mini
+    # aspersion sino aspersion. Oracle capturo el codigo nuevo ese mismo dia, la
+    # corrida lo detecto y la entrada se retiro. Sus 12 etiquetas viejas quedaron
+    # huerfanas, como estaba previsto, y el modulo se regrabo con las 6 que le
+    # tocan. Se deja escrito porque el rastro de por que un modulo cambio de
+    # codigo no vive en ningun otro sitio.
 }
 
 

@@ -1,24 +1,8 @@
 {
-  "generado": "2026-08-24",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-24T20:58Z)",
+  "generado": "2026-08-25",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-25T20:35Z)",
   "regla": "((M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0) OR (REGEXP_LIKE(M.CODIGO_MODULO, '^[A-Z]{3}-(ASP|AVF|PVC)-[0-9]+$')))",
   "avisos": [
-    {
-      "tipo": "recodificado",
-      "de": "CES-MNA-083",
-      "a": "CES-ASP-004",
-      "finca": "Morenas Fernandez"
-    },
-    {
-      "tipo": "recodificado",
-      "de": "CEN-PVC-003",
-      "a": "CEN-PVC-005",
-      "finca": "Polonia"
-    },
-    {
-      "tipo": "sinCodigo",
-      "registros": 10
-    },
     {
       "tipo": "otroTipoDeRiego",
       "registros": 6,
@@ -1041,7 +1025,7 @@
       "pasadas": 2,
       "etiquetasExtra": 4,
       "etiquetasFijas": null,
-      "tipoRiego": "Miniaspersion",
+      "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
     },
@@ -1279,7 +1263,7 @@
       "pasadas": 2,
       "etiquetasExtra": 4,
       "etiquetasFijas": null,
-      "tipoRiego": "Miniaspersion",
+      "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "Pozo",
       "duplicado": false
     },
@@ -1467,50 +1451,6 @@
       "duplicado": false
     },
     {
-      "codigo": "CEN-PVC-001",
-      "region": "CENTRAL NORTE",
-      "responsable": "Mario Robelio Miliam Miliam",
-      "finca": "Polonia",
-      "codigoFinca": "377",
-      "ramales": 1,
-      "pasadas": 1,
-      "etiquetasExtra": 0,
-      "etiquetasFijas": 2,
-      "tipoRiego": "Pivote Central",
-      "fuenteAgua": "Rio",
-      "duplicado": false,
-      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Polonia, recodificacion)"
-    },
-    {
-      "codigo": "CEN-PVC-002",
-      "region": "CENTRAL NORTE",
-      "responsable": "Mario Robelio Miliam Miliam",
-      "finca": "Polonia",
-      "codigoFinca": "377",
-      "ramales": 1,
-      "pasadas": 1,
-      "etiquetasExtra": 0,
-      "etiquetasFijas": 2,
-      "tipoRiego": "Pivote Central",
-      "fuenteAgua": "Rio",
-      "duplicado": false,
-      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Polonia, recodificacion)"
-    },
-    {
-      "codigo": "CEN-PVC-003",
-      "region": "CENTRAL SUR",
-      "responsable": "",
-      "finca": "Oro Blanco I",
-      "codigoFinca": "816",
-      "ramales": 2,
-      "pasadas": 1,
-      "etiquetasExtra": 0,
-      "etiquetasFijas": 2,
-      "tipoRiego": "Pivote",
-      "fuenteAgua": "",
-      "duplicado": false
-    },
-    {
       "codigo": "CEN-PVC-004",
       "region": "CENTRAL NORTE",
       "responsable": "",
@@ -1520,7 +1460,7 @@
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 2,
-      "tipoRiego": "Pivote",
+      "tipoRiego": "Pivote Central",
       "fuenteAgua": "",
       "duplicado": false
     },
@@ -1534,7 +1474,7 @@
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 2,
-      "tipoRiego": "Pivote",
+      "tipoRiego": "Pivote Central",
       "fuenteAgua": "",
       "duplicado": false
     },
@@ -2045,7 +1985,7 @@
     {
       "codigo": "CES-MNA-019",
       "region": "CENTRAL SUR",
-      "responsable": "Byron Estuardo Garcia Mendoza",
+      "responsable": "",
       "finca": "Oro Blanco I",
       "codigoFinca": "816",
       "ramales": 9,
@@ -2053,14 +1993,13 @@
       "etiquetasExtra": 4,
       "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
-      "fuenteAgua": "Pozo",
-      "duplicado": false,
-      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 26 etiquetas grabadas"
+      "fuenteAgua": "",
+      "duplicado": false
     },
     {
       "codigo": "CES-MNA-020",
       "region": "CENTRAL SUR",
-      "responsable": "Byron Estuardo Garcia Mendoza",
+      "responsable": "",
       "finca": "Oro Blanco I",
       "codigoFinca": "816",
       "ramales": 14,
@@ -2068,14 +2007,13 @@
       "etiquetasExtra": 4,
       "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
-      "fuenteAgua": "Pozo",
-      "duplicado": false,
-      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 37 etiquetas grabadas"
+      "fuenteAgua": "",
+      "duplicado": false
     },
     {
       "codigo": "CES-MNA-022",
       "region": "CENTRAL SUR",
-      "responsable": "Byron Estuardo Garcia Mendoza",
+      "responsable": "",
       "finca": "Oro Blanco I",
       "codigoFinca": "816",
       "ramales": 13,
@@ -2083,14 +2021,13 @@
       "etiquetasExtra": 4,
       "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
-      "fuenteAgua": "Pozo",
-      "duplicado": false,
-      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 34 etiquetas grabadas"
+      "fuenteAgua": "",
+      "duplicado": false
     },
     {
       "codigo": "CES-MNA-023",
       "region": "CENTRAL SUR",
-      "responsable": "Byron Estuardo Garcia Mendoza",
+      "responsable": "",
       "finca": "Oro Blanco I",
       "codigoFinca": "816",
       "ramales": 12,
@@ -2098,9 +2035,8 @@
       "etiquetasExtra": 4,
       "etiquetasFijas": null,
       "tipoRiego": "Mini Aspersion",
-      "fuenteAgua": "Pozo",
-      "duplicado": false,
-      "conservado": "Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 32 etiquetas grabadas"
+      "fuenteAgua": "",
+      "duplicado": false
     },
     {
       "codigo": "CES-MNA-025",
@@ -2915,12 +2851,12 @@
       "duplicado": false
     },
     {
-      "codigo": "CES-PVC-007",
+      "codigo": "CES-PVC-001",
       "region": "CENTRAL SUR",
-      "responsable": "Otto Rene Portillo Sandoval",
-      "finca": "Agropecuaria El Congo",
-      "codigoFinca": "374",
-      "ramales": 11,
+      "responsable": "",
+      "finca": "Oro Blanco I",
+      "codigoFinca": "816",
+      "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 2,
@@ -2929,17 +2865,101 @@
       "duplicado": false
     },
     {
-      "codigo": "CES-PVC-009",
+      "codigo": "CES-PVC-002",
       "region": "CENTRAL SUR",
-      "responsable": "Hector Armando Sigarroa Suriano",
-      "finca": "La Felicidad",
-      "codigoFinca": "369",
+      "responsable": "",
+      "finca": "Oro Blanco I",
+      "codigoFinca": "816",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "Pivote Central",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-PVC-003",
+      "region": "CENTRAL SUR",
+      "responsable": "",
+      "finca": "Oro Blanco I",
+      "codigoFinca": "816",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "Pivote Central",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-PVC-004",
+      "region": "CENTRAL SUR",
+      "responsable": "",
+      "finca": "Oro Blanco I",
+      "codigoFinca": "816",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "Pivote Central",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-PVC-005",
+      "region": "CENTRAL SUR",
+      "responsable": "",
+      "finca": "Oro Blanco I",
+      "codigoFinca": "816",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "Pivote Central",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-PVC-006",
+      "region": "CENTRAL SUR",
+      "responsable": "",
+      "finca": "Oro Blanco I",
+      "codigoFinca": "816",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "Pivote Central",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-PVC-007",
+      "region": "CENTRAL SUR",
+      "responsable": "Otto Rene Portillo Sandoval",
+      "finca": "Agropecuaria El Congo",
+      "codigoFinca": "374",
       "ramales": 0,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 2,
       "tipoRiego": "Pivote Central",
       "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
+      "codigo": "CES-PVC-008",
+      "region": "CENTRAL SUR",
+      "responsable": "",
+      "finca": "La Felicidad",
+      "codigoFinca": "369",
+      "ramales": 2,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "Pivote Central",
+      "fuenteAgua": "",
       "duplicado": false
     },
     {
@@ -5099,6 +5119,20 @@
       "duplicado": false
     },
     {
+      "codigo": "OOC-MNA-065",
+      "region": "OCCIDENTE CENTRO",
+      "responsable": "Sergio Orlando Valenzuela Melgar",
+      "finca": "El Retiro",
+      "codigoFinca": "404",
+      "ramales": 2,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
+      "etiquetasFijas": null,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
       "codigo": "OOC-PVC-001",
       "region": "OCCIDENTE CENTRO",
       "responsable": "Eddy Rolando Payes Barrientos",
@@ -5110,6 +5144,20 @@
       "etiquetasFijas": 2,
       "tipoRiego": "Pivote Central",
       "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "OOC-PVC-002",
+      "region": "OCCIDENTE CENTRO",
+      "responsable": "Sergio Orlando Valenzuela Melgar",
+      "finca": "El Retiro",
+      "codigoFinca": "404",
+      "ramales": 1,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 2,
+      "tipoRiego": "Pivote Central",
+      "fuenteAgua": "",
       "duplicado": false
     },
     {

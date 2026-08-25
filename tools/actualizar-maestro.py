@@ -137,12 +137,18 @@ CONSERVADOS = {
     'CEN-ASP-012': 'Oracle le vacio el codigo el 2026-08-20 (Villa Laura, la pasan a MNA); 6 etiquetas grabadas',
     'CEN-ASP-018': 'Oracle le vacio el codigo el 2026-08-20 (Villa Laura, la pasan a MNA); 6 etiquetas grabadas',
     'CEN-MNA-040': 'Oracle le vacio el codigo el 2026-08-20 (Luceros); 32 etiquetas grabadas',
-    'CEN-PVC-001': 'Oracle le vacio el codigo el 2026-08-20 (Polonia, recodificacion)',
-    'CEN-PVC-002': 'Oracle le vacio el codigo el 2026-08-20 (Polonia, recodificacion)',
-    'CES-MNA-019': 'Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 26 etiquetas grabadas',
-    'CES-MNA-020': 'Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 37 etiquetas grabadas',
-    'CES-MNA-022': 'Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 34 etiquetas grabadas',
-    'CES-MNA-023': 'Oracle le vacio el codigo el 2026-08-20 (Oro Blanco I); 32 etiquetas grabadas',
+    # CEN-PVC-001 y CEN-PVC-002 salieron de aqui el 2026-08-25. No se habian
+    # perdido: Polonia los recodifico a CEN-PVC-003 y CEN-PVC-004 -se confirma
+    # por el motor, 0033-0318 y 0033-0990- y ninguno llego a tener una sola
+    # etiqueta. Conservarlos le pintaba a Polonia cuatro pivotes teniendo dos, y
+    # eso manda a una cuadrilla a rotular algo que no existe.
+
+    # CES-MNA-019, 020, 022 y 023 salieron de aqui el 2026-08-25. Oracle les
+    # habia dado 081..084, numeros que ya llevaban El Rosario II, La Felicidad y
+    # el retirado de Morenas Fernandez; la oficina lo corrigio devolviendoles los
+    # suyos. Vuelven con los mismos ramales que tenian (9, 14, 13 y 12), asi que
+    # las 128 etiquetas pegadas el 2026-08-06 siguen cuadrando y no se reimprime
+    # nada. Oracle si les perdio el responsable y la fuente de agua.
 }
 
 
