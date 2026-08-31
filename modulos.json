@@ -1,6 +1,6 @@
 {
-  "generado": "2026-08-25",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-25T20:35Z)",
+  "generado": "2026-08-31",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-31T21:12Z)",
   "regla": "((M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0) OR (REGEXP_LIKE(M.CODIGO_MODULO, '^[A-Z]{3}-(ASP|AVF|PVC)-[0-9]+$')))",
   "avisos": [
     {
@@ -19,14 +19,6 @@
         "OBJECTID"
       ],
       "mismoNumeroDeRamales": false
-    },
-    {
-      "codigo": "CEN-ASP-013",
-      "registros": 2,
-      "columnasDistintas": [
-        "OBJECTID"
-      ],
-      "mismoNumeroDeRamales": true
     },
     {
       "codigo": "CEN-ASP-020",
@@ -151,12 +143,21 @@
       "codigo": "ORC-ASP-008",
       "registros": 2,
       "columnasDistintas": [
+        "NO_RAMALES",
+        "OBJECTID"
+      ],
+      "mismoNumeroDeRamales": false
+    },
+    {
+      "codigo": "ORC-ASP-009",
+      "registros": 2,
+      "columnasDistintas": [
         "OBJECTID"
       ],
       "mismoNumeroDeRamales": true
     },
     {
-      "codigo": "ORC-ASP-009",
+      "codigo": "ORC-ASP-010",
       "registros": 2,
       "columnasDistintas": [
         "NO_RAMALES",
@@ -165,20 +166,13 @@
       "mismoNumeroDeRamales": false
     },
     {
-      "codigo": "ORC-ASP-010",
-      "registros": 2,
-      "columnasDistintas": [
-        "OBJECTID"
-      ],
-      "mismoNumeroDeRamales": true
-    },
-    {
       "codigo": "ORC-ASP-012",
       "registros": 2,
       "columnasDistintas": [
+        "NO_RAMALES",
         "OBJECTID"
       ],
-      "mismoNumeroDeRamales": true
+      "mismoNumeroDeRamales": false
     },
     {
       "codigo": "ORC-ASP-013",
@@ -192,9 +186,10 @@
       "codigo": "ORC-ASP-014",
       "registros": 2,
       "columnasDistintas": [
+        "NO_RAMALES",
         "OBJECTID"
       ],
-      "mismoNumeroDeRamales": true
+      "mismoNumeroDeRamales": false
     },
     {
       "codigo": "ORC-ASP-015",
@@ -499,7 +494,7 @@
     {
       "codigo": "CEN-ASP-013",
       "region": "CENTRAL NORTE",
-      "responsable": "Gerson David Macario Osoy",
+      "responsable": "Mario Robelio Miliam Miliam",
       "finca": "El Rincon",
       "codigoFinca": "62",
       "ramales": 6,
@@ -508,7 +503,7 @@
       "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "Rio",
-      "duplicado": true
+      "duplicado": false
     },
     {
       "codigo": "CEN-ASP-014",
@@ -677,6 +672,62 @@
       "etiquetasFijas": 6,
       "tipoRiego": "Aspersion",
       "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-027",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Agua Zarca",
+      "codigoFinca": "155",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-028",
+      "region": "CENTRAL NORTE",
+      "responsable": "Mario Robelio Miliam Miliam",
+      "finca": "Dinamarca",
+      "codigoFinca": "381",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-029",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Rita",
+      "codigoFinca": "12",
+      "ramales": 0,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "",
+      "duplicado": false
+    },
+    {
+      "codigo": "CEN-ASP-030",
+      "region": "CENTRAL NORTE",
+      "responsable": "Eddy Leonardo Orellana Serrano",
+      "finca": "Santa Monica",
+      "codigoFinca": "13",
+      "ramales": 12,
+      "pasadas": 1,
+      "etiquetasExtra": 0,
+      "etiquetasFijas": 6,
+      "tipoRiego": "Aspersion",
+      "fuenteAgua": "Rio",
       "duplicado": false
     },
     {
@@ -2832,7 +2883,7 @@
       "pasadas": 2,
       "etiquetasExtra": 4,
       "etiquetasFijas": null,
-      "tipoRiego": "",
+      "tipoRiego": "Mini Aspersion",
       "fuenteAgua": "",
       "duplicado": false
     },
@@ -2940,7 +2991,7 @@
       "responsable": "Otto Rene Portillo Sandoval",
       "finca": "Agropecuaria El Congo",
       "codigoFinca": "374",
-      "ramales": 0,
+      "ramales": 1,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 2,
@@ -5264,7 +5315,7 @@
       "responsable": "Gaspar Tiu Esteban",
       "finca": "Acacias",
       "codigoFinca": "152",
-      "ramales": 0,
+      "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
@@ -5292,7 +5343,7 @@
       "responsable": "Gaspar Tiu Esteban",
       "finca": "Josefina II",
       "codigoFinca": "202",
-      "ramales": 0,
+      "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
@@ -5320,7 +5371,7 @@
       "responsable": "Gaspar Tiu Esteban",
       "finca": "Rancho Maria",
       "codigoFinca": "614",
-      "ramales": 0,
+      "ramales": 4,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
@@ -5348,7 +5399,7 @@
       "responsable": "Gaspar Tiu Esteban",
       "finca": "Cadiz",
       "codigoFinca": "615",
-      "ramales": 0,
+      "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
@@ -5390,7 +5441,7 @@
       "responsable": "Gaspar Tiu Esteban",
       "finca": "Cadiz",
       "codigoFinca": "615",
-      "ramales": 0,
+      "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
@@ -5404,7 +5455,7 @@
       "responsable": "Gaspar Tiu Esteban",
       "finca": "Cadiz",
       "codigoFinca": "615",
-      "ramales": 0,
+      "ramales": 2,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
