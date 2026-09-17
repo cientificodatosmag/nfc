@@ -1,6 +1,6 @@
 {
-  "generado": "2026-08-31",
-  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-08-31T21:12Z)",
+  "generado": "2026-09-17",
+  "fuente": "Oracle SDEUSR.MAESTRO_MODULOS_RIEGO (2026-09-17T15:32Z)",
   "regla": "((M.NO_RAMALES IS NOT NULL AND M.NO_RAMALES > 0) OR (REGEXP_LIKE(M.CODIGO_MODULO, '^[A-Z]{3}-(ASP|AVF|PVC)-[0-9]+$')))",
   "avisos": [
     {
@@ -3812,6 +3812,20 @@
       "duplicado": false
     },
     {
+      "codigo": "OCR-MNA-055",
+      "region": "OCCIDENTE",
+      "responsable": "Walter Alexander Paiz Aroche",
+      "finca": "La Cuchilla II",
+      "codigoFinca": "664",
+      "ramales": 16,
+      "pasadas": 2,
+      "etiquetasExtra": 4,
+      "etiquetasFijas": null,
+      "tipoRiego": "Mini Aspersion",
+      "fuenteAgua": "Pozo",
+      "duplicado": false
+    },
+    {
       "codigo": "OCR-MNA-056",
       "region": "OCCIDENTE",
       "responsable": "Walter Alexander Paiz Aroche",
@@ -5217,7 +5231,7 @@
       "responsable": "Aldrin Picado",
       "finca": "Cojonal I",
       "codigoFinca": "295",
-      "ramales": 2,
+      "ramales": 4,
       "pasadas": 1,
       "etiquetasExtra": 0,
       "etiquetasFijas": 6,
